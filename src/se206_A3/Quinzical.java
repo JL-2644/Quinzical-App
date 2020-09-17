@@ -39,7 +39,9 @@ public class Quinzical extends Application{
 		pracBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-	
+				// Start up the practice module scene
+				PracticeScene prac = new PracticeScene(primaryStage, menuScene);
+				prac.startScene();	
 			}
 		});
 		
@@ -47,7 +49,9 @@ public class Quinzical extends Application{
 		gameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-		
+				// Start up the game module scene
+				GameScene game = new GameScene(primaryStage, menuScene);
+				game.startScene();
 			}
 		});
 		
