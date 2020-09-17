@@ -1,10 +1,16 @@
 package se206_A3;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,6 +34,45 @@ public class Quinzical extends Application{
 		Text title = new Text("Welcome to Quinzical!");
 		title.setTextAlignment(TextAlignment.CENTER);
 		title.setFont(new Font(25));
+		
+		//
+		pracBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+	
+			}
+		});
+		
+		//
+		gameBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+		
+			}
+		});
+		
+		//Handle the quit button when pressed
+		quitBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// Create a prompt to confirm game close
+				Alert confirm = new Alert(AlertType.CONFIRMATION);
+				confirm.setTitle("Quinzical");
+				confirm.setHeaderText("Do you want to exit the game?");
+				
+				ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+				ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+
+				confirm.getButtonTypes().setAll(yesButton, noButton);
+				
+				confirm.showAndWait();
+				
+				// If user selected yes close the game, else continue to play
+				if(confirm.getResult() == yesButton) {
+					primaryStage.close();
+				}
+			}
+		});
 		
 		// Layout of menu
 		VBox layout = new VBox(40);
