@@ -26,7 +26,7 @@ public class Quinzical extends Application{
 	public void start(Stage primaryStage) {
 		
 		// Create new buttons for the three options
-		pracBtn= new Button("Enter practive module");
+		pracBtn= new Button("Enter practice module");
 		gameBtn= new Button("Enter Game Module");
 		quitBtn= new Button("Quit Game");
 		
@@ -35,7 +35,7 @@ public class Quinzical extends Application{
 		title.setTextAlignment(TextAlignment.CENTER);
 		title.setFont(new Font(25));
 		
-		//
+		// Handle when the practice module button is pressed
 		pracBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -43,7 +43,7 @@ public class Quinzical extends Application{
 			}
 		});
 		
-		//
+		// Handle when the games button is pressed
 		gameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
