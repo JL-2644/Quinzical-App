@@ -1,5 +1,7 @@
 package se206_A3;
 
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +27,10 @@ public class Quinzical extends Application{
 	@Override
 	public void start(Stage primaryStage) {
 		
+		// Get an array of all the category names
+		File cateDir = new File("./categories");
+		String[] cateFiles = cateDir.list();
+
 		// Create new buttons for the three options
 		pracBtn= new Button("Enter practice module");
 		gameBtn= new Button("Enter Game Module");
@@ -40,7 +46,7 @@ public class Quinzical extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the practice module scene
-				PracticeScene prac = new PracticeScene(primaryStage, menuScene);
+				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene);
 				prac.startScene();	
 			}
 		});
@@ -50,7 +56,7 @@ public class Quinzical extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the game module scene
-				GameScene game = new GameScene(primaryStage, menuScene);
+				GameScene game = new GameScene(cateFiles, primaryStage, menuScene);
 				game.startScene();
 			}
 		});

@@ -7,10 +7,12 @@ public class PracticeScene {
 	
 	private Stage _primary;
 	private Scene _menu;
+	private String[] _catNames;
 	
-	public PracticeScene(Stage primary, Scene menu) {
+	public PracticeScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
 		_menu = menu;
+		_catNames = catNames;
 	}
 	
 	public void startScene() {
