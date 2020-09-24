@@ -1,9 +1,13 @@
 package se206_A3;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,10 +17,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -26,49 +35,108 @@ import javafx.stage.Stage;
 public class GameScene {
 
 	private Stage _primary;
-	private Scene _menu, _game;
+	private Scene _menu, _game, answerScene;
 	private String[] _catNames;
 	private Random _rnd;
 	private int _monVal;
 	private List<String> categories, lines, questions;
-	private Button _valueBtn, btnClicked, _backBtn;
-	
+	private Button _valueBtn, _backBtn;
+
 	public GameScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
 	}
-	
+
 	public void startScene() {
 		// Create lists
 		categories = new ArrayList<String>();
 		questions = new ArrayList<String>();
 		lines = new ArrayList<String>();
-		
+
 		// Instantiate a random object
 		_rnd = new Random();
-		
-		// Selects 5 random unique categories
-		while (categories.size() < 5) {
-			// Generates a random index number
-			int index = _rnd.nextInt(_catNames.length);
-			// Check if category has already been added
-			if(!categories.contains(_catNames[index])) {
-				categories.add(_catNames[index]);
+
+		// Creates a directory for save files
+		new File("./saves").mkdir();
+
+		File saveDir = new File("./saves");
+		String[] saveFiles = saveDir.list();
+
+		// Preparation 
+		if ( saveFiles.length < 1) {
+			// Selects 5 random unique categories
+			while (categories.size() < 5) {
+				// Generates a random index number
+				int index = _rnd.nextInt(_catNames.length);
+				// Check if category has already been added
+				if(!categories.contains(_catNames[index])) {
+					categories.add(_catNames[index]);
+				}
+			}
+			// Save the selected categories to a save folder
+			for (int i = 0; i < categories.size(); i++) {
+				// New text file inside saves for the category
+				File savefile = new File("./saves/" + categories.get(i));
+				// Text file inside categories folder
+				File catefile = new File("./categories/" + categories.get(i));
+
+				// Store all the lines from the category into a list
+				try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
+					String line;
+					while ((line = value.readLine()) != null) {
+						lines.add(line);
+					}
+				}catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				// Get 5 random questions from that list, write to the new file
+				_monVal = 100;
+				while (questions.size() < 5) {
+					int rndLineIndex = _rnd.nextInt(lines.size());
+					String line = lines.get(rndLineIndex);
+
+					if(!questions.contains(line)) {
+						// Write the line to the new file
+						BufferedWriter out = null;
+						try {
+							int val = _monVal;
+							savefile.createNewFile();
+							// Appends the new lines to the file
+							out = new BufferedWriter(new FileWriter(savefile, true));
+							out.write(val + ";" + line);
+							out.newLine();
+							out.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						_monVal += 100;
+						questions.add(line);
+					}
+				}
+				questions.clear();
+				lines.clear();
 			}
 		}
-		
+		else {
+			// If game is ongoing, add the category names to the list
+			for (String category: saveFiles) {
+				categories.add(category);
+			}
+		}
+
 		TabPane tabs= new TabPane();
 		// Tabs cannot be closed
 		tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		
+
 		// Create the tabs for the 5 categories
 		for (int i = 0; i < categories.size(); i++) {
 			// Create a layout for each category
 			VBox cateLayout = new VBox(30);
 			cateLayout.setAlignment(Pos.CENTER);
 			cateLayout.setPadding(new Insets(30));
-			
+
 			// Create a title
 			Text title = new Text("Select " + categories.get(i) + " question?");
 			title.setTextAlignment(TextAlignment.CENTER);
@@ -76,30 +144,32 @@ public class GameScene {
 			// Add title to layout
 			cateLayout.getChildren().add(title);
 			
-			File catefile = new File("./categories/" + categories.get(i));
+			// New text file inside saves for the category
+			File savefile = new File("./saves/" + categories.get(i));
 			
-			// Store all the lines from the category into a list
-			try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
+			try (BufferedReader value = new BufferedReader(new FileReader(savefile))){
 				String line;
+				int row = 0;
+				String cateNum = categories.get(i);
 				while ((line = value.readLine()) != null) {
-					lines.add(line);
-				}
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			// Get 5 random questions from that category
-			_monVal = 100;
-			while (questions.size() < 5) {
-				int rndLineIndex = _rnd.nextInt(lines.size());
-				String line = lines.get(rndLineIndex);
-				
-				if(!questions.contains(line)) {
-					questions.add(line);
-					_valueBtn = new Button("" + _monVal);
+					int lineNum = row;
+					line = line.substring(0, line.indexOf(";"));
+					_valueBtn = new Button(line);
+					_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							// Only the lowest value is able to be clicked
+							if(lineNum == 0) {
+								answerScene = new Scene(answerLayout(cateNum, lineNum), 450, 450);
+								_primary.setScene(answerScene);
+							}
+						}	
+					});
 					cateLayout.getChildren().add(_valueBtn);
-					_monVal += 100;
+					row++;
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			
 			// Button to go back to menu
@@ -110,13 +180,9 @@ public class GameScene {
 					_primary.setScene(_menu);
 				}	
 			});
-			
+
 			// Add btn to layout
 			cateLayout.getChildren().add(_backBtn);
-			
-			questions.clear(); // Not ideal
-			lines.clear();
-			
 			tabs.getTabs().add(new Tab(categories.get(i), cateLayout));
 		}
 
@@ -124,9 +190,79 @@ public class GameScene {
 		VBox gameLayout = new VBox(50);
 		gameLayout.getChildren().addAll(tabs);
 		_game = new Scene(gameLayout, 450, 450);
-		
+
 		// Display the scene
 		_primary.setScene(_game);
 		_primary.show();
+	}
+	
+	public VBox answerLayout(String category, int lineNum) {
+		// Get the value
+		//int value = Integer.parseInt(click.getText());
+
+		Button btnEnter = new Button("Enter");
+		Button dkBtn = new Button("Don't know");
+		
+		// Get the specified line from the category file
+		String readLine = null;
+		String question = null;
+		try {
+			readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
+			question = readLine.substring(readLine.indexOf(";")+ 1);
+			question = question.substring(0, question.indexOf(";"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// tts the question
+		HelperThread ttsQ = new HelperThread(question);
+		ttsQ.start();
+		
+		// Allow user to enter their answer
+		TextField txtInput = new TextField();
+		btnEnter.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// Get the answer
+				String readLine = null;
+				try {
+					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String answer = readLine.substring(readLine.indexOf(";") + 1);
+				answer = answer.substring(answer.indexOf(";") + 1);
+				
+				Alert a = new Alert(AlertType.CONFIRMATION);
+				
+				if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
+					a.setTitle("Correct");
+					// tts correct
+					HelperThread ttsA = new HelperThread("Correct");
+					ttsA.start();
+					a.setHeaderText("Your answer was correct");
+				}
+				else {
+					a.setTitle("Incorrect");
+					// tts the answer
+					HelperThread ttsA = new HelperThread("Answer was " + answer);
+					ttsA.start();
+					a.setHeaderText("The correct answer was " + answer);
+				}
+				a.showAndWait();
+				_primary.setScene(_game);
+			}	
+		});
+		
+		// Layout of the answer scene where user gets to input answer to question
+		VBox layout = new VBox(20);
+		layout.setAlignment(Pos.BASELINE_CENTER);
+		layout.setPadding(new Insets(100));
+		Label direction = new Label("Enter answer below");
+		direction.setMinWidth(Region.USE_PREF_SIZE);
+		
+		layout.getChildren().addAll(direction, txtInput, btnEnter, dkBtn);
+		return layout;
 	}
 }
