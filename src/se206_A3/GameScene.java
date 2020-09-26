@@ -41,7 +41,7 @@ public class GameScene {
 	private Random _rnd;
 	private int _monVal;
 	private List<String> categories, lines, questions;
-	private Button _valueBtn, _backBtn;
+	private Button _valueBtn, _backBtn, btnClicked;
 
 	public GameScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
@@ -50,6 +50,7 @@ public class GameScene {
 	}
 
 	public void startScene() {
+
 		// Create lists
 		categories = new ArrayList<String>();
 		questions = new ArrayList<String>();
@@ -62,6 +63,7 @@ public class GameScene {
 		new File("./saves").mkdir();
 
 		File saveDir = new File("./saves");
+		File winFile = new File("./saves/winnings");
 		String[] saveFiles = saveDir.list();
 
 		// Preparation 
@@ -119,12 +121,41 @@ public class GameScene {
 				questions.clear();
 				lines.clear();
 			}
+
+			// Create a winnings file to store money earned
+			BufferedWriter writer = null;
+			try {
+				winFile.createNewFile();
+				writer = new BufferedWriter(new FileWriter(winFile));
+				writer.write("" + 0);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else {
 			// If game is ongoing, add the category names to the list
 			for (String category: saveFiles) {
-				categories.add(category);
+				if(!category.equals("winnings")) {
+					categories.add(category);
+				}
 			}
+		}
+
+		// Check if all sections have been completed
+		int count = 0;
+		for (int i = 0; i < categories.size(); i++) {
+			File file = new File("./saves/"+ categories.get(i));
+			if (file.length() == 0) {
+				count++;
+			}
+		}
+		// If the game has been completed, show an alert box to reset
+		if(count == categories.size()) {
+			// Start up the reward scene
+			RewardScene reward = new RewardScene(_primary, _menu);
+			reward.startScene();
+			return;
 		}
 
 		TabPane tabs= new TabPane();
@@ -144,35 +175,45 @@ public class GameScene {
 			title.setFont(new Font(15));
 			// Add title to layout
 			cateLayout.getChildren().add(title);
-			
+
 			// New text file inside saves for the category
 			File savefile = new File("./saves/" + categories.get(i));
-			
-			try (BufferedReader value = new BufferedReader(new FileReader(savefile))){
-				String line;
-				int row = 0;
-				String cateNum = categories.get(i);
-				while ((line = value.readLine()) != null) {
-					int lineNum = row;
-					line = line.substring(0, line.indexOf(";"));
-					_valueBtn = new Button(line);
-					_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							// Only the lowest value is able to be clicked
-							if(lineNum == 0) {
-								answerScene = new Scene(answerLayout(cateNum, lineNum), 450, 450);
-								_primary.setScene(answerScene);
-							}
-						}	
-					});
-					cateLayout.getChildren().add(_valueBtn);
-					row++;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+
+			boolean empty = !savefile.exists() || savefile.length() == 0;
+
+			if(empty) {
+				Label comp = new Label("Completed"); 
+				comp.setFont(new Font(10));
+				cateLayout.getChildren().add(comp);
 			}
-			
+			else {
+				try (BufferedReader value = new BufferedReader(new FileReader(savefile))){
+					String line;
+					int row = 0;
+					String cateNum = categories.get(i);
+
+					while ((line = value.readLine()) != null) {
+						int lineNum = row;
+						line = line.substring(0, line.indexOf(";"));
+						_valueBtn = new Button(line);
+						_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								btnClicked = (Button) event.getSource();
+								// Only the lowest value is able to be clicked
+								if(lineNum == 0) {
+									answerScene = new Scene(answerLayout(btnClicked, cateNum, lineNum), 450, 450);
+									_primary.setScene(answerScene);
+								}
+							}	
+						});
+						cateLayout.getChildren().add(_valueBtn);
+						row++;
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			// Button to go back to menu
 			_backBtn = new Button("Back to Menu");
 			_backBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -196,14 +237,16 @@ public class GameScene {
 		_primary.setScene(_game);
 		_primary.show();
 	}
-	
-	public VBox answerLayout(String category, int lineNum) {
+
+	public VBox answerLayout(Button click, String category, int lineNum) {
+		File winFile = new File("./saves/winnings");
+
 		// Get the value
-		//int value = Integer.parseInt(click.getText());
+		int value = Integer.parseInt(click.getText());
 
 		Button btnEnter = new Button("Enter");
 		Button dkBtn = new Button("Don't know");
-		
+
 		// Get the specified line from the category file
 		String readLine = null;
 		String question = null;
@@ -218,10 +261,75 @@ public class GameScene {
 		// tts the question
 		HelperThread ttsQ = new HelperThread(question);
 		ttsQ.start();
-		
+
 		// Allow user to enter their answer
 		TextField txtInput = new TextField();
 		btnEnter.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+
+				// Read money value from file
+				BufferedReader win = null;
+				int money = 0;
+				try {
+					win = new BufferedReader(new FileReader(winFile));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				String moneyPool = null;
+				try {
+					moneyPool = win.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				money = Integer.parseInt(moneyPool);
+
+				// Get the answer
+				String readLine = null;
+				try {
+					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String answer = readLine.substring(readLine.indexOf(";") + 1);
+				answer = answer.substring(answer.indexOf(";") + 1);
+
+				Alert a = new Alert(AlertType.CONFIRMATION);
+
+				if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
+					a.setTitle("Correct");
+					// tts correct
+					HelperThread ttsA = new HelperThread("Correct");
+					ttsA.start();
+					a.setHeaderText("Your answer was correct");
+					money += value;
+				}
+				else {
+					a.setTitle("Incorrect");
+					// tts the answer
+					HelperThread ttsA = new HelperThread("Answer was " + answer);
+					ttsA.start();
+					a.setHeaderText("The correct answer was " + answer);
+				}
+
+				// Write new money value to file
+				BufferedWriter out = null;
+				try {
+					out = new BufferedWriter(new FileWriter(winFile));
+					out.write("" + money);
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				update(category, lineNum);
+				a.showAndWait();
+				startScene();
+			}	
+		});
+		dkBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				// Get the answer
@@ -234,40 +342,31 @@ public class GameScene {
 				}
 				String answer = readLine.substring(readLine.indexOf(";") + 1);
 				answer = answer.substring(answer.indexOf(";") + 1);
-				
+
 				Alert a = new Alert(AlertType.CONFIRMATION);
-				
-				if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
-					a.setTitle("Correct");
-					// tts correct
-					HelperThread ttsA = new HelperThread("Correct");
-					ttsA.start();
-					a.setHeaderText("Your answer was correct");
-				}
-				else {
-					a.setTitle("Incorrect");
-					// tts the answer
-					HelperThread ttsA = new HelperThread("Answer was " + answer);
-					ttsA.start();
-					a.setHeaderText("The correct answer was " + answer);
-				}
+				a.setTitle("Answer");
+				// tts the answer
+				HelperThread ttsA = new HelperThread("Answer was " + answer);
+				ttsA.start();
+				a.setHeaderText("The correct answer was " + answer);
+
 				update(category, lineNum);
 				a.showAndWait();
 				startScene();
-			}	
+			}
 		});
-		
+
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(20);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setPadding(new Insets(100));
 		Label direction = new Label("Enter answer below");
 		direction.setMinWidth(Region.USE_PREF_SIZE);
-		
+
 		layout.getChildren().addAll(direction, txtInput, btnEnter, dkBtn);
 		return layout;
 	}
-	
+
 	/*
 	 * Method updates save files so that questions which have been answered are removed
 	 */
@@ -275,7 +374,7 @@ public class GameScene {
 		lineRemove++;
 		File inputFile = new File("./saves/"+cateFile);
 		File tmp = new File("./saves/"+cateFile+"Tmp");
-		
+
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
 		try {
