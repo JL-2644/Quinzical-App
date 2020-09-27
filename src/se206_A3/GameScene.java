@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -246,6 +249,7 @@ public class GameScene {
 
 		Button btnEnter = new Button("Enter");
 		Button dkBtn = new Button("Don't know");
+		Button replay = new Button("Replay Q");
 
 		// Get the specified line from the category file
 		String readLine = null;
@@ -261,6 +265,19 @@ public class GameScene {
 		// tts the question
 		HelperThread ttsQ = new HelperThread(question);
 		ttsQ.start();
+
+		// Create a slider for tts speed
+		Slider slider = new Slider();
+
+		// Set the sliders min, max and val
+		slider.setMin(0.25);
+		slider.setMax(2);
+		slider.setValue(1);
+
+		// Set increment
+		slider.setShowTickLabels(true);
+		slider.setShowTickMarks(true);
+		slider.setBlockIncrement(0.25);
 
 		// Allow user to enter their answer
 		TextField txtInput = new TextField();
@@ -329,6 +346,7 @@ public class GameScene {
 				startScene();
 			}	
 		});
+
 		dkBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -356,6 +374,29 @@ public class GameScene {
 			}
 		});
 
+		// Replay the question
+		replay.setOnAction(new EventHandler<ActionEvent> () {
+			@Override
+			public void handle(ActionEvent arg0) {
+				// Get the slider value
+				double speed = slider.getValue();
+				System.out.println(speed);
+				String readLine = null;
+				String question = null;
+				try {
+					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
+					question = readLine.substring(readLine.indexOf(";")+ 1);
+					question = question.substring(0, question.indexOf(";"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// tts the question
+				HelperThread ttsQ = new HelperThread(question);
+				ttsQ.start();
+			}
+		});
+
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(20);
 		layout.setAlignment(Pos.BASELINE_CENTER);
@@ -363,7 +404,7 @@ public class GameScene {
 		Label direction = new Label("Enter answer below");
 		direction.setMinWidth(Region.USE_PREF_SIZE);
 
-		layout.getChildren().addAll(direction, txtInput, btnEnter, dkBtn);
+		layout.getChildren().addAll(direction, txtInput, btnEnter, dkBtn, replay, slider);
 		return layout;
 	}
 

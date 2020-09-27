@@ -12,6 +12,8 @@ public class HelperThread extends Thread{
 	
 	@Override
 	public void run() {
+		// Write to a scm file
+		
 		String cmd = "echo " + "\"" + text + "\"" + " | festival --tts";
 		ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);
 		try {
