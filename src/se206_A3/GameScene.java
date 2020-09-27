@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -270,7 +268,7 @@ public class GameScene {
 		Slider slider = new Slider();
 
 		// Set the sliders min, max and val
-		slider.setMin(0.25);
+		slider.setMin(0.5);
 		slider.setMax(2);
 		slider.setValue(1);
 
@@ -380,7 +378,7 @@ public class GameScene {
 			public void handle(ActionEvent arg0) {
 				// Get the slider value
 				double speed = slider.getValue();
-				System.out.println(speed);
+
 				String readLine = null;
 				String question = null;
 				try {
@@ -392,7 +390,7 @@ public class GameScene {
 					e.printStackTrace();
 				}
 				// tts the question
-				HelperThread ttsQ = new HelperThread(question);
+				HelperThread ttsQ = new HelperThread(question, speed);
 				ttsQ.start();
 			}
 		});
