@@ -4,3 +4,4 @@
 20/09/2020 - Create the game module and did the visuals for it<br/>
 24/09/2020 - Added a save state
 26/09/2020 - Created reward scene
+28/09/2020 - Added NZ tts system

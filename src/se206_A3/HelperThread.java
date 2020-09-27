@@ -9,10 +9,11 @@ import java.io.IOException;
 public class HelperThread extends Thread{
 
 	private String text;
-	private double _speed = 1;
+	private double _speed;
 	
 	public HelperThread(String text) {
 		this.text = text;
+		_speed = 1;
 	}
 	
 	public HelperThread(String text, double speed) {
@@ -32,7 +33,7 @@ public class HelperThread extends Thread{
 		try {
 			tts.createNewFile();
 			scmWriter = new BufferedWriter(new FileWriter(tts));
-			scmWriter.write("(voice_akl_nz_jdt_diphone)");
+			scmWriter.write("(voice_kal_diphone)");
 			scmWriter.newLine();
 			scmWriter.write("(Parameter.set 'Duration_Stretch " + _speed + ")");
 			scmWriter.newLine();
