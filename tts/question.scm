@@ -1,3 +1,3 @@
 (voice_kal_diphone)
-(Parameter.set 'Duration_Stretch 1.0)
-(SayText "With more that 400, New Zealand has more of these per capita than any other country in the world")
+(Parameter.set 'Duration_Stretch 1.2764084507042253)
+(SayText "This is the number of stars on the New Zealand flag")

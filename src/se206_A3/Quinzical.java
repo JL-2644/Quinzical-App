@@ -90,7 +90,7 @@ public class Quinzical extends Application{
 		layout.setPadding(new Insets(100));
 		layout.getChildren().addAll(title, pracBtn, gameBtn, quitBtn);
 
-		menuScene = new Scene(layout, 450, 450);
+		menuScene = new Scene(layout, 500, 450);
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
 		

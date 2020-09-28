@@ -75,7 +75,7 @@ public class RewardScene {
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
 		rewardLayout.setPadding(new Insets(100));
 		rewardLayout.getChildren().addAll(title, finalScore, _menuBtn);
-		_reward = new Scene(rewardLayout, 450, 450);
+		_reward = new Scene(rewardLayout, 500, 450);
 
 		// Display the scene
 		_primary.setScene(_reward);

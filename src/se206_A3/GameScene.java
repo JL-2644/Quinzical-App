@@ -17,6 +17,7 @@ import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -29,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -204,7 +206,7 @@ public class GameScene {
 								btnClicked = (Button) event.getSource();
 								// Only the lowest value is able to be clicked
 								if(lineNum == 0) {
-									answerScene = new Scene(answerLayout(btnClicked, cateNum, lineNum), 450, 450);
+									answerScene = new Scene(answerLayout(btnClicked, cateNum, lineNum), 500, 450);
 									_primary.setScene(answerScene);
 								}
 							}	
@@ -233,7 +235,7 @@ public class GameScene {
 		// Creates a layout for the whole game module scene
 		VBox gameLayout = new VBox(50);
 		gameLayout.getChildren().addAll(tabs);
-		_game = new Scene(gameLayout, 450, 450);
+		_game = new Scene(gameLayout, 500, 450);
 
 		// Display the scene
 		_primary.setScene(_game);
@@ -417,13 +419,18 @@ public class GameScene {
 		});
 
 		// Layout of the answer scene where user gets to input answer to question
-		VBox layout = new VBox(20);
+		VBox layout = new VBox(30);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setPadding(new Insets(100));
 		Label clue = new Label("Clue: " + text + "...");
+		clue.setFont(new Font(15));
 		clue.setMinWidth(Region.USE_PREF_SIZE);
+		
+		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
+		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
+		
 
-		layout.getChildren().addAll(clue, txtInput, btnEnter, dkBtn, replay, slider);
+		layout.getChildren().addAll(clue, txtInput, tileBtns, slider);
 		return layout;
 	}
 
