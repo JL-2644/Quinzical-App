@@ -77,7 +77,6 @@ public class RewardScene {
 		rewardLayout.getChildren().addAll(title, finalScore, _menuBtn);
 		_reward = new Scene(rewardLayout, 450, 450);
 
-		System.out.println("SHow scene");
 		// Display the scene
 		_primary.setScene(_reward);
 		_primary.show();

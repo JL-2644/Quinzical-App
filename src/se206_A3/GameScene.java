@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -109,7 +110,7 @@ public class GameScene {
 							savefile.createNewFile();
 							// Appends the new lines to the file
 							out = new BufferedWriter(new FileWriter(savefile, true));
-							out.write(val + ";" + line);
+							out.write(val + "|" + line);
 							out.newLine();
 							out.close();
 						} catch (IOException e) {
@@ -195,7 +196,7 @@ public class GameScene {
 
 					while ((line = value.readLine()) != null) {
 						int lineNum = row;
-						line = line.substring(0, line.indexOf(";"));
+						line = line.substring(0, line.indexOf("|"));
 						_valueBtn = new Button(line);
 						_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
@@ -252,10 +253,13 @@ public class GameScene {
 		// Get the specified line from the category file
 		String readLine = null;
 		String question = null;
+		String text = null;
 		try {
 			readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-			question = readLine.substring(readLine.indexOf(";")+ 1);
-			question = question.substring(0, question.indexOf(";"));
+			question = readLine.substring(readLine.indexOf("|")+ 1);
+			text = question.substring(question.indexOf("|") + 1);
+			text = text.substring(0, text.indexOf("|"));
+			question = question.substring(0, question.indexOf("|"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -307,12 +311,28 @@ public class GameScene {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String answer = readLine.substring(readLine.indexOf(";") + 1);
-				answer = answer.substring(answer.indexOf(";") + 1);
+				String answer = readLine.substring(readLine.indexOf("|") + 1);
+				answer = answer.substring(answer.indexOf("|") + 1);
+				answer = answer.substring(answer.indexOf("|") + 1);
 
 				Alert a = new Alert(AlertType.CONFIRMATION);
-
-				if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
+				
+				// Check if answer has multiple correct answers
+				String[] answers = null;
+				if (answer.indexOf('/') != -1) {
+					answers = answer.split("\\/+");
+					// Convert all string to lower case
+					for (int i = 0; i < answers.length; i++) {
+						answers[i] = answers[i].toLowerCase();
+					}
+				}
+				else {
+					answers = new String[1];
+					answers[0] = answer.toLowerCase();
+				}
+				
+				//if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
+				if (Arrays.asList(answers).contains(txtInput.getText().toLowerCase())) {
 					a.setTitle("Correct");
 					// tts correct
 					HelperThread ttsA = new HelperThread("Correct");
@@ -356,8 +376,9 @@ public class GameScene {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String answer = readLine.substring(readLine.indexOf(";") + 1);
-				answer = answer.substring(answer.indexOf(";") + 1);
+				String answer = readLine.substring(readLine.indexOf("|") + 1);
+				answer = answer.substring(answer.indexOf("|") + 1);
+				answer = answer.substring(answer.indexOf("|") + 1);
 
 				Alert a = new Alert(AlertType.CONFIRMATION);
 				a.setTitle("Answer");
@@ -383,8 +404,8 @@ public class GameScene {
 				String question = null;
 				try {
 					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-					question = readLine.substring(readLine.indexOf(";")+ 1);
-					question = question.substring(0, question.indexOf(";"));
+					question = readLine.substring(readLine.indexOf("|")+ 1);
+					question = question.substring(0, question.indexOf("|"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -399,10 +420,10 @@ public class GameScene {
 		VBox layout = new VBox(20);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setPadding(new Insets(100));
-		Label direction = new Label("Enter answer below");
-		direction.setMinWidth(Region.USE_PREF_SIZE);
+		Label clue = new Label("Clue: " + text + "...");
+		clue.setMinWidth(Region.USE_PREF_SIZE);
 
-		layout.getChildren().addAll(direction, txtInput, btnEnter, dkBtn, replay, slider);
+		layout.getChildren().addAll(clue, txtInput, btnEnter, dkBtn, replay, slider);
 		return layout;
 	}
 

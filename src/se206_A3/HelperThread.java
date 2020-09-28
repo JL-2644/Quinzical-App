@@ -44,6 +44,7 @@ public class HelperThread extends Thread{
 			e.printStackTrace();
 		}
 		
+		// Run the file in bash
 		String cmd = "`" + "festival -b ./tts/question.scm" + "`";
 		ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);
 		try {
