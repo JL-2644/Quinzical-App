@@ -31,9 +31,10 @@ public class PracticeScene {
 	private String[] _catNames;
 	private Alert a = new Alert(AlertType.NONE);
 	private List<Button> catList = new ArrayList<Button>(); 
-	private List<List<String>> question = new ArrayList<List<String>>(); 
+	private List<List<String>> question = new ArrayList<List<String>>();
+	private List<List<String>> clue = new ArrayList<List<String>>();
 	private List<List<String>> answer = new ArrayList<List<String>>();
-	private List<String> cat = new ArrayList<String>();
+	private List<String> _cat = new ArrayList<String>();
 	private int _attempts = 0;
 	Button _back = new Button("Main Menu");
 	
@@ -51,6 +52,7 @@ public class PracticeScene {
 			public void handle(ActionEvent e) {
 				_primary.setTitle("Quinzical");
 				_primary.setScene(_menu);
+				_primary.centerOnScreen();
 			}
 		});
 		Label label = new Label("Pick a catergory!!!");
@@ -85,7 +87,9 @@ public class PracticeScene {
 					vbox2.setAlignment(Pos.CENTER);
 					VBox.setMargin(label2, new Insets(10, 10, 10, 10));
 					Text que = new Text(randomQuestion);
+					double len = que.getLayoutBounds().getWidth();
 					TextField answerTxt = new TextField();
+					answerTxt.setMaxWidth(180);
 					Button confirm = new Button("Submit");
 					Slider slider = new Slider();
 					slider.setMin(0.5);
@@ -94,6 +98,11 @@ public class PracticeScene {
 					slider.setShowTickLabels(true);
 					slider.setShowTickMarks(true);
 					slider.setBlockIncrement(0.25);
+					slider.setMaxWidth(180);
+					VBox.setMargin(que, new Insets(10, 10, 10, 10));
+					VBox.setMargin(slider, new Insets(10, 10, 10, 10));
+					Label clueLabel = new Label(clue.get(tmp).get(ran) + ": ...");
+					VBox.setMargin(clueLabel, new Insets(10, 10, 10, 10));
 					Button replay = new Button("Replay");
 					replay.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
@@ -103,19 +112,18 @@ public class PracticeScene {
 							ttsQ.start();
 						}
 					});
-					vbox2.getChildren().addAll(label2, que, slider, replay, answerTxt, confirm);
 					VBox.setMargin(que, new Insets(10, 10, 10, 10));
 					VBox.setMargin(answerTxt, new Insets(10, 10, 10, 10));
 					VBox.setMargin(confirm, new Insets(10, 10, 10, 10));
-					Scene scene2 = new Scene(vbox2, 500, 320);
+					vbox2.getChildren().addAll(label2, que, slider, replay, answerTxt, confirm);
+					Scene scene2 = new Scene(vbox2, (int) len + 100, 380);
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
 
-					System.out.println(randomQuestion);
-
 					_primary.setScene(scene2);
+					_primary.centerOnScreen();
 					_attempts = 0;
-
+					
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent e) {
@@ -126,7 +134,17 @@ public class PracticeScene {
 							String sen;
 							String userAns = answerTxt.getText().trim().toLowerCase();
 							String fullAns = answer.get(tmp).get(ran);
-							if (userAns.equals(fullAns.toLowerCase())) {
+							boolean status = false;
+							if (fullAns.contains("/") == true) {
+								String[] parts = fullAns.split("/");
+								for (String diffAns : parts) {
+									if (userAns.equals(diffAns.trim().toLowerCase())) {
+										status = true;
+										break;
+									}
+								}
+							}
+							if (userAns.equals(fullAns.toLowerCase()) || status == true) {
 
 								sen = "Correct!!!";
 								HelperThread ttsQ = new HelperThread(sen);
@@ -135,6 +153,7 @@ public class PracticeScene {
 								a.setTitle("Result");
 								a.showAndWait();
 								_primary.setScene(scene);
+								_primary.centerOnScreen();
 							} else {
 								_attempts++;
 								if (_attempts == 3) {
@@ -153,6 +172,7 @@ public class PracticeScene {
 										public void handle(ActionEvent e) {
 											_primary.setTitle("Practice");
 											_primary.setScene(scene);
+											_primary.centerOnScreen();
 										}
 									});
 									sen = "The correct answer is: " + answer.get(tmp).get(ran);
@@ -163,25 +183,27 @@ public class PracticeScene {
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, 500, 320);
+									Scene scene3 = new Scene(vbox3, (int) len + 100, 380);
 									_primary.setScene(scene3);
+									_primary.centerOnScreen();
 								} else {
 									sen = "Wrong Answer";
-									System.out.println(answer.get(tmp).get(ran));
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									a = new Alert(AlertType.NONE, sen, ButtonType.OK);
 									a.setTitle("Result");
 									a.showAndWait();
 
-//									if (_attempts == 2) {
-//										Text hint = new Text("Hint");
-//										VBox vbox3 = new VBox(5);
-//										vbox3 = vbox2;
-//										vbox3.getChildren().add(hint);
-//										Scene scene4 = new Scene(vbox3, 500, 320);
-//										_primary.setScene(scene4);
-//									}
+									if (_attempts == 2) {
+										Text hint = new Text("Hint: " + answer.get(tmp).get(ran).charAt(0));
+										VBox vbox4 = new VBox(5);
+										vbox4.setAlignment(Pos.CENTER);
+										vbox4.getChildren().addAll(label2, que, slider, replay, hint, clueLabel,
+												answerTxt, confirm);
+										Scene scene4 = new Scene(vbox4, (int) len + 100, 380);
+										_primary.setScene(scene4);
+										_primary.centerOnScreen();
+									}
 								}
 							}
 						}
@@ -207,7 +229,7 @@ public class PracticeScene {
 				if (exitStatus == 0) {
 							
 					while ((line = stdout.readLine()) != null) {
-						cat.add(line);
+						_cat.add(line);
 						String file = "categories/" + line;
 						readFile(file);
 					}
@@ -234,7 +256,8 @@ public class PracticeScene {
 	        String split = "\\|";
 	        List<String> questionTmp = new ArrayList<String>();
 	        List<String> answerTmp = new ArrayList<String>();
-	        
+	        List<String> clueTmp = new ArrayList<String>();
+		
 	        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
 	            while ((line = br.readLine()) != null) {
@@ -242,10 +265,12 @@ public class PracticeScene {
 	                String[] after = line.split(split);
 	                
 	                questionTmp.add(after[0]);
+			clueTmp.add(after[1]);
 	                answerTmp.add(after[2].trim());
 	            }
 	            
 	            question.add(questionTmp);
+		    clue.add(clueTmp);
 	            answer.add(answerTmp);
 
 	        } catch (Exception e) {
