@@ -76,7 +76,7 @@ public class PracticeScene {
 			count++;
 		}
 		//Practice scene
-		Scene scene = new Scene(vbox, 500, 45 * count + 124);
+		Scene scene = new Scene(vbox, 500, 45 * count + 164);
 		_primary.setTitle("Practice");
 		_primary.setScene(scene);
 
