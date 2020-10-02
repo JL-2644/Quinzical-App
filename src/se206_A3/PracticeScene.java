@@ -2,7 +2,6 @@ package se206_A3;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -132,7 +131,7 @@ public class PracticeScene {
 					VBox.setMargin(que, new Insets(10, 10, 10, 10));
 					VBox.setMargin(answerTxt, new Insets(10, 10, 10, 10));
 					VBox.setMargin(confirm, new Insets(10, 10, 10, 10));
-					vbox2.getChildren().addAll(label2, que, slider, info, replay, answerTxt, confirm);
+					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, answerTxt, confirm);
 					Scene scene2 = new Scene(vbox2, (int) len + 100, 450);
 					//tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
@@ -213,7 +212,7 @@ public class PracticeScene {
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
-									//not revealing the correct answer if the user hasn't answered the questions threee times
+									//not revealing the correct answer if the user hasn't answered the questions three times
 									//already
 									sen = "Wrong Answer";
 									HelperThread ttsQ = new HelperThread(sen);
@@ -246,36 +245,13 @@ public class PracticeScene {
 
 	//Initialize the information used for the game from categories/ folder.
 	public void initial() {
+				
 		try {
-			String find = "ls categories/";
-			ProcessBuilder pb = new ProcessBuilder("bash", "-c", find);
-			Process process = pb.start();
-
-			BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-			int exitStatus = process.waitFor();
-			String line;
-
-			if (exitStatus == 0) {
-
-				while ((line = stdout.readLine()) != null) {
+				for (String line:_catNames) {
 					_cat.add(line);
 					String file = "categories/" + line;
 					readFile(file);
 				}
-			} 
-
-			else {
-
-				while ((line = stderr.readLine()) != null) {
-					Alert a = new Alert(AlertType.ERROR);
-					a.setHeaderText("Can't find directory");
-					a.setTitle("Error encountered");
-					a.setContentText(line);
-					a.show();
-				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
