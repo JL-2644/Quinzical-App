@@ -37,14 +37,18 @@ public class PracticeScene {
 	private int _attempts = 0;
 	Button _back = new Button("Main Menu");
 
-	//Constructor
+	/*
+	 * Constructor
+	 */
 	public PracticeScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
 	}
 
-	//Method to start the scene
+	/*
+	 * Method to start the scene
+	 */
 	public void startScene() {
 		//Initialize the data(questions, answers, categories)
 		initial();
@@ -243,7 +247,9 @@ public class PracticeScene {
 		}
 	}
 
-	//Initialize the information used for the game from categories/ folder.
+	/*
+	 * Initialize the information used for the game from categories/ folder.
+	 */
 	public void initial() {
 				
 		try {
@@ -257,7 +263,9 @@ public class PracticeScene {
 		}
 	}
 
-	//Read file to give useful information such as clues, questions and answers.
+	/*
+	 * Read file to give useful information such as clues, questions and answers.
+	 */
 	public void readFile(String file) {
 		String line = "";
 		String split = "\\|";
@@ -285,7 +293,9 @@ public class PracticeScene {
 		}
 	}
 
-	//get random position from a list
+	/*
+	 * get random position from a list
+	 */
 	public int getRandomElement(List<String> list) {
 		Random rand = new Random();
 		return rand.nextInt(list.size());

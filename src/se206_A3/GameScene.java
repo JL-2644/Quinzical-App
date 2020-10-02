@@ -52,7 +52,10 @@ public class GameScene {
 		_menu = menu;
 		_catNames = catNames;
 	}
-
+	
+	/*
+	 * Starts the game scene
+	 */
 	public void startScene() {
 
 		// Create lists
@@ -242,6 +245,9 @@ public class GameScene {
 		_primary.show();
 	}
 
+	/*
+	 * Gets the answer scene layout
+	 */
 	public VBox answerLayout(Button click, String category, int lineNum) {
 		File winFile = new File("./saves/winnings");
 

@@ -29,7 +29,9 @@ public class RewardScene {
 		_primary = primary;
 		_menu = menu;
 	}
-
+	/*
+	 * Starts the reward scene
+	 */
 	public void startScene() {
 		// Title
 		Text title = new Text("Congratulations, you have finished the games module");
