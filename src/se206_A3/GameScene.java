@@ -250,7 +250,7 @@ public class GameScene {
 
 		Button btnEnter = new Button("Enter");
 		Button dkBtn = new Button("Don't know");
-		Button replay = new Button("Replay Q");
+		Button replay = new Button("Replay");
 
 		// Get the specified line from the category file
 		String readLine = null;
@@ -318,7 +318,7 @@ public class GameScene {
 				answer = answer.substring(answer.indexOf("|") + 1);
 
 				Alert a = new Alert(AlertType.CONFIRMATION);
-				
+
 				// Check if answer has multiple correct answers
 				String[] answers = null;
 				if (answer.indexOf('/') != -1) {
@@ -332,7 +332,7 @@ public class GameScene {
 					answers = new String[1];
 					answers[0] = answer.toLowerCase();
 				}
-				
+
 				//if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
 				if (Arrays.asList(answers).contains(txtInput.getText().toLowerCase())) {
 					a.setTitle("Correct");
@@ -425,12 +425,13 @@ public class GameScene {
 		Label clue = new Label("Clue: " + text + "...");
 		clue.setFont(new Font(15));
 		clue.setMinWidth(Region.USE_PREF_SIZE);
-		
+		Label info = new Label("Adjust question speed");
+
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
-		
 
-		layout.getChildren().addAll(clue, txtInput, tileBtns, slider);
+
+		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info);
 		return layout;
 	}
 

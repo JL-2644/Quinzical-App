@@ -10,23 +10,23 @@ public class HelperThread extends Thread{
 
 	private String text;
 	private double _speed;
-	
+
 	public HelperThread(String text) {
 		this.text = text;
 		_speed = 1;
 	}
-	
+
 	public HelperThread(String text, double speed) {
 		this.text = text;
 		_speed = speed;
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		// Creates a directory for tts files
 		new File("./tts").mkdir();
-				
+
 		// Write to a scm file
 		File tts = new File("./tts/question.scm");
 		BufferedWriter scmWriter = null;
@@ -43,7 +43,7 @@ public class HelperThread extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Run the file in bash
 		String cmd = "`" + "festival -b ./tts/question.scm" + "`";
 		ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);

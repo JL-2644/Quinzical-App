@@ -25,7 +25,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PracticeScene {
-	
+
 	private Stage _primary;
 	private Scene _menu;
 	private String[] _catNames;
@@ -37,13 +37,13 @@ public class PracticeScene {
 	private List<String> _cat = new ArrayList<String>();
 	private int _attempts = 0;
 	Button _back = new Button("Main Menu");
-	
+
 	public PracticeScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
 	}
-	
+
 	public void startScene() {
 		initial();
 		int count = 0;
@@ -73,7 +73,7 @@ public class PracticeScene {
 		Scene scene = new Scene(vbox, 500, 45 * count + 124);
 		_primary.setTitle("Practice");
 		_primary.setScene(scene);
-		
+
 		for (Button cat:catList) {
 			cat.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -102,6 +102,7 @@ public class PracticeScene {
 					VBox.setMargin(que, new Insets(10, 10, 10, 10));
 					VBox.setMargin(slider, new Insets(10, 10, 10, 10));
 					Label clueLabel = new Label(clue.get(tmp).get(ran) + ": ...");
+					Label info = new Label("Adjust question speed");
 					VBox.setMargin(clueLabel, new Insets(10, 10, 10, 10));
 					Button replay = new Button("Replay");
 					replay.setOnAction(new EventHandler<ActionEvent>() {
@@ -115,15 +116,15 @@ public class PracticeScene {
 					VBox.setMargin(que, new Insets(10, 10, 10, 10));
 					VBox.setMargin(answerTxt, new Insets(10, 10, 10, 10));
 					VBox.setMargin(confirm, new Insets(10, 10, 10, 10));
-					vbox2.getChildren().addAll(label2, que, slider, replay, answerTxt, confirm);
-					Scene scene2 = new Scene(vbox2, (int) len + 100, 380);
+					vbox2.getChildren().addAll(label2, que, slider, info, replay, answerTxt, confirm);
+					Scene scene2 = new Scene(vbox2, (int) len + 100, 450);
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
 
 					_primary.setScene(scene2);
 					_primary.centerOnScreen();
 					_attempts = 0;
-					
+
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent e) {
@@ -183,7 +184,7 @@ public class PracticeScene {
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, (int) len + 100, 380);
+									Scene scene3 = new Scene(vbox3, (int) len + 100, 450);
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
@@ -198,9 +199,9 @@ public class PracticeScene {
 										Text hint = new Text("Hint: " + answer.get(tmp).get(ran).charAt(0));
 										VBox vbox4 = new VBox(5);
 										vbox4.setAlignment(Pos.CENTER);
-										vbox4.getChildren().addAll(label2, que, slider, replay, hint, clueLabel,
+										vbox4.getChildren().addAll(label2, que, slider, info, replay, hint, clueLabel,
 												answerTxt, confirm);
-										Scene scene4 = new Scene(vbox4, (int) len + 100, 380);
+										Scene scene4 = new Scene(vbox4, (int) len + 100, 450);
 										_primary.setScene(scene4);
 										_primary.centerOnScreen();
 									}
@@ -212,72 +213,72 @@ public class PracticeScene {
 			});
 		}
 	}
-	
-	//Initialize the information used for the game from categories/ folder.
-		public void initial() {
-			try {
-				String find = "ls categories/";
-				ProcessBuilder pb = new ProcessBuilder("bash", "-c", find);
-				Process process = pb.start();
 
-				BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				
-				int exitStatus = process.waitFor();
-				String line;
-					
-				if (exitStatus == 0) {
-							
-					while ((line = stdout.readLine()) != null) {
-						_cat.add(line);
-						String file = "categories/" + line;
-						readFile(file);
-					}
-				} 
-				
-				else {
-					
-					while ((line = stderr.readLine()) != null) {
-						Alert a = new Alert(AlertType.ERROR);
-						a.setHeaderText("Can't find directory");
-						a.setTitle("Error encountered");
-						a.setContentText(line);
-						a.show();
-					}
+	//Initialize the information used for the game from categories/ folder.
+	public void initial() {
+		try {
+			String find = "ls categories/";
+			ProcessBuilder pb = new ProcessBuilder("bash", "-c", find);
+			Process process = pb.start();
+
+			BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+			int exitStatus = process.waitFor();
+			String line;
+
+			if (exitStatus == 0) {
+
+				while ((line = stdout.readLine()) != null) {
+					_cat.add(line);
+					String file = "categories/" + line;
+					readFile(file);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			} 
+
+			else {
+
+				while ((line = stderr.readLine()) != null) {
+					Alert a = new Alert(AlertType.ERROR);
+					a.setHeaderText("Can't find directory");
+					a.setTitle("Error encountered");
+					a.setContentText(line);
+					a.show();
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	
+	}
+
 	//Read file to give useful information such as values, questions and answers.
 	public void readFile(String file) {
 		String line = "";
-	        String split = "\\|";
-	        List<String> questionTmp = new ArrayList<String>();
-	        List<String> answerTmp = new ArrayList<String>();
-	        List<String> clueTmp = new ArrayList<String>();
-		
-	        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		String split = "\\|";
+		List<String> questionTmp = new ArrayList<String>();
+		List<String> answerTmp = new ArrayList<String>();
+		List<String> clueTmp = new ArrayList<String>();
 
-	            while ((line = br.readLine()) != null) {
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
-	                String[] after = line.split(split);
-	                
-	                questionTmp.add(after[0]);
-			clueTmp.add(after[1]);
-	                answerTmp.add(after[2].trim());
-	            }
-	            
-	            question.add(questionTmp);
-		    clue.add(clueTmp);
-	            answer.add(answerTmp);
+			while ((line = br.readLine()) != null) {
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+				String[] after = line.split(split);
+
+				questionTmp.add(after[0]);
+				clueTmp.add(after[1]);
+				answerTmp.add(after[2].trim());
+			}
+
+			question.add(questionTmp);
+			clue.add(clueTmp);
+			answer.add(answerTmp);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public int getRandomElement(List<String> list) {
 		Random rand = new Random();
 		return rand.nextInt(list.size());

@@ -24,18 +24,18 @@ public class RewardScene {
 	private Scene _reward, _menu;
 	private Button _menuBtn;
 	private Stage _primary;
-	
+
 	public RewardScene(Stage primary, Scene menu) {
 		_primary = primary;
 		_menu = menu;
 	}
-	
+
 	public void startScene() {
 		// Title
 		Text title = new Text("Congratulations, you have finished the games module");
 		title.setTextAlignment(TextAlignment.CENTER);
 		title.setFont(new Font(15));
-		
+
 		// Read money value from file
 		File winFile = new File("./saves/winnings");
 		BufferedReader win = null;
@@ -52,10 +52,10 @@ public class RewardScene {
 			e.printStackTrace();
 		}
 		score = Integer.parseInt(moneyPool);
-		
+
 		// Display text of the final score
 		Label finalScore = new Label("Your final score was " + score);
-		
+
 		_menuBtn =  new Button("Play Again?");
 		_menuBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -69,7 +69,7 @@ public class RewardScene {
 				_primary.setScene(_menu);
 			}	
 		});
-		
+
 		// Create a layout for the reward scene
 		VBox rewardLayout = new VBox(50);
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
