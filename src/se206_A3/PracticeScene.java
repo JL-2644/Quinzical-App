@@ -35,7 +35,7 @@ public class PracticeScene {
 	private List<List<String>> answer = new ArrayList<List<String>>();
 	private List<String> _cat = new ArrayList<String>();
 	private int _attempts = 0;
-	Button _back = new Button("Main Menu");
+	private Button _back = new Button("Main Menu");
 
 	/*
 	 * Constructor
@@ -54,7 +54,8 @@ public class PracticeScene {
 		initial();
 		int count = 0;
 		//button for going to main menu
-		_back.setOnAction(new EventHandler<ActionEvent>() {
+		Button back = new Button("Main Menu");
+		back.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				_primary.setTitle("Quinzical");
@@ -66,10 +67,10 @@ public class PracticeScene {
 		label.setFont(new Font("Arial", 24));
 		VBox vbox = new VBox(5);
 		vbox.setAlignment(Pos.CENTER);
-		vbox.getChildren().add(_back);
+		vbox.getChildren().add(back);
 		vbox.getChildren().add(label);
 		VBox.setMargin(label, new Insets(10, 10, 10, 10));
-		VBox.setMargin(_back, new Insets(10, 10, 10, 10));
+		VBox.setMargin(back, new Insets(10, 10, 10, 10));
 		//create buttons according to amount of categories
 		for (String cat:_cat) {
 			Button catButton = new Button(cat);
@@ -207,6 +208,15 @@ public class PracticeScene {
 									VBox.setMargin(que, new Insets(10, 10, 10, 10));
 									VBox.setMargin(practice, new Insets(10, 10, 10, 10));
 									VBox.setMargin(ans, new Insets(10, 10, 10, 10));
+									VBox.setMargin(_back, new Insets(10, 10, 10, 10));
+									_back.setOnAction(new EventHandler<ActionEvent>() {
+										@Override
+										public void handle(ActionEvent e) {
+											_primary.setTitle("Quinzical");
+											_primary.setScene(_menu);
+											_primary.centerOnScreen();
+										}
+									});
 									
 									//tts the answer
 									HelperThread ttsQ = new HelperThread(sen);
@@ -216,7 +226,8 @@ public class PracticeScene {
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
-									//not revealing the correct answer if the user hasn't answered the questions three times
+									//not revealing the correct answer if the user hasn't 
+									//answered the questions three times
 									//already
 									sen = "Wrong Answer";
 									HelperThread ttsQ = new HelperThread(sen);
