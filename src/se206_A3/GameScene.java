@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -43,7 +46,7 @@ public class GameScene {
 	private Scene _menu, _game, answerScene;
 	private String[] _catNames;
 	private Random _rnd;
-	private int _monVal;
+	private int _monVal, counter;
 	private List<String> categories, lines, questions;
 	private Button _valueBtn, _backBtn, btnClicked;
 
@@ -52,7 +55,7 @@ public class GameScene {
 		_menu = menu;
 		_catNames = catNames;
 	}
-	
+
 	/*
 	 * Starts the game scene
 	 */
@@ -289,6 +292,50 @@ public class GameScene {
 		slider.setShowTickMarks(true);
 		slider.setBlockIncrement(0.25);
 
+
+		// Start the timer
+		Timer timer = new Timer();
+		counter = 45;
+		Label timeLeft = new Label("45 seconds left to answer");
+		TimerTask task = new TimerTask()
+		{
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						timeLeft.setText(Integer.toString(counter) + " seconds left to answer");
+						counter--;
+						if(counter == -1) {
+							// Get the answer
+							timer.cancel();
+							String readLine = null;
+							try {
+								readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							String answer = readLine.substring(readLine.indexOf("|") + 1);
+							answer = answer.substring(answer.indexOf("|") + 1);
+							answer = answer.substring(answer.indexOf("|") + 1);
+
+							Alert a = new Alert(AlertType.CONFIRMATION);
+							a.setTitle("Time is up");
+							// tts the answer
+							HelperThread ttsA = new HelperThread("Answer was " + answer);
+							ttsA.start();
+							a.setHeaderText("The correct answer was " + answer);
+							a.showAndWait();
+							update(category, lineNum);
+							startScene();
+						}
+					}
+				});
+			}
+		};
+		timer.scheduleAtFixedRate(task, 1000,1000);
+
 		// Allow user to enter their answer
 		TextField txtInput = new TextField();
 		btnEnter.setOnAction(new EventHandler<ActionEvent>() {
@@ -427,17 +474,17 @@ public class GameScene {
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(30);
 		layout.setAlignment(Pos.BASELINE_CENTER);
-		layout.setPadding(new Insets(100));
+		layout.setPadding(new Insets(80));
 		Label clue = new Label("Clue: " + text + "...");
 		clue.setFont(new Font(15));
 		clue.setMinWidth(Region.USE_PREF_SIZE);
-		Label info = new Label("Adjust question speed");
+		Label info = new Label("Adjust question speed (default is 1)");
 
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
 
 
-		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info);
+		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info, timeLeft);
 		return layout;
 	}
 

@@ -120,7 +120,7 @@ public class PracticeScene {
 					VBox.setMargin(slider, new Insets(10, 10, 10, 10));
 					
 					Label clueLabel = new Label(clue.get(tmp).get(ran) + ": ...");
-					Label info = new Label("Adjust question speed");
+					Label info = new Label("Adjust question speed (default is 1)");
 					VBox.setMargin(clueLabel, new Insets(10, 10, 10, 10));
 					
 					//replay button
