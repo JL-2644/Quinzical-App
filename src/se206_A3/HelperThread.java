@@ -8,16 +8,16 @@ import java.io.IOException;
 
 public class HelperThread extends Thread{
 
-	private String text;
+	private String _text;
 	private double _speed;
 
 	public HelperThread(String text) {
-		this.text = text;
+		_text = text;
 		_speed = 1;
 	}
 
 	public HelperThread(String text, double speed) {
-		this.text = text;
+		_text = text;
 		_speed = speed;
 	}
 
@@ -37,7 +37,7 @@ public class HelperThread extends Thread{
 			scmWriter.newLine();
 			scmWriter.write("(Parameter.set 'Duration_Stretch " + _speed + ")");
 			scmWriter.newLine();
-			scmWriter.write("(SayText " + "\"" + text + "\"" + ")");
+			scmWriter.write("(SayText " + "\"" + _text + "\"" + ")");
 			scmWriter.newLine();
 			scmWriter.close();
 		} catch (IOException e) {

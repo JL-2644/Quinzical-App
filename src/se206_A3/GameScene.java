@@ -3,37 +3,23 @@ package se206_A3;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -43,10 +29,10 @@ import javafx.stage.Stage;
 public class GameScene {
 
 	private Stage _primary;
-	private Scene _menu, _game, answerScene;
+	private Scene _menu, _game;
 	private String[] _catNames;
 	private Random _rnd;
-	private int _monVal, counter;
+	private int _monVal;
 	private List<String> categories, lines, questions;
 	private Button _valueBtn, _backBtn, btnClicked;
 
@@ -160,7 +146,7 @@ public class GameScene {
 				count++;
 			}
 		}
-		// If the game has been completed, show an alert box to reset
+		// If the game has been completed, display the reward scene
 		if(count == categories.size()) {
 			// Start up the reward scene
 			RewardScene reward = new RewardScene(_primary, _menu);
@@ -212,8 +198,10 @@ public class GameScene {
 								btnClicked = (Button) event.getSource();
 								// Only the lowest value is able to be clicked
 								if(lineNum == 0) {
-									answerScene = new Scene(answerLayout(btnClicked, cateNum, lineNum), 500, 450);
-									_primary.setScene(answerScene);
+									AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
+											lineNum, _primary, _catNames, _menu);
+									
+									answer.startScene();
 								}
 							}	
 						});
@@ -249,279 +237,10 @@ public class GameScene {
 	}
 
 	/*
-	 * Gets the answer scene layout
-	 */
-	public VBox answerLayout(Button click, String category, int lineNum) {
-		File winFile = new File("./saves/winnings");
-
-		// Get the value
-		int value = Integer.parseInt(click.getText());
-
-		Button btnEnter = new Button("Enter");
-		Button dkBtn = new Button("Don't know");
-		Button replay = new Button("Replay");
-
-		// Get the specified line from the category file
-		String readLine = null;
-		String question = null;
-		String text = null;
-		try {
-			readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-			question = readLine.substring(readLine.indexOf("|")+ 1);
-			text = question.substring(question.indexOf("|") + 1);
-			text = text.substring(0, text.indexOf("|"));
-			question = question.substring(0, question.indexOf("|"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// tts the question
-		HelperThread ttsQ = new HelperThread(question);
-		ttsQ.start();
-
-		// Create a slider for tts speed
-		Slider slider = new Slider();
-
-		// Set the sliders min, max and val
-		slider.setMin(0.5);
-		slider.setMax(2);
-		slider.setValue(1);
-
-		// Set increment
-		slider.setShowTickLabels(true);
-		slider.setShowTickMarks(true);
-		slider.setBlockIncrement(0.25);
-
-
-		// Start the timer
-		Timer timer = new Timer();
-		counter = 45;
-		Label timeLeft = new Label("45 seconds left to answer");
-		TimerTask task = new TimerTask()
-		{
-			@Override
-			public void run() {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						timeLeft.setText(Integer.toString(counter) + " seconds left to answer");
-						counter--;
-						if(counter == -1) {
-							// Get the answer
-							timer.cancel();
-							String readLine = null;
-							try {
-								readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							String answer = readLine.substring(readLine.indexOf("|") + 1);
-							answer = answer.substring(answer.indexOf("|") + 1);
-							answer = answer.substring(answer.indexOf("|") + 1);
-
-							Alert a = new Alert(AlertType.CONFIRMATION);
-							a.setTitle("Time is up");
-							// tts the answer
-							HelperThread ttsA = new HelperThread("Answer was " + answer);
-							ttsA.start();
-							a.setHeaderText("The correct answer was " + answer);
-							a.showAndWait();
-							update(category, lineNum);
-							startScene();
-						}
-					}
-				});
-			}
-		};
-		timer.scheduleAtFixedRate(task, 1000,1000);
-
-		// Allow user to enter their answer
-		TextField txtInput = new TextField();
-		btnEnter.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-
-				// Read money value from file
-				BufferedReader win = null;
-				int money = 0;
-				try {
-					win = new BufferedReader(new FileReader(winFile));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-				String moneyPool = null;
-				try {
-					moneyPool = win.readLine();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				money = Integer.parseInt(moneyPool);
-
-				// Get the answer
-				String readLine = null;
-				try {
-					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				String answer = readLine.substring(readLine.indexOf("|") + 1);
-				answer = answer.substring(answer.indexOf("|") + 1);
-				answer = answer.substring(answer.indexOf("|") + 1);
-
-				Alert a = new Alert(AlertType.CONFIRMATION);
-
-				// Check if answer has multiple correct answers
-				String[] answers = null;
-				if (answer.indexOf('/') != -1) {
-					answers = answer.split("\\/+");
-					// Convert all string to lower case
-					for (int i = 0; i < answers.length; i++) {
-						answers[i] = answers[i].toLowerCase();
-					}
-				}
-				else {
-					answers = new String[1];
-					answers[0] = answer.toLowerCase();
-				}
-
-				//if (txtInput.getText().equalsIgnoreCase(answer.trim())) {
-				if (Arrays.asList(answers).contains(txtInput.getText().toLowerCase())) {
-					a.setTitle("Correct");
-					// tts correct
-					HelperThread ttsA = new HelperThread("Correct");
-					ttsA.start();
-					a.setHeaderText("Your answer was correct");
-					money += value;
-				}
-				else {
-					a.setTitle("Incorrect");
-					// tts the answer
-					HelperThread ttsA = new HelperThread("Answer was " + answer);
-					ttsA.start();
-					a.setHeaderText("The correct answer was " + answer);
-				}
-
-				// Write new money value to file
-				BufferedWriter out = null;
-				try {
-					out = new BufferedWriter(new FileWriter(winFile));
-					out.write("" + money);
-					out.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				update(category, lineNum);
-				a.showAndWait();
-				startScene();
-			}	
-		});
-
-		dkBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				// Get the answer
-				String readLine = null;
-				try {
-					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				String answer = readLine.substring(readLine.indexOf("|") + 1);
-				answer = answer.substring(answer.indexOf("|") + 1);
-				answer = answer.substring(answer.indexOf("|") + 1);
-
-				Alert a = new Alert(AlertType.CONFIRMATION);
-				a.setTitle("Answer");
-				// tts the answer
-				HelperThread ttsA = new HelperThread("Answer was " + answer);
-				ttsA.start();
-				a.setHeaderText("The correct answer was " + answer);
-
-				update(category, lineNum);
-				a.showAndWait();
-				startScene();
-			}
-		});
-
-		// Replay the question
-		replay.setOnAction(new EventHandler<ActionEvent> () {
-			@Override
-			public void handle(ActionEvent arg0) {
-				// Get the slider value
-				double speed = slider.getValue();
-
-				String readLine = null;
-				String question = null;
-				try {
-					readLine = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
-					question = readLine.substring(readLine.indexOf("|")+ 1);
-					question = question.substring(0, question.indexOf("|"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// tts the question
-				HelperThread ttsQ = new HelperThread(question, speed);
-				ttsQ.start();
-			}
-		});
-
-		// Layout of the answer scene where user gets to input answer to question
-		VBox layout = new VBox(30);
-		layout.setAlignment(Pos.BASELINE_CENTER);
-		layout.setPadding(new Insets(80));
-		Label clue = new Label("Clue: " + text + "...");
-		clue.setFont(new Font(15));
-		clue.setMinWidth(Region.USE_PREF_SIZE);
-		Label info = new Label("Adjust question speed (default is 1)");
-
-		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
-		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
-
-
-		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info, timeLeft);
-		return layout;
-	}
-
-	/*
-	 * Method updates save files so that questions which have been answered are removed
+	 * This method updates the save files so that questions which have been answered are removed
 	 */
 	public void update(String cateFile, int lineRemove) {
-		lineRemove++;
-		File inputFile = new File("./saves/"+cateFile);
-		File tmp = new File("./saves/"+cateFile+"Tmp");
-
-		BufferedReader reader = null;
-		BufferedWriter writer = null;
-		try {
-			reader = new BufferedReader(new FileReader(inputFile));	
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String currentLine;
-		int count = 0;
-		try {
-			writer = new BufferedWriter(new FileWriter(tmp));
-			while((currentLine = reader.readLine()) != null) {
-				count++;
-				if (count == lineRemove) {
-					continue;
-				}
-				writer.write(currentLine + System.getProperty("line.separator"));
-			}
-			writer.close();
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		inputFile.delete();
-		tmp.renameTo(inputFile);
+		UpdateCategory cate = new UpdateCategory(cateFile, lineRemove);
+		cate.update();
 	}
 }
