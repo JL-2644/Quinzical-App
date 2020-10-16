@@ -62,7 +62,7 @@ public class GameScene {
 		File winFile = new File("./saves/winnings");
 		String[] saveFiles = saveDir.list();
 
-		// Preparation 
+		// Initial preparation of save states
 		if ( saveFiles.length < 1) {
 			// Selects 5 random unique categories
 			while (categories.size() < 5) {
@@ -102,7 +102,7 @@ public class GameScene {
 						try {
 							int val = _monVal;
 							savefile.createNewFile();
-							// Appends the new lines to the file
+							// Appends the new lines to the file with the values
 							out = new BufferedWriter(new FileWriter(savefile, true));
 							out.write(val + "|" + line);
 							out.newLine();
@@ -154,6 +154,7 @@ public class GameScene {
 			return;
 		}
 
+
 		TabPane tabs= new TabPane();
 		// Tabs cannot be closed
 		tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -192,19 +193,23 @@ public class GameScene {
 						int lineNum = row;
 						line = line.substring(0, line.indexOf("|"));
 						_valueBtn = new Button(line);
+						
+						// All other buttons disabled except the lowest value one
+						if(lineNum != 0) {
+							_valueBtn.setDisable(true);
+						}
+						
 						_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
 								btnClicked = (Button) event.getSource();
-								// Only the lowest value is able to be clicked
-								if(lineNum == 0) {
 									AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
 											lineNum, _primary, _catNames, _menu);
-									
+
 									answer.startScene();
-								}
 							}	
 						});
+						
 						cateLayout.getChildren().add(_valueBtn);
 						row++;
 					}
@@ -224,6 +229,23 @@ public class GameScene {
 			// Add btn to layout
 			cateLayout.getChildren().add(_backBtn);
 			tabs.getTabs().add(new Tab(categories.get(i), cateLayout));
+		}
+
+		// If two sections have been completed, open up international module
+		if(count >= 2 ) {
+			// Create a layout for each category
+			VBox cateLayout = new VBox(30);
+			cateLayout.setAlignment(Pos.CENTER);
+			cateLayout.setPadding(new Insets(30));
+
+			// Create a title
+			Text title = new Text("Select international question?");
+			title.setTextAlignment(TextAlignment.CENTER);
+			title.setFont(new Font(15));
+			// Add title to layout
+			cateLayout.getChildren().add(title);
+			
+			tabs.getTabs().add(new Tab("International", cateLayout));
 		}
 
 		// Creates a layout for the whole game module scene

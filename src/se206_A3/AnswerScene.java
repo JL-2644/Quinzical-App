@@ -52,7 +52,7 @@ public class AnswerScene {
 	}
 
 	public void startScene() {
-
+		GameScene game = new GameScene(_catNames, _primary, _menu);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value
@@ -106,7 +106,7 @@ public class AnswerScene {
 							a.showAndWait();
 							
 							update(_category, _lineNum);
-							returnToGame();
+							game.startScene();
 						}
 					}
 				});
@@ -185,7 +185,7 @@ public class AnswerScene {
 				timer.cancel();
 				a.showAndWait();
 				
-				returnToGame();
+				game.startScene();
 			}	
 		});
 
@@ -204,7 +204,7 @@ public class AnswerScene {
 				timer.cancel();
 				a.showAndWait();
 				
-				returnToGame();
+				game.startScene();
 			}
 		});
 
@@ -253,14 +253,6 @@ public class AnswerScene {
 	}
 	
 	/*
-	 * Method to return back to the game modules
-	 */
-	private void returnToGame() {
-		GameScene game = new GameScene(_catNames, _primary, _menu);
-		game.startScene();
-	}
-	
-	/*
 	 * Method to run the tts
 	 */
 	private void runTts(String type) {
@@ -282,6 +274,7 @@ public class AnswerScene {
 			e.printStackTrace();
 		}
 		msg = line.substring(line.indexOf("|") + 1);
+		
 		if (type.equals("answer")) {
 			msg = msg.substring(msg.indexOf("|") + 1);
 			msg = msg.substring(msg.indexOf("|") + 1);
@@ -296,6 +289,7 @@ public class AnswerScene {
 		else {
 			msg = "Error has occurred";
 		}
+		
 		return msg;
 	}
 }
