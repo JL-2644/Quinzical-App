@@ -15,10 +15,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -33,7 +35,7 @@ public class GameScene {
 	private String[] _catNames;
 	private Random _rnd;
 	private int _monVal;
-	private List<String> categories, lines, questions;
+	private List<String> _categories, _lines, _questions;
 	private Button _valueBtn, _backBtn, btnClicked;
 
 	public GameScene(String[] catNames, Stage primary, Scene menu) {
@@ -48,9 +50,9 @@ public class GameScene {
 	public void startScene() {
 
 		// Create lists
-		categories = new ArrayList<String>();
-		questions = new ArrayList<String>();
-		lines = new ArrayList<String>();
+		_categories = new ArrayList<String>();
+		_questions = new ArrayList<String>();
+		_lines = new ArrayList<String>();
 
 		// Instantiate a random object
 		_rnd = new Random();
@@ -65,26 +67,26 @@ public class GameScene {
 		// Initial preparation of save states
 		if ( saveFiles.length < 1) {
 			// Selects 5 random unique categories
-			while (categories.size() < 5) {
+			while (_categories.size() < 5) {
 				// Generates a random index number
 				int index = _rnd.nextInt(_catNames.length);
 				// Check if category has already been added
-				if(!categories.contains(_catNames[index])) {
-					categories.add(_catNames[index]);
+				if(!_categories.contains(_catNames[index])) {
+					_categories.add(_catNames[index]);
 				}
 			}
 			// Save the selected categories to a save folder
-			for (int i = 0; i < categories.size(); i++) {
+			for (int i = 0; i < _categories.size(); i++) {
 				// New text file inside saves for the category
-				File savefile = new File("./saves/" + categories.get(i));
+				File savefile = new File("./saves/" + _categories.get(i));
 				// Text file inside categories folder
-				File catefile = new File("./categories/" + categories.get(i));
+				File catefile = new File("./categories/" + _categories.get(i));
 
 				// Store all the lines from the category into a list
 				try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
 					String line;
 					while ((line = value.readLine()) != null) {
-						lines.add(line);
+						_lines.add(line);
 					}
 				}catch (IOException e) {
 					e.printStackTrace();
@@ -92,11 +94,11 @@ public class GameScene {
 
 				// Get 5 random questions from that list, write to the new file
 				_monVal = 100;
-				while (questions.size() < 5) {
-					int rndLineIndex = _rnd.nextInt(lines.size());
-					String line = lines.get(rndLineIndex);
+				while (_questions.size() < 5) {
+					int rndLineIndex = _rnd.nextInt(_lines.size());
+					String line = _lines.get(rndLineIndex);
 
-					if(!questions.contains(line)) {
+					if(!_questions.contains(line)) {
 						// Write the line to the new file
 						BufferedWriter out = null;
 						try {
@@ -111,11 +113,11 @@ public class GameScene {
 							e.printStackTrace();
 						}
 						_monVal += 100;
-						questions.add(line);
+						_questions.add(line);
 					}
 				}
-				questions.clear();
-				lines.clear();
+				_questions.clear();
+				_lines.clear();
 			}
 
 			// Create a winnings file to store money earned
@@ -133,25 +135,47 @@ public class GameScene {
 			// If game is ongoing, add the category names to the list
 			for (String category: saveFiles) {
 				if(!category.equals("winnings")) {
-					categories.add(category);
+					_categories.add(category);
 				}
 			}
 		}
 
 		// Check if all sections have been completed
 		int count = 0;
-		for (int i = 0; i < categories.size(); i++) {
-			File file = new File("./saves/"+ categories.get(i));
+		for (int i = 0; i < _categories.size(); i++) {
+			File file = new File("./saves/"+ _categories.get(i));
 			if (file.length() == 0) {
 				count++;
 			}
 		}
 		// If the game has been completed, display the reward scene
-		if(count == categories.size()) {
+		if(count == _categories.size()) {
 			// Start up the reward scene
 			RewardScene reward = new RewardScene(_primary, _menu);
 			reward.startScene();
 			return;
+		}
+		
+		// If two sections have been completed, open up international module
+		if(count >= 2 ) {
+			// New text file inside saves for the category
+			File international = new File("./saves/international");
+			// If first time unlocking then display a pop up 
+			if(!international.exists()) {
+				try {
+					international.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				Alert a = new Alert(AlertType.CONFIRMATION);
+				a.setTitle("Unlocked");
+				a.setHeaderText("Congratulations, you have unlocked the international section");
+				a.showAndWait();
+			}
+			
+			
+			_categories.add("international");
 		}
 
 
@@ -160,21 +184,21 @@ public class GameScene {
 		tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
 		// Create the tabs for the 5 categories
-		for (int i = 0; i < categories.size(); i++) {
+		for (int i = 0; i < _categories.size(); i++) {
 			// Create a layout for each category
 			VBox cateLayout = new VBox(30);
 			cateLayout.setAlignment(Pos.CENTER);
 			cateLayout.setPadding(new Insets(30));
 
 			// Create a title
-			Text title = new Text("Select " + categories.get(i) + " question?");
+			Text title = new Text("Select " + _categories.get(i) + " question?");
 			title.setTextAlignment(TextAlignment.CENTER);
 			title.setFont(new Font(15));
 			// Add title to layout
 			cateLayout.getChildren().add(title);
 
 			// New text file inside saves for the category
-			File savefile = new File("./saves/" + categories.get(i));
+			File savefile = new File("./saves/" + _categories.get(i));
 
 			boolean empty = !savefile.exists() || savefile.length() == 0;
 
@@ -187,7 +211,7 @@ public class GameScene {
 				try (BufferedReader value = new BufferedReader(new FileReader(savefile))){
 					String line;
 					int row = 0;
-					String cateNum = categories.get(i);
+					String cateNum = _categories.get(i);
 
 					while ((line = value.readLine()) != null) {
 						int lineNum = row;
@@ -228,24 +252,7 @@ public class GameScene {
 
 			// Add btn to layout
 			cateLayout.getChildren().add(_backBtn);
-			tabs.getTabs().add(new Tab(categories.get(i), cateLayout));
-		}
-
-		// If two sections have been completed, open up international module
-		if(count >= 2 ) {
-			// Create a layout for each category
-			VBox cateLayout = new VBox(30);
-			cateLayout.setAlignment(Pos.CENTER);
-			cateLayout.setPadding(new Insets(30));
-
-			// Create a title
-			Text title = new Text("Select international question?");
-			title.setTextAlignment(TextAlignment.CENTER);
-			title.setFont(new Font(15));
-			// Add title to layout
-			cateLayout.getChildren().add(title);
-			
-			tabs.getTabs().add(new Tab("International", cateLayout));
+			tabs.getTabs().add(new Tab(_categories.get(i), cateLayout));
 		}
 
 		// Creates a layout for the whole game module scene
