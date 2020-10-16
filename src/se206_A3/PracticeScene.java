@@ -1,7 +1,5 @@
 package se206_A3;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,7 +49,8 @@ public class PracticeScene {
 	 */
 	public void startScene() {
 		//Initialize the data(questions, answers, categories)
-		initial();
+		InitialData data = new InitialData();
+		data.initial(_catNames, _cat, question, clue, answer);
 		int count = 0;
 		//button for going to main menu
 		Button back = new Button("Main Menu");
@@ -137,7 +136,8 @@ public class PracticeScene {
 					VBox.setMargin(answerTxt, new Insets(10, 10, 10, 10));
 					VBox.setMargin(confirm, new Insets(10, 10, 10, 10));
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, answerTxt, confirm);
-					Scene scene2 = new Scene(vbox2, (int) len + 100, 450);
+					int sceneWidth = setWidth(len);
+					Scene scene2 = new Scene(vbox2, sceneWidth, 450);
 					//tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
@@ -222,7 +222,7 @@ public class PracticeScene {
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, (int) len + 100, 450);
+									Scene scene3 = new Scene(vbox3, sceneWidth, 450);
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
@@ -245,7 +245,7 @@ public class PracticeScene {
 												answerTxt, confirm);
 										
 										//change to a scene that contain hint
-										Scene scene4 = new Scene(vbox4, (int) len + 100, 450);
+										Scene scene4 = new Scene(vbox4, sceneWidth, 450);
 										_primary.setScene(scene4);
 										_primary.centerOnScreen();
 									}
@@ -259,56 +259,21 @@ public class PracticeScene {
 	}
 
 	/*
-	 * Initialize the information used for the game from categories/ folder.
-	 */
-	public void initial() {
-				
-		try {
-				for (String line:_catNames) {
-					_cat.add(line);
-					String file = "categories/" + line;
-					readFile(file);
-				}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
-	 * Read file to give useful information such as clues, questions and answers.
-	 */
-	public void readFile(String file) {
-		String line = "";
-		String split = "\\|";
-		List<String> questionTmp = new ArrayList<String>();
-		List<String> answerTmp = new ArrayList<String>();
-		List<String> clueTmp = new ArrayList<String>();
-
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
-			while ((line = br.readLine()) != null) {
-
-				String[] after = line.split(split);
-
-				questionTmp.add(after[0]);
-				clueTmp.add(after[1]);
-				answerTmp.add(after[2].trim());
-			}
-
-			question.add(questionTmp);
-			clue.add(clueTmp);
-			answer.add(answerTmp);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/*
 	 * get random position from a list
 	 */
 	public int getRandomElement(List<String> list) {
 		Random rand = new Random();
 		return rand.nextInt(list.size());
+	}
+	
+	/*
+	 * set minimum window width for practice scene.
+	 */
+	public int setWidth(double len) {
+		int sceneWidth = (int)len + 100;
+		if (sceneWidth < 500) {
+			sceneWidth = 500;
+		}
+		return sceneWidth;
 	}
 }
