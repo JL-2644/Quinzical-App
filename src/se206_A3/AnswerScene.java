@@ -245,7 +245,7 @@ public class AnswerScene {
 	}
 	
 	/*
-	 * Method updates save files so that questions which have been answered are removed
+	 * Method updates the save files so that questions which have been answered are removed
 	 */
 	private void update(String cateFile, int lineRemove) {
 		UpdateCategory cate = new UpdateCategory(cateFile, lineRemove);

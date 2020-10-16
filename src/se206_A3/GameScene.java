@@ -77,47 +77,7 @@ public class GameScene {
 			}
 			// Save the selected categories to a save folder
 			for (int i = 0; i < _categories.size(); i++) {
-				// New text file inside saves for the category
-				File savefile = new File("./saves/" + _categories.get(i));
-				// Text file inside categories folder
-				File catefile = new File("./categories/" + _categories.get(i));
-
-				// Store all the lines from the category into a list
-				try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
-					String line;
-					while ((line = value.readLine()) != null) {
-						_lines.add(line);
-					}
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				// Get 5 random questions from that list, write to the new file
-				_monVal = 100;
-				while (_questions.size() < 5) {
-					int rndLineIndex = _rnd.nextInt(_lines.size());
-					String line = _lines.get(rndLineIndex);
-
-					if(!_questions.contains(line)) {
-						// Write the line to the new file
-						BufferedWriter out = null;
-						try {
-							int val = _monVal;
-							savefile.createNewFile();
-							// Appends the new lines to the file with the values
-							out = new BufferedWriter(new FileWriter(savefile, true));
-							out.write(val + "|" + line);
-							out.newLine();
-							out.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						_monVal += 100;
-						_questions.add(line);
-					}
-				}
-				_questions.clear();
-				_lines.clear();
+				createSave(_categories.get(i), "categories");
 			}
 
 			// Create a winnings file to store money earned
@@ -133,8 +93,9 @@ public class GameScene {
 		}
 		else {
 			// If game is ongoing, add the category names to the list
+			// exclude winnings and international file
 			for (String category: saveFiles) {
-				if(!category.equals("winnings")) {
+				if(!category.equals("winnings") || !category.contentEquals("international")) {
 					_categories.add(category);
 				}
 			}
@@ -159,21 +120,16 @@ public class GameScene {
 		// If two sections have been completed, open up international module
 		if(count >= 2 ) {
 			// New text file inside saves for the category
-			File international = new File("./saves/international");
+			File international = new File("./saves/worldQ");
 			// If first time unlocking then display a pop up 
 			if(!international.exists()) {
-				try {
-					international.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				createSave("international", "catInternational");
 				
 				Alert a = new Alert(AlertType.CONFIRMATION);
 				a.setTitle("Unlocked");
 				a.setHeaderText("Congratulations, you have unlocked the international section");
 				a.showAndWait();
 			}
-			
 			
 			_categories.add("international");
 		}
@@ -266,10 +222,49 @@ public class GameScene {
 	}
 
 	/*
-	 * This method updates the save files so that questions which have been answered are removed
+	 * This method creates a save file for a specific category
 	 */
-	public void update(String cateFile, int lineRemove) {
-		UpdateCategory cate = new UpdateCategory(cateFile, lineRemove);
-		cate.update();
+	private void createSave(String cateName, String dir) {
+		// New text file inside saves for the category
+		File savefile = new File("./saves/" + cateName);
+		// Text file inside categories folder
+		File catefile = new File("./" + dir + "/" + cateName);
+
+		// Store all the lines from the category into a list
+		try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
+			String line;
+			while ((line = value.readLine()) != null) {
+				_lines.add(line);
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Get 5 random questions from that list, write to the new file
+		_monVal = 100;
+		while (_questions.size() < 5) {
+			int rndLineIndex = _rnd.nextInt(_lines.size());
+			String line = _lines.get(rndLineIndex);
+
+			if(!_questions.contains(line)) {
+				// Write the line to the new file
+				BufferedWriter out = null;
+				try {
+					int val = _monVal;
+					savefile.createNewFile();
+					// Appends the new lines to the file with the values
+					out = new BufferedWriter(new FileWriter(savefile, true));
+					out.write(val + "|" + line);
+					out.newLine();
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				_monVal += 100;
+				_questions.add(line);
+			}
+		}
+		_questions.clear();
+		_lines.clear();
 	}
 }
