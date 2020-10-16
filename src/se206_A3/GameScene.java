@@ -95,11 +95,13 @@ public class GameScene {
 			// If game is ongoing, add the category names to the list
 			// exclude winnings and international file
 			for (String category: saveFiles) {
-				if(!category.equals("winnings") || !category.contentEquals("international")) {
+				if(!category.equals("winnings") && !category.equals("International")) {
 					_categories.add(category);
 				}
+
 			}
 		}
+		File international = new File("./saves/International");
 
 		// Check if all sections have been completed
 		int count = 0;
@@ -109,31 +111,30 @@ public class GameScene {
 				count++;
 			}
 		}
+
 		// If the game has been completed, display the reward scene
-		if(count == _categories.size()) {
+		if(count == _categories.size() && international.length() == 0) {
 			// Start up the reward scene
 			RewardScene reward = new RewardScene(_primary, _menu);
 			reward.startScene();
 			return;
 		}
-		
+
 		// If two sections have been completed, open up international module
+
 		if(count >= 2 ) {
-			// New text file inside saves for the category
-			File international = new File("./saves/worldQ");
 			// If first time unlocking then display a pop up 
 			if(!international.exists()) {
-				createSave("international", "catInternational");
-				
+				createSave("International", "categoriesInternational");
+
 				Alert a = new Alert(AlertType.CONFIRMATION);
 				a.setTitle("Unlocked");
 				a.setHeaderText("Congratulations, you have unlocked the international section");
 				a.showAndWait();
 			}
-			
-			_categories.add("international");
-		}
 
+			_categories.add("International");
+		}
 
 		TabPane tabs= new TabPane();
 		// Tabs cannot be closed
@@ -168,28 +169,27 @@ public class GameScene {
 					String line;
 					int row = 0;
 					String cateNum = _categories.get(i);
-
 					while ((line = value.readLine()) != null) {
 						int lineNum = row;
 						line = line.substring(0, line.indexOf("|"));
 						_valueBtn = new Button(line);
-						
+
 						// All other buttons disabled except the lowest value one
 						if(lineNum != 0) {
 							_valueBtn.setDisable(true);
 						}
-						
+
 						_valueBtn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
 								btnClicked = (Button) event.getSource();
-									AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
-											lineNum, _primary, _catNames, _menu);
+								AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
+										lineNum, _primary, _catNames, _menu);
 
-									answer.startScene();
+								answer.startScene();
 							}	
 						});
-						
+
 						cateLayout.getChildren().add(_valueBtn);
 						row++;
 					}
