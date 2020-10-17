@@ -26,9 +26,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -40,6 +42,7 @@ public class AnswerScene {
 	private Button _click;
 	private String _category;
 	private int _lineNum, _counter, _value;
+	private final DropShadow shadow = new DropShadow();
 
 	public AnswerScene(Button click, String category, int lineNum, Stage primary,
 			String[] catNames, Scene menu) {
@@ -52,6 +55,9 @@ public class AnswerScene {
 	}
 
 	public void startScene() {
+		
+		shadow.setColor(Color.web("#7f96eb"));
+		
 		GameScene game = new GameScene(_catNames, _primary, _menu);
 		File winFile = new File("./saves/winnings");
 
@@ -61,6 +67,9 @@ public class AnswerScene {
 		Button btnEnter = new Button("Enter");
 		Button dkBtn = new Button("Don't know");
 		Button replay = new Button("Replay");
+		btnEnter.setEffect(shadow);
+		dkBtn.setEffect(shadow);
+		replay.setEffect(shadow);
 
 		// Get the question and clue
 		String question = getType("question");
