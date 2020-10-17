@@ -13,7 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -23,9 +25,12 @@ public class Quinzical extends Application{
 
 	private Button pracBtn, gameBtn, quitBtn;
 	private Scene menuScene;
+	private final DropShadow shadow = new DropShadow();
 	
 	@Override
 	public void start(Stage primaryStage) {
+		
+		shadow.setColor(Color.web("#7f96eb"));
 		
 		// Get an array of all the category names
 		File cateDir = new File("./categories");
@@ -35,6 +40,9 @@ public class Quinzical extends Application{
 		pracBtn= new Button("Enter practice module");
 		gameBtn= new Button("Enter Game Module");
 		quitBtn= new Button("Quit Game");
+		pracBtn.setEffect(shadow);
+		gameBtn.setEffect(shadow);
+		quitBtn.setEffect(shadow);
 		
 		// Title
 		Text title = new Text("Welcome to Quinzical!");
