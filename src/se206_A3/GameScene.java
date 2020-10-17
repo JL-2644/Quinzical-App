@@ -27,6 +27,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 public class GameScene {
 
@@ -37,6 +39,7 @@ public class GameScene {
 	private int _monVal;
 	private List<String> _categories, _lines, _questions;
 	private Button _valueBtn, _backBtn, btnClicked;
+	private final DropShadow shadow = new DropShadow();
 
 	public GameScene(String[] catNames, Stage primary, Scene menu) {
 		_primary = primary;
@@ -49,6 +52,8 @@ public class GameScene {
 	 */
 	public void startScene() {
 
+		shadow.setColor(Color.web("#7f96eb"));
+		
 		// Create lists
 		_categories = new ArrayList<String>();
 		_questions = new ArrayList<String>();
@@ -173,6 +178,7 @@ public class GameScene {
 						int lineNum = row;
 						line = line.substring(0, line.indexOf("|"));
 						_valueBtn = new Button(line);
+						_valueBtn.setEffect(shadow);
 
 						// All other buttons disabled except the lowest value one
 						if(lineNum != 0) {
@@ -199,6 +205,7 @@ public class GameScene {
 			}
 			// Button to go back to menu
 			_backBtn = new Button("Back to Menu");
+			_backBtn.setEffect(shadow);
 			_backBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
