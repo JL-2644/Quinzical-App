@@ -15,9 +15,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -34,6 +36,7 @@ public class PracticeScene {
 	private List<String> _cat = new ArrayList<String>();
 	private int _attempts = 0;
 	private Button _back = new Button("Main Menu");
+	private final DropShadow shadow = new DropShadow();
 
 	/*
 	 * Constructor
@@ -50,10 +53,12 @@ public class PracticeScene {
 	public void startScene() {
 		//Initialize the data(questions, answers, categories)
 		InitialData data = new InitialData();
+		shadow.setColor(Color.web("#7f96eb"));
 		data.initial(_catNames, _cat, question, clue, answer);
 		int count = 0;
 		//button for going to main menu
 		Button back = new Button("Main Menu");
+		back.setEffect(shadow);
 		back.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -73,6 +78,7 @@ public class PracticeScene {
 		//create buttons according to amount of categories
 		for (String cat:_cat) {
 			Button catButton = new Button(cat);
+			catButton.setEffect(shadow);
 			vbox.getChildren().add(catButton);
 			VBox.setMargin(catButton, new Insets(10, 10, 10, 10));
 			catList.add(catButton);
@@ -104,6 +110,7 @@ public class PracticeScene {
 					TextField answerTxt = new TextField();
 					answerTxt.setMaxWidth(180);
 					Button confirm = new Button("Submit");
+					confirm.setEffect(shadow);
 					
 					//set up slider for tts
 					Slider slider = new Slider();
@@ -124,6 +131,7 @@ public class PracticeScene {
 					
 					//replay button
 					Button replay = new Button("Replay");
+					replay.setEffect(shadow);
 					replay.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent e) {
@@ -194,6 +202,7 @@ public class PracticeScene {
 									
 									//Button to go back to practice module
 									Button practice = new Button("Practice Module");
+									practice.setEffect(shadow);
 									practice.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
 										public void handle(ActionEvent e) {
@@ -209,6 +218,7 @@ public class PracticeScene {
 									VBox.setMargin(practice, new Insets(10, 10, 10, 10));
 									VBox.setMargin(ans, new Insets(10, 10, 10, 10));
 									VBox.setMargin(_back, new Insets(10, 10, 10, 10));
+									_back.setEffect(shadow);
 									_back.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
 										public void handle(ActionEvent e) {
