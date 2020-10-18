@@ -1,4 +1,4 @@
-package se206_A3;
+package se206_A3.quinzical.utils;
 
 
 import java.io.BufferedWriter;

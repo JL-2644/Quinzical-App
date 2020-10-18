@@ -1,4 +1,4 @@
-package se206_A3;
+package se206_A3.quinzical.scenes;
 
 import java.io.File;
 
@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class Quinzical extends Application{
+public class Menu extends Application{
 
 	private Button pracBtn, gameBtn, quitBtn;
 	private Scene menuScene;

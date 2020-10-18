@@ -1,4 +1,4 @@
-package se206_A3;
+package se206_A3.quinzical.scenes;
 
 import java.io.BufferedReader;
 import java.io.File;

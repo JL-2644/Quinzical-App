@@ -1,4 +1,4 @@
-package se206_A3;
+package se206_A3.quinzical.scenes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,8 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import se206_A3.quinzical.utils.HelperThread;
+import se206_A3.quinzical.utils.InitialData;
 
 public class PracticeScene {
 

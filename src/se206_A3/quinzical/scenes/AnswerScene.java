@@ -1,4 +1,4 @@
-package se206_A3;
+package se206_A3.quinzical.scenes;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,6 +33,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import se206_A3.quinzical.utils.HelperThread;
+import se206_A3.quinzical.utils.UpdateCategory;
 
 public class AnswerScene {
 	
