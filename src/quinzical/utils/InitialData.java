@@ -1,4 +1,4 @@
-package se206_A3.quinzical.utils;
+package quinzical.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
