@@ -21,8 +21,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
-import se206_A3.quinzical.utils.HelperThread;
-import se206_A3.quinzical.utils.InitialData;
+import quinzical.utils.HelperThread;
+import quinzical.utils.InitialData;
 
 public class PracticeScene extends Menu{
 
@@ -259,7 +259,7 @@ public class PracticeScene extends Menu{
 												answerTxt, confirm);
 
 										// change to a scene that contain hint
-										Scene scene4 = new Scene(vbox4, sceneLength, 500);
+										Scene scene4 = new Scene(vbox4, sceneWidth, 500);
 										_primary.setScene(scene4);
 										_primary.centerOnScreen();
 									}
