@@ -15,6 +15,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -195,7 +197,7 @@ public class GameScene extends Menu{
 							public void handle(ActionEvent event) {
 								btnClicked = (Button) event.getSource();
 								AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
-										lineNum, _primary, _catNames, _menu);
+										lineNum, _primary, _catNames, _menu, theme);
 
 								answer.startScene();
 							}	
