@@ -74,7 +74,7 @@ public class PracticeScene extends Menu{
 				_primary.centerOnScreen();
 			}
 		});
-		Label label = new Label("Pick a catergory!!!");
+		Text label = new Text("Pick a catergory!!!");
 		theme.setText(label);
 		VBox vbox = new VBox(20);
 		vbox.setAlignment(Pos.CENTER);
@@ -149,8 +149,8 @@ public class PracticeScene extends Menu{
 						}
 					});
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, answerTxt, confirm);
-					int sceneLength = setLength(len);
-					Scene scene2 = new Scene(vbox2, sceneLength, 500);
+					int sceneWidth = setWidth(len);
+					Scene scene2 = new Scene(vbox2, sceneWidth, 500);
 					// tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
