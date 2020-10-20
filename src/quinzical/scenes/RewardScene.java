@@ -46,8 +46,7 @@ public class RewardScene extends Menu {
 		
 		// Title
 		Text title = new Text("Congratulations, you have finished the games module");
-		title.setTextAlignment(TextAlignment.CENTER);
-		title.setFont(new Font(15));
+		theme.setText(title);
 
 		// Read money value from file
 		File winFile = new File("./saves/winnings");
@@ -67,7 +66,8 @@ public class RewardScene extends Menu {
 		score = Integer.parseInt(moneyPool);
 
 		// Display text of the final score
-		Label finalScore = new Label("Your final score was " + score);
+		Text finalScore = new Text("Your final score was " + score);
+		theme.setSmallText(finalScore);
 
 		_menuBtn =  new Button("Play Again?");
 		_menuBtn.setOnAction(new EventHandler<ActionEvent>() {

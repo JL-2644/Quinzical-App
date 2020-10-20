@@ -43,7 +43,7 @@ public class Menu extends Application{
 		String[] cateFiles = cateDir.list();
 
 		// Create new buttons for the three options
-		pracBtn= new Button("Enter practice module");
+		pracBtn= new Button("Enter Practice Module");
 		gameBtn= new Button("Enter Game Module");
 		quitBtn= new Button("Quit Game");
 		settingBtn= new Button("Settings");
