@@ -154,7 +154,6 @@ public class GameScene extends Menu{
 		for (int i = 0; i < _categories.size(); i++) {
 			// Create a layout for each category
 			VBox cateLayout = new VBox(30);
-			cateLayout.setBackground(_bg);
 			cateLayout.setAlignment(Pos.CENTER);
 			cateLayout.setPadding(new Insets(30));
 
@@ -226,7 +225,9 @@ public class GameScene extends Menu{
 
 		// Creates a layout for the whole game module scene
 		VBox gameLayout = new VBox(50);
+
 		gameLayout.getChildren().addAll(tabs);
+		gameLayout.setBackground(_bg);
 		_game = new Scene(gameLayout, 500, 500);
 
 		// Display the scene
