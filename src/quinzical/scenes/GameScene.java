@@ -31,7 +31,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
-import quinzical.utils.UpdateCategory;
 
 public class GameScene extends Menu{
 
