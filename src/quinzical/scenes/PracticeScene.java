@@ -6,26 +6,25 @@ import java.util.Random;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import quinzical.utils.AppTheme;
 import se206_A3.quinzical.utils.HelperThread;
 import se206_A3.quinzical.utils.InitialData;
 
-public class PracticeScene {
+public class PracticeScene extends Menu{
 
 	private Stage _primary;
 	private Scene _menu;
@@ -39,25 +38,31 @@ public class PracticeScene {
 	private int _attempts = 0;
 	private Button _back = new Button("Main Menu");
 	private final DropShadow shadow = new DropShadow();
+	private Background _bg;
 
 	/*
 	 * Constructor
 	 */
-	public PracticeScene(String[] catNames, Stage primary, Scene menu) {
+	public PracticeScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
+		super.theme = theme;
 	}
 
 	/*
 	 * Method to start the scene
 	 */
 	public void startScene() {
+		
 		//Initialize the data(questions, answers, categories)
 		InitialData data = new InitialData();
-		shadow.setColor(Color.web("#7f96eb"));
 		data.initial(_catNames, _cat, question, clue, answer);
 		int count = 0;
+		
+		// Set shadow color
+		shadow.setColor(Color.web("#7f96eb"));
+		
 		//button for going to main menu
 		Button back = new Button("Main Menu");
 		back.setEffect(shadow);
@@ -70,22 +75,24 @@ public class PracticeScene {
 			}
 		});
 		Label label = new Label("Pick a catergory!!!");
-		label.setFont(new Font("Arial", 24));
-		VBox vbox = new VBox(5);
+		theme.setText(label);
+		VBox vbox = new VBox(20);
 		vbox.setAlignment(Pos.CENTER);
 		vbox.getChildren().add(back);
 		vbox.getChildren().add(label);
-		VBox.setMargin(label, new Insets(10, 10, 10, 10));
-		VBox.setMargin(back, new Insets(10, 10, 10, 10));
+		
 		//create buttons according to amount of categories
 		for (String cat:_cat) {
 			Button catButton = new Button(cat);
 			catButton.setEffect(shadow);
 			vbox.getChildren().add(catButton);
-			VBox.setMargin(catButton, new Insets(10, 10, 10, 10));
 			catList.add(catButton);
 			count++;
 		}
+		
+		_bg = theme.getBackground();
+		vbox.setBackground(_bg);
+		
 		//Practice scene
 		Scene scene = new Scene(vbox, 500, 45 * count + 164);
 		_primary.setTitle("Practice");
@@ -102,12 +109,13 @@ public class PracticeScene {
 					int ran = getRandomElement(question.get(tmp));
 					String randomQuestion = question.get(tmp).get(ran);
 					
-					Label label2 = new Label("Question");
-					label2.setFont(new Font("Arial", 24));
-					VBox vbox2 = new VBox(5);
+					Text label2 = new Text("Question");
+					theme.setText(label2);
+					VBox vbox2 = new VBox(20);
 					vbox2.setAlignment(Pos.CENTER);
-					VBox.setMargin(label2, new Insets(10, 10, 10, 10));
+					vbox2.setBackground(_bg);
 					Text que = new Text(randomQuestion);
+					theme.setSmallText(que);
 					double len = que.getLayoutBounds().getWidth();
 					TextField answerTxt = new TextField();
 					answerTxt.setMaxWidth(180);
@@ -124,12 +132,10 @@ public class PracticeScene {
 					slider.setBlockIncrement(0.25);
 					slider.setMaxWidth(180);
 					
-					VBox.setMargin(que, new Insets(10, 10, 10, 10));
-					VBox.setMargin(slider, new Insets(10, 10, 10, 10));
-					
-					Label clueLabel = new Label(clue.get(tmp).get(ran) + ": ...");
-					Label info = new Label("Adjust question speed (default is 1)");
-					VBox.setMargin(clueLabel, new Insets(10, 10, 10, 10));
+					Text clueLabel = new Text(clue.get(tmp).get(ran) + ": ...");
+					theme.setSmallText(clueLabel);
+					Text info = new Text("Adjust question speed (default is 1)");
+					theme.setSmallText(info);
 					
 					//replay button
 					Button replay = new Button("Replay");
@@ -142,13 +148,10 @@ public class PracticeScene {
 							ttsQ.start();
 						}
 					});
-					VBox.setMargin(que, new Insets(10, 10, 10, 10));
-					VBox.setMargin(answerTxt, new Insets(10, 10, 10, 10));
-					VBox.setMargin(confirm, new Insets(10, 10, 10, 10));
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, answerTxt, confirm);
-					int sceneWidth = setWidth(len);
-					Scene scene2 = new Scene(vbox2, sceneWidth, 450);
-					//tts the question
+					int sceneLength = setLength(len);
+					Scene scene2 = new Scene(vbox2, sceneLength, 500);
+					// tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
 
@@ -192,15 +195,15 @@ public class PracticeScene {
 								_attempts++;
 								//After all attempts
 								if (_attempts == 3) {
-									Label label3 = new Label("Question");
-									label3.setFont(new Font("Arial", 24));
-									Label label4 = new Label("Answer");
-									label4.setFont(new Font("Arial", 24));
-									VBox vbox3 = new VBox(5);
+									Text label3 = new Text("Question");
+									theme.setText(label3);
+									Text label4 = new Text("Answer");
+									theme.setText(label4);
+									VBox vbox3 = new VBox(40);
 									vbox3.setAlignment(Pos.CENTER);
-									VBox.setMargin(label3, new Insets(10, 10, 10, 10));
-									VBox.setMargin(label4, new Insets(10, 10, 10, 10));
+									vbox3.setBackground(_bg);
 									Text que = new Text(randomQuestion);
+									theme.setSmallText(que);
 									
 									//Button to go back to practice module
 									Button practice = new Button("Practice Module");
@@ -216,10 +219,7 @@ public class PracticeScene {
 									//show user the correct answer
 									sen = "The correct answer is: " + answer.get(tmp).get(ran);
 									Text ans = new Text(sen);
-									VBox.setMargin(que, new Insets(10, 10, 10, 10));
-									VBox.setMargin(practice, new Insets(10, 10, 10, 10));
-									VBox.setMargin(ans, new Insets(10, 10, 10, 10));
-									VBox.setMargin(_back, new Insets(10, 10, 10, 10));
+									theme.setSmallText(ans);
 									_back.setEffect(shadow);
 									_back.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
@@ -234,7 +234,7 @@ public class PracticeScene {
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, sceneWidth, 450);
+									Scene scene3 = new Scene(vbox3, sceneWidth, 500);
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
@@ -251,13 +251,15 @@ public class PracticeScene {
 									//User gets the first letter of the answer as a hint
 									if (_attempts == 2) {
 										Text hint = new Text("Hint: " + answer.get(tmp).get(ran).charAt(0));
-										VBox vbox4 = new VBox(5);
+										theme.setSmallText(hint);
+										VBox vbox4 = new VBox(20);
 										vbox4.setAlignment(Pos.CENTER);
+										vbox4.setBackground(_bg);
 										vbox4.getChildren().addAll(label2, que, slider, info, replay, hint, clueLabel,
 												answerTxt, confirm);
-										
-										//change to a scene that contain hint
-										Scene scene4 = new Scene(vbox4, sceneWidth, 450);
+
+										// change to a scene that contain hint
+										Scene scene4 = new Scene(vbox4, sceneLength, 500);
 										_primary.setScene(scene4);
 										_primary.centerOnScreen();
 									}
