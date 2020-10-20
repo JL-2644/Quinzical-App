@@ -10,4 +10,5 @@
 15/10/2020 - Finished the timers feature<br/>
 16/10/2020 - As a group refactored code into smaller classes<br/>
 17/10/2020 - Added the international questions database and finished the international section<br/>
-18/10/2020 - Added some special effects on buttons, refactored classes into multiple packages
+18/10/2020 - Added some special effects on buttons, refactored classes into multiple packages<br/>
+21/10/2020 - Added the macron buttons feature
