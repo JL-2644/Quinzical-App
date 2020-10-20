@@ -13,26 +13,37 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import quinzical.utils.AppTheme;
 
-public class RewardScene {
+public class RewardScene extends Menu {
 
 	private Scene _reward, _menu;
 	private Button _menuBtn;
 	private Stage _primary;
+	private final DropShadow shadow = new DropShadow();
+	private Background _bg;
 
-	public RewardScene(Stage primary, Scene menu) {
+	public RewardScene(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
 		_menu = menu;
+		super.theme = theme;
 	}
 	/*
 	 * Starts the reward scene
 	 */
 	public void startScene() {
+		
+		_bg = theme.getBackground();
+		shadow.setColor(Color.web("#7f96eb"));
+		
 		// Title
 		Text title = new Text("Congratulations, you have finished the games module");
 		title.setTextAlignment(TextAlignment.CENTER);
@@ -76,8 +87,9 @@ public class RewardScene {
 		VBox rewardLayout = new VBox(50);
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
 		rewardLayout.setPadding(new Insets(100));
+		rewardLayout.setBackground(_bg);
 		rewardLayout.getChildren().addAll(title, finalScore, _menuBtn);
-		_reward = new Scene(rewardLayout, 500, 450);
+		_reward = new Scene(rewardLayout, 500, 500);
 
 		// Display the scene
 		_primary.setScene(_reward);
