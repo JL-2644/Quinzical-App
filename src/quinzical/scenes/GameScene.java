@@ -15,22 +15,23 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
+import quinzical.utils.AppTheme;
+import quinzical.utils.UpdateCategory;
 
-public class GameScene {
+public class GameScene extends Menu{
 
 	private Stage _primary;
 	private Scene _menu, _game;
@@ -40,11 +41,13 @@ public class GameScene {
 	private List<String> _categories, _lines, _questions;
 	private Button _valueBtn, _backBtn, btnClicked;
 	private final DropShadow shadow = new DropShadow();
-
-	public GameScene(String[] catNames, Stage primary, Scene menu) {
+	private Background _bg;
+	
+	public GameScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
+		super.theme = theme;
 	}
 
 	/*
@@ -52,6 +55,7 @@ public class GameScene {
 	 */
 	public void startScene() {
 
+		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 		
 		// Create lists
@@ -120,7 +124,7 @@ public class GameScene {
 		// If the game has been completed, display the reward scene
 		if(count == _categories.size() && international.length() == 0) {
 			// Start up the reward scene
-			RewardScene reward = new RewardScene(_primary, _menu);
+			RewardScene reward = new RewardScene(_primary, _menu, theme);
 			reward.startScene();
 			return;
 		}
@@ -149,6 +153,7 @@ public class GameScene {
 		for (int i = 0; i < _categories.size(); i++) {
 			// Create a layout for each category
 			VBox cateLayout = new VBox(30);
+			cateLayout.setBackground(_bg);
 			cateLayout.setAlignment(Pos.CENTER);
 			cateLayout.setPadding(new Insets(30));
 
@@ -221,7 +226,7 @@ public class GameScene {
 		// Creates a layout for the whole game module scene
 		VBox gameLayout = new VBox(50);
 		gameLayout.getChildren().addAll(tabs);
-		_game = new Scene(gameLayout, 500, 450);
+		_game = new Scene(gameLayout, 500, 500);
 
 		// Display the scene
 		_primary.setScene(_game);
