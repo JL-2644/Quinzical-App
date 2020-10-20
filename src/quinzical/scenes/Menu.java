@@ -62,7 +62,7 @@ public class Menu extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the practice module scene
-				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene);
+				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene, theme);
 				prac.startScene();	
 			}
 		});
@@ -72,7 +72,7 @@ public class Menu extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the game module scene
-				GameScene game = new GameScene(cateFiles, primaryStage, menuScene);
+				GameScene game = new GameScene(cateFiles, primaryStage, menuScene, theme);
 				game.startScene();
 			}
 		});
@@ -115,7 +115,7 @@ public class Menu extends Application{
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setBackground(_bg);
 		layout.setPadding(new Insets(100));
-		layout.getChildren().addAll(title, pracBtn, gameBtn, quitBtn);
+		layout.getChildren().addAll(title, pracBtn, gameBtn,settingBtn, quitBtn);
 
 		menuScene = new Scene(layout, 500, 500);
 		primaryStage.setScene(menuScene);
