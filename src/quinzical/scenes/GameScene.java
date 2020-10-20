@@ -159,8 +159,7 @@ public class GameScene extends Menu{
 
 			// Create a title
 			Text title = new Text("Select " + _categories.get(i) + " question?");
-			title.setTextAlignment(TextAlignment.CENTER);
-			title.setFont(new Font(15));
+			theme.setText(title);
 			// Add title to layout
 			cateLayout.getChildren().add(title);
 
@@ -170,8 +169,8 @@ public class GameScene extends Menu{
 			boolean empty = !savefile.exists() || savefile.length() == 0;
 
 			if(empty) {
-				Label comp = new Label("Completed"); 
-				comp.setFont(new Font(10));
+				Text comp = new Text("Completed"); 
+				theme.setSmallText(comp);
 				cateLayout.getChildren().add(comp);
 			}
 			else {

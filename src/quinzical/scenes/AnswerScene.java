@@ -33,6 +33,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 import quinzical.utils.HelperThread;
@@ -100,7 +101,8 @@ public class AnswerScene extends Menu{
 		// Start the timer
 		Timer timer = new Timer();
 		_counter = 45;
-		Label timeLeft = new Label("45 seconds left to answer");
+		Text timeLeft = new Text("45 seconds left to answer");
+		theme.setSmallText(timeLeft);
 		TimerTask task = new TimerTask()
 		{
 			@Override
@@ -241,16 +243,17 @@ public class AnswerScene extends Menu{
 		});
 
 		// Layout of the answer scene where user gets to input answer to question
-		VBox layout = new VBox(30);
+		VBox layout = new VBox(35);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setBackground(_bg);
 		layout.setPadding(new Insets(80));
-		Label clue = new Label("Clue: " + text + "...");
-		clue.setFont(new Font(15));
-		clue.setMinWidth(Region.USE_PREF_SIZE);
-		Label info = new Label("Adjust question speed (default is 1)");
+		Text clue = new Text("Clue: " + text + "...");
+		theme.setSmallText(clue);
+		Text info = new Text("Adjust question speed (default is 1)");
+		theme.setSmallText(info);
 
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
+		tileBtns.setHgap(25);
 		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
 
 
