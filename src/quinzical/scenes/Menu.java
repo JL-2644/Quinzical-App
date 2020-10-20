@@ -117,10 +117,25 @@ public class Menu extends Application{
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				File saveDir = new File("./saves");
-				// Clear all save data
-				for(File file : saveDir.listFiles()) {
-					file.delete();
+				
+				Alert confirm = new Alert(AlertType.CONFIRMATION);
+				confirm.setTitle("Quinzical");
+				confirm.setHeaderText("Do you want to reset the game?");
+				
+				ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+				ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+
+				confirm.getButtonTypes().setAll(yesButton, noButton);
+				
+				confirm.showAndWait();
+				
+				// If user selected yes close the game, else continue to play
+				if(confirm.getResult() == yesButton) {
+					File saveDir = new File("./saves");
+					// Clear all save data
+					for(File file : saveDir.listFiles()) {
+						file.delete();
+					}
 				}
 			}	
 		});
