@@ -1,4 +1,4 @@
-package se206_A3.quinzical.scenes;
+package quinzical.scenes;
 
 import java.io.File;
 
