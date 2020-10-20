@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -39,6 +41,7 @@ public class PracticeScene extends Menu{
 	private Button _back = new Button("Main Menu");
 	private final DropShadow shadow = new DropShadow();
 	private Background _bg;
+	private Button[] _macrons;
 
 	/*
 	 * Constructor
@@ -132,6 +135,29 @@ public class PracticeScene extends Menu{
 					slider.setBlockIncrement(0.25);
 					slider.setMaxWidth(180);
 					
+					// Macron buttons
+					_macrons = new Button[5];
+					TilePane macronTile = new TilePane(Orientation.HORIZONTAL);
+					macronTile.setAlignment(Pos.BASELINE_CENTER);
+					macronTile.setHgap(30);
+					_macrons[0] = new Button("ā");
+					_macrons[1] = new Button("ē");
+					_macrons[2] = new Button("ī");
+					_macrons[3] = new Button("ō");
+					_macrons[4] = new Button("ū");
+					for (int i = 0; i < _macrons.length; i++) {
+						_macrons[i].setOnAction(new EventHandler<ActionEvent> () {
+							@Override
+							public void handle(ActionEvent event) {
+								String current = answerTxt.getText();
+								String getLetter = ((Button)event.getSource()).getText();
+								answerTxt.setText(current + getLetter);
+							}
+						});
+						macronTile.getChildren().add(_macrons[i]);
+					}
+					
+					
 					Text clueLabel = new Text(clue.get(tmp).get(ran) + ": ...");
 					theme.setSmallText(clueLabel);
 					Text info = new Text("Adjust question speed (default is 1)");
@@ -148,7 +174,7 @@ public class PracticeScene extends Menu{
 							ttsQ.start();
 						}
 					});
-					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, answerTxt, confirm);
+					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
 					int sceneWidth = setWidth(len);
 					Scene scene2 = new Scene(vbox2, sceneWidth, 500);
 					// tts the question
@@ -256,7 +282,7 @@ public class PracticeScene extends Menu{
 										vbox4.setAlignment(Pos.CENTER);
 										vbox4.setBackground(_bg);
 										vbox4.getChildren().addAll(label2, que, slider, info, replay, hint, clueLabel,
-												answerTxt, confirm);
+												macronTile, answerTxt, confirm);
 
 										// change to a scene that contain hint
 										Scene scene4 = new Scene(vbox4, sceneWidth, 500);

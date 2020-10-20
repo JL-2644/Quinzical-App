@@ -22,17 +22,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
@@ -40,7 +38,7 @@ import quinzical.utils.HelperThread;
 import quinzical.utils.UpdateCategory;
 
 public class AnswerScene extends Menu{
-	
+
 	private Stage _primary;
 	private Scene _menu;
 	private String[] _catNames;
@@ -49,8 +47,9 @@ public class AnswerScene extends Menu{
 	private int _lineNum, _counter, _value;
 	private final DropShadow shadow = new DropShadow();
 	private Background _bg;
-	
-		public AnswerScene(Button click, String category, int lineNum, Stage primary,
+	private Button[] _macrons;
+
+	public AnswerScene(Button click, String category, int lineNum, Stage primary,
 			String[] catNames, Scene menu, AppTheme theme) {
 		_click = click;
 		_category = category;
@@ -62,10 +61,10 @@ public class AnswerScene extends Menu{
 	}
 
 	public void startScene() {
-		
+
 		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
-		
+
 		GameScene game = new GameScene(_catNames, _primary, _menu, theme);
 		File winFile = new File("./saves/winnings");
 
@@ -117,12 +116,12 @@ public class AnswerScene extends Menu{
 							timer.cancel();
 							String answer = getType("answer");
 							runTts("Answer was " + answer);
-							
+
 							Alert a = new Alert(AlertType.CONFIRMATION);
 							a.setTitle("Time is up");
 							a.setHeaderText("The correct answer was " + answer);
 							a.showAndWait();
-							
+
 							update(_category, _lineNum);
 							game.startScene();
 						}
@@ -156,7 +155,6 @@ public class AnswerScene extends Menu{
 				money = Integer.parseInt(moneyPool);
 
 				String answer = getType("answer");
-				Alert a = new Alert(AlertType.CONFIRMATION);
 
 				// Check if answer has multiple correct answers
 				String[] answers = null;
@@ -173,19 +171,20 @@ public class AnswerScene extends Menu{
 				}
 
 				if (Arrays.asList(answers).contains(txtInput.getText().toLowerCase())) {
+					Alert a = new Alert(AlertType.NONE, "Answer is correct", ButtonType.OK);
 					a.setTitle("Correct");
 					// tts correct
 					runTts("Correct");
-
-					a.setHeaderText("Your answer was correct");
+					a.showAndWait();
+					
 					money += _value;
 				}
 				else {
+					Alert a = new Alert(AlertType.NONE, "The correct answer was " + answer, ButtonType.OK);
 					a.setTitle("Incorrect");
 					// tts the answer
 					runTts("Answer was " + answer);
-					
-					a.setHeaderText("The correct answer was " + answer);
+					a.showAndWait();
 				}
 
 				// Write new money value to file
@@ -201,8 +200,6 @@ public class AnswerScene extends Menu{
 
 				update(_category, _lineNum);
 				timer.cancel();
-				a.showAndWait();
-				
 				game.startScene();
 			}	
 		});
@@ -212,16 +209,14 @@ public class AnswerScene extends Menu{
 			public void handle(ActionEvent event) {
 				String answer = getType("answer");
 				runTts("Answer was " + answer);
-				
-				Alert a = new Alert(AlertType.CONFIRMATION);
+
+				Alert a = new Alert(AlertType.NONE, "The correct answer was " + answer, ButtonType.OK);
 				a.setTitle("Answer");
-				a.setHeaderText("The correct answer was " + answer);
-				// tts the answer
 
 				update(_category, _lineNum);
 				timer.cancel();
 				a.showAndWait();
-				
+
 				game.startScene();
 			}
 		});
@@ -232,15 +227,36 @@ public class AnswerScene extends Menu{
 			public void handle(ActionEvent arg0) {
 				// Get the slider value
 				double speed = slider.getValue();
-				
+
 				// Returns the question portion
 				String question = getType("question");
-				
+
 				// tts the question and speed
 				HelperThread ttsQ = new HelperThread(question, speed);
 				ttsQ.start();
 			}
 		});
+
+		// Macron buttons
+		_macrons = new Button[5];
+		TilePane macronTile = new TilePane(Orientation.HORIZONTAL);
+		macronTile.setHgap(50);
+		_macrons[0] = new Button("ā");
+		_macrons[1] = new Button("ē");
+		_macrons[2] = new Button("ī");
+		_macrons[3] = new Button("ō");
+		_macrons[4] = new Button("ū");
+		for (int i = 0; i < _macrons.length; i++) {
+			_macrons[i].setOnAction(new EventHandler<ActionEvent> () {
+				@Override
+				public void handle(ActionEvent event) {
+					String current = txtInput.getText();
+					String getLetter = ((Button)event.getSource()).getText();
+					txtInput.setText(current + getLetter);
+				}
+			});
+			macronTile.getChildren().add(_macrons[i]);
+		}
 
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(35);
@@ -257,13 +273,13 @@ public class AnswerScene extends Menu{
 		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
 
 
-		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info, timeLeft);
-		
+		layout.getChildren().addAll(clue, macronTile, txtInput, tileBtns, slider, info, timeLeft);
+
 		Scene answer = new Scene(layout, 500, 500);
 		_primary.setScene(answer);
 		_primary.show();
 	}
-	
+
 	/*
 	 * Method updates the save files so that questions which have been answered are removed
 	 */
@@ -271,7 +287,7 @@ public class AnswerScene extends Menu{
 		UpdateCategory cate = new UpdateCategory(cateFile, lineRemove);
 		cate.update();
 	}
-	
+
 	/*
 	 * Method to run the tts
 	 */
@@ -279,7 +295,7 @@ public class AnswerScene extends Menu{
 		HelperThread tts = new HelperThread(type);
 		tts.start();
 	}
-	
+
 	/*
 	 * This method returns the question,answer or clue portion
 	 */
@@ -288,13 +304,13 @@ public class AnswerScene extends Menu{
 		String msg = null;
 		try {
 			line = Files.readAllLines(Paths.get("./saves/"+_category)).get(_lineNum);
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		msg = line.substring(line.indexOf("|") + 1);
-		
+
 		if (type.equals("answer")) {
 			msg = msg.substring(msg.indexOf("|") + 1);
 			msg = msg.substring(msg.indexOf("|") + 1);
@@ -309,7 +325,7 @@ public class AnswerScene extends Menu{
 		else {
 			msg = "Error has occurred";
 		}
-		
+
 		return msg;
 	}
 }

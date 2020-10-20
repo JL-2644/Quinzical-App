@@ -47,7 +47,7 @@ public class SettingScene extends Menu{
 		_maori.setEffect(shadow);
 		_back.setEffect(shadow);
 		_bg = theme.getBackground();
-		VBox vbox = new VBox(40);
+		VBox vbox = new VBox(30);
 		vbox.getChildren().addAll(label, _light, _dark, _nz, _maori, _back);
 		vbox.setAlignment(Pos.BASELINE_CENTER);
 		vbox.setBackground(_bg);
