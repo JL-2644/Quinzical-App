@@ -14,21 +14,27 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import quinzical.utils.AppTheme;
 
 public class Menu extends Application{
 
-	private Button pracBtn, gameBtn, quitBtn;
+	private Button pracBtn, gameBtn, quitBtn, settingBtn;
 	private Scene menuScene;
 	private final DropShadow shadow = new DropShadow();
+	protected AppTheme theme = new AppTheme();
+	protected VBox layout;
+	private Background _bg;
 	
 	@Override
 	public void start(Stage primaryStage) {
+		
+		_bg = theme.getBackground();
 		
 		shadow.setColor(Color.web("#7f96eb"));
 		
@@ -40,14 +46,16 @@ public class Menu extends Application{
 		pracBtn= new Button("Enter practice module");
 		gameBtn= new Button("Enter Game Module");
 		quitBtn= new Button("Quit Game");
+		settingBtn= new Button("Settings");
 		pracBtn.setEffect(shadow);
 		gameBtn.setEffect(shadow);
 		quitBtn.setEffect(shadow);
+		settingBtn.setEffect(shadow);
 		
 		// Title
 		Text title = new Text("Welcome to Quinzical!");
+		theme.setText(title);
 		title.setTextAlignment(TextAlignment.CENTER);
-		title.setFont(new Font(25));
 		
 		// Handle when the practice module button is pressed
 		pracBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -92,16 +100,26 @@ public class Menu extends Application{
 			}
 		});
 		
+		// Handle when the settings button is pressed
+		settingBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// Start up the game module scene
+				SettingScene setting = new SettingScene(primaryStage, menuScene, theme, layout);
+				setting.startScene();
+			}
+		});
+		
 		// Layout of menu
 		VBox layout = new VBox(40);
 		layout.setAlignment(Pos.BASELINE_CENTER);
+		layout.setBackground(_bg);
 		layout.setPadding(new Insets(100));
 		layout.getChildren().addAll(title, pracBtn, gameBtn, quitBtn);
 
-		menuScene = new Scene(layout, 500, 450);
+		menuScene = new Scene(layout, 500, 500);
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
-		
 		
 		primaryStage.show();
 		
