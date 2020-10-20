@@ -27,16 +27,18 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import se206_A3.quinzical.utils.HelperThread;
-import se206_A3.quinzical.utils.UpdateCategory;
+import quinzical.utils.AppTheme;
+import quinzical.utils.HelperThread;
+import quinzical.utils.UpdateCategory;
 
-public class AnswerScene {
+public class AnswerScene extends Menu{
 	
 	private Stage _primary;
 	private Scene _menu;
@@ -45,22 +47,25 @@ public class AnswerScene {
 	private String _category;
 	private int _lineNum, _counter, _value;
 	private final DropShadow shadow = new DropShadow();
-
-	public AnswerScene(Button click, String category, int lineNum, Stage primary,
-			String[] catNames, Scene menu) {
+	private Background _bg;
+	
+		public AnswerScene(Button click, String category, int lineNum, Stage primary,
+			String[] catNames, Scene menu, AppTheme theme) {
 		_click = click;
 		_category = category;
 		_lineNum = lineNum;
 		_primary = primary;
 		_menu = menu;
 		_catNames = catNames;
+		super.theme = theme;
 	}
 
 	public void startScene() {
 		
+		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 		
-		GameScene game = new GameScene(_catNames, _primary, _menu);
+		GameScene game = new GameScene(_catNames, _primary, _menu, theme);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value
@@ -238,6 +243,7 @@ public class AnswerScene {
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(30);
 		layout.setAlignment(Pos.BASELINE_CENTER);
+		layout.setBackground(_bg);
 		layout.setPadding(new Insets(80));
 		Label clue = new Label("Clue: " + text + "...");
 		clue.setFont(new Font(15));
@@ -250,7 +256,7 @@ public class AnswerScene {
 
 		layout.getChildren().addAll(clue, txtInput, tileBtns, slider, info, timeLeft);
 		
-		Scene answer = new Scene(layout, 500, 450);
+		Scene answer = new Scene(layout, 500, 500);
 		_primary.setScene(answer);
 		_primary.show();
 	}
