@@ -24,7 +24,7 @@ import quinzical.utils.AppTheme;
 
 public class Menu extends Application{
 
-	private Button pracBtn, gameBtn, quitBtn, settingBtn, reset;
+	private Button pracBtn, gameBtn, quitBtn, settingBtn, reset, leaderboard;
 	private Scene menuScene;
 	private final DropShadow shadow = new DropShadow();
 	protected AppTheme theme = new AppTheme();
@@ -48,12 +48,14 @@ public class Menu extends Application{
 		quitBtn= new Button("Quit Game");
 		settingBtn= new Button("Settings");
 	    reset= new Button("Reset Game");
+	    leaderboard= new Button("View LeaderBoard");
 		
 		pracBtn.setEffect(shadow);
 		gameBtn.setEffect(shadow);
 		quitBtn.setEffect(shadow);
 		settingBtn.setEffect(shadow);
 		reset.setEffect(shadow);
+		leaderboard.setEffect(shadow);
 		
 		// Title
 		Text title = new Text("Welcome to Quinzical!");
@@ -125,12 +127,20 @@ public class Menu extends Application{
 			}	
 		});
 		
+		leaderboard.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				LeaderBoard board = new LeaderBoard(primaryStage, menuScene);
+				board.start();
+			}	
+		});
+		
 		// Layout of menu
 		layout = new VBox(30);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setBackground(_bg);
 		layout.setPadding(new Insets(100));
-		layout.getChildren().addAll(title, pracBtn, gameBtn, settingBtn, reset, quitBtn);
+		layout.getChildren().addAll(title, pracBtn, gameBtn, leaderboard, settingBtn, reset, quitBtn);
 
 		menuScene = new Scene(layout, 500, 500);
 		primaryStage.setScene(menuScene);
