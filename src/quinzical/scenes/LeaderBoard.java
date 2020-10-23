@@ -33,7 +33,7 @@ public class LeaderBoard extends Menu{
 	private final DropShadow shadow = new DropShadow();
 	private Scene _menu;
 	private Background _bg;
-	private static ObservableList<User> users = FXCollections.observableArrayList();
+	private ObservableList<User> users = FXCollections.observableArrayList();
 
 	public LeaderBoard(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
@@ -42,8 +42,7 @@ public class LeaderBoard extends Menu{
 	}
 
 	public void start() {
-		
-		users.clear();
+
 		File scoreFile = new File("./leaderboard/score");
 		
 		_bg = theme.getBackground();

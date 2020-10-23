@@ -47,8 +47,8 @@ public class RewardScene extends Menu {
 		shadow.setColor(Color.web("#7f96eb"));
 
 		// Title
-		Text title = new Text("Congratulations, you have finished the games module");
-		theme.setSmallText(title);
+		Text title = new Text("Congratulations");
+		theme.setText(title);
 
 		// Read money value from file
 		File winFile = new File("./saves/winnings");
@@ -71,6 +71,21 @@ public class RewardScene extends Menu {
 		Text finalScore = new Text("Your final score was " + score);
 		theme.setSmallText(finalScore);
 
+		Text reward = new Text();
+		theme.setSmallText(reward);
+		// Gold
+		if(score >= 6000) {
+			reward.setText("You have won Gold");
+		}
+		//Silver
+		else if (score >= 3000 && score < 6000) {
+			reward.setText("You have won Silver");
+		}
+		//Bronze
+		else {
+			reward.setText("You have won Bronze");
+		}
+		
 		_menuBtn =  new Button("Play Again?");
 		_menuBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -105,7 +120,7 @@ public class RewardScene extends Menu {
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
 		rewardLayout.setPadding(new Insets(100));
 		rewardLayout.setBackground(_bg);
-		rewardLayout.getChildren().addAll(title, finalScore, _addScore, _menuBtn);
+		rewardLayout.getChildren().addAll(title, finalScore, reward, _addScore, _menuBtn);
 		_reward = new Scene(rewardLayout, 650, 600);
 
 		// Display the scene
