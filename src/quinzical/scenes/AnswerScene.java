@@ -275,7 +275,7 @@ public class AnswerScene extends Menu{
 
 		layout.getChildren().addAll(clue, macronTile, txtInput, tileBtns, slider, info, timeLeft);
 
-		Scene answer = new Scene(layout, 500, 500);
+		Scene answer = new Scene(layout, 650, 600);
 		_primary.setScene(answer);
 		_primary.show();
 	}

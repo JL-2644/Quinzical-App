@@ -91,7 +91,7 @@ public class RewardScene extends Menu {
 				if(name.getText().length() == 0) {
 					name.setText("Anonymous");
 				}
-				LeaderBoard board = new LeaderBoard(_primary, _menu);
+				LeaderBoard board = new LeaderBoard(_primary, _menu, theme);
 				board.add(name.getText(), score);
 				clear();
 				_primary.setScene(_menu);
@@ -105,7 +105,7 @@ public class RewardScene extends Menu {
 		rewardLayout.setPadding(new Insets(100));
 		rewardLayout.setBackground(_bg);
 		rewardLayout.getChildren().addAll(title, finalScore, _addScore, _menuBtn);
-		_reward = new Scene(rewardLayout, 500, 500);
+		_reward = new Scene(rewardLayout, 650, 600);
 
 		// Display the scene
 		_primary.setScene(_reward);

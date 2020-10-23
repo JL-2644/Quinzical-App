@@ -12,13 +12,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import quinzical.utils.AppTheme;
 import quinzical.utils.User;
 
-public class LeaderBoard {
+public class LeaderBoard extends Menu{
 
 	private Button _backBtn, _clear;
 	private TableView<User> table;
@@ -26,13 +28,17 @@ public class LeaderBoard {
 	private final DropShadow shadow = new DropShadow();
 	private static ObservableList<User> users = FXCollections.observableArrayList();
 	private Scene _menu;
+	private Background _bg;
 
-	public LeaderBoard(Stage primary, Scene menu) {
+	public LeaderBoard(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
 		_menu = menu;
+		super.theme = theme;
 	}
 
 	public void start() {
+		
+		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
 		TableColumn<User, String> nameColumn = new TableColumn<>("Name");
@@ -44,6 +50,7 @@ public class LeaderBoard {
 		scoreColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("score"));
 
 		table = new TableView<>();
+		table.prefHeightProperty().bind(_primary.heightProperty().multiply(0.8));
 		table.setItems(getUsers());
 		table.getColumns().addAll(nameColumn, scoreColumn);
 
@@ -61,14 +68,15 @@ public class LeaderBoard {
 
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.setAlignment(Pos.BASELINE_CENTER);
-		tileBtns.setHgap(80);
+		tileBtns.setHgap(150);
 		tileBtns.getChildren().addAll(_clear, _backBtn);
 		
 		VBox vBox = new VBox(20);
 		vBox.setAlignment(Pos.CENTER);
 		vBox.getChildren().addAll(table, tileBtns);
+		vBox.setBackground(_bg);
 
-		Scene scene = new Scene(vBox, 500, 500);
+		Scene scene = new Scene(vBox, 650, 600);
 		_primary.setScene(scene);
 		_primary.show();
 

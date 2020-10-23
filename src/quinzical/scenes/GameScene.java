@@ -128,7 +128,6 @@ public class GameScene extends Menu{
 		}
 
 		// If two sections have been completed, open up international module
-
 		if(count >= 2 ) {
 			// If first time unlocking then display a pop up 
 			if(!international.exists()) {
@@ -152,7 +151,7 @@ public class GameScene extends Menu{
 			// Create a layout for each category
 			VBox cateLayout = new VBox(30);
 			cateLayout.setAlignment(Pos.CENTER);
-			cateLayout.setPadding(new Insets(30));
+			cateLayout.setPadding(new Insets(100));
 
 			// Create a title
 			Text title = new Text("Select " + _categories.get(i) + " question?");
@@ -224,7 +223,7 @@ public class GameScene extends Menu{
 
 		gameLayout.getChildren().addAll(tabs);
 		gameLayout.setBackground(_bg);
-		_game = new Scene(gameLayout, 500, 500);
+		_game = new Scene(gameLayout, 650, 600);
 
 		// Display the scene
 		_primary.setScene(_game);

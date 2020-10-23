@@ -97,7 +97,7 @@ public class PracticeScene extends Menu{
 		vbox.setBackground(_bg);
 		
 		//Practice scene
-		Scene scene = new Scene(vbox, 500, 45 * count + 164);
+		Scene scene = new Scene(vbox, 650, 45 * count + 164);
 		_primary.setTitle("Practice");
 		_primary.setScene(scene);
 
@@ -121,7 +121,7 @@ public class PracticeScene extends Menu{
 					theme.setSmallText(que);
 					double len = que.getLayoutBounds().getWidth();
 					TextField answerTxt = new TextField();
-					answerTxt.setMaxWidth(180);
+					answerTxt.setMaxWidth(300);
 					Button confirm = new Button("Submit");
 					confirm.setEffect(shadow);
 					
@@ -133,7 +133,7 @@ public class PracticeScene extends Menu{
 					slider.setShowTickLabels(true);
 					slider.setShowTickMarks(true);
 					slider.setBlockIncrement(0.25);
-					slider.setMaxWidth(180);
+					slider.setMaxWidth(320);
 					
 					// Macron buttons
 					_macrons = new Button[5];
@@ -176,7 +176,7 @@ public class PracticeScene extends Menu{
 					});
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
 					int sceneWidth = setWidth(len);
-					Scene scene2 = new Scene(vbox2, sceneWidth, 500);
+					Scene scene2 = new Scene(vbox2, sceneWidth, 600);
 					// tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
@@ -260,7 +260,7 @@ public class PracticeScene extends Menu{
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, sceneWidth, 500);
+									Scene scene3 = new Scene(vbox3, sceneWidth, 600);
 									_primary.setScene(scene3);
 									_primary.centerOnScreen();
 								} else {
@@ -285,7 +285,7 @@ public class PracticeScene extends Menu{
 												macronTile, answerTxt, confirm);
 
 										// change to a scene that contain hint
-										Scene scene4 = new Scene(vbox4, sceneWidth, 500);
+										Scene scene4 = new Scene(vbox4, sceneWidth, 600);
 										_primary.setScene(scene4);
 										_primary.centerOnScreen();
 									}
@@ -311,8 +311,8 @@ public class PracticeScene extends Menu{
 	 */
 	public int setWidth(double len) {
 		int sceneWidth = (int)len + 100;
-		if (sceneWidth < 500) {
-			sceneWidth = 500;
+		if (sceneWidth < 650) {
+			sceneWidth = 650;
 		}
 		return sceneWidth;
 	}

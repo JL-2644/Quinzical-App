@@ -64,10 +64,9 @@ public class SettingScene extends Menu{
 		vbox.setAlignment(Pos.BASELINE_CENTER);
 		vbox.setBackground(_bg);
 		vbox.setPadding(new Insets(100));
-		Scene setting = new Scene(vbox, 500, 500);
+		Scene setting = new Scene(vbox, 650, 600);
 		_primaryStage.setScene(setting);
 		_primaryStage.setTitle("Settings");
-		_primaryStage.centerOnScreen();
 		
 		// Handle when the light button is pressed
 		_light.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,11 +75,11 @@ public class SettingScene extends Menu{
 				theme.changeLight();
 				_bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori, _back);
+				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori, _reset, _back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
 				vbox2.setBackground(_bg);
 				vbox2.setPadding(new Insets(100));
-				Scene setting = new Scene(vbox2, 500, 500);
+				Scene setting = new Scene(vbox2, 650, 600);
 				_primaryStage.setScene(setting);
 				layout.setBackground(_bg);
 			}
@@ -94,10 +93,10 @@ public class SettingScene extends Menu{
 				_bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
 				vbox2.setBackground(_bg);
-				vbox2.getChildren().addAll(label,_light, _dark, _nz, _maori, _back);
+				vbox2.getChildren().addAll(label,_light, _dark, _nz, _maori, _reset, _back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
 				vbox2.setPadding(new Insets(100));
-				Scene setting = new Scene(vbox2, 500, 500);
+				Scene setting = new Scene(vbox2, 650, 600);
 				_primaryStage.setScene(setting);
 				layout.setBackground(_bg);
 			}
@@ -110,11 +109,11 @@ public class SettingScene extends Menu{
 				theme.changeNZ();
 				_bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori, _back);
+				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori,_reset, _back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
 				vbox2.setBackground(_bg);
 				vbox2.setPadding(new Insets(100));
-				Scene setting = new Scene(vbox2, 500, 500);
+				Scene setting = new Scene(vbox2, 650, 600);
 				_primaryStage.setScene(setting);
 				layout.setBackground(_bg);
 			}
@@ -127,11 +126,11 @@ public class SettingScene extends Menu{
 				theme.changeMaori();
 				_bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori, _back);
+				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori,_reset, _back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
 				vbox2.setBackground(_bg);
 				vbox2.setPadding(new Insets(100));
-				Scene setting = new Scene(vbox2, 500, 500);
+				Scene setting = new Scene(vbox2, 650, 600);
 				_primaryStage.setScene(setting);
 				layout.setBackground(_bg);
 			}

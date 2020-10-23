@@ -116,7 +116,7 @@ public class Menu extends Application{
 		leaderboard.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				LeaderBoard board = new LeaderBoard(primaryStage, menuScene);
+				LeaderBoard board = new LeaderBoard(primaryStage, menuScene, theme);
 				board.start();
 			}	
 		});
@@ -128,10 +128,10 @@ public class Menu extends Application{
 		layout.setPadding(new Insets(100));
 		layout.getChildren().addAll(title, pracBtn, gameBtn, leaderboard, settingBtn, quitBtn);
 
-		menuScene = new Scene(layout, 500, 500);
+		menuScene = new Scene(layout, 650, 600);
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
-		
+		primaryStage.centerOnScreen();
 		primaryStage.show();
 		
 	}
