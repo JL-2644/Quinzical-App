@@ -7,7 +7,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
@@ -53,8 +57,10 @@ public class SettingScene extends Menu{
 		_back.setEffect(shadow);
 		_reset.setEffect(shadow);
 		_bg = theme.getBackground();
-		VBox vbox = new VBox(30);
+
+		VBox vbox = new VBox(40);
 		vbox.getChildren().addAll(label, _light, _dark, _nz, _maori, _reset, _back);
+
 		vbox.setAlignment(Pos.BASELINE_CENTER);
 		vbox.setBackground(_bg);
 		vbox.setPadding(new Insets(100));
@@ -142,10 +148,24 @@ public class SettingScene extends Menu{
 		_reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				File saveDir = new File("./saves");
-				// Clear all save data
-				for(File file : saveDir.listFiles()) {
-					file.delete();
+				Alert confirm = new Alert(AlertType.CONFIRMATION);
+				confirm.setTitle("Quinzical");
+				confirm.setHeaderText("Do you want to reset the game?");
+				
+				ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+				ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+
+				confirm.getButtonTypes().setAll(yesButton, noButton);
+				
+				confirm.showAndWait();
+				
+				// If user selected yes close the game, else continue to play
+				if(confirm.getResult() == yesButton) {
+					File saveDir = new File("./saves");
+					// Clear all save data
+					for(File file : saveDir.listFiles()) {
+						file.delete();
+					}
 				}
 			}	
 		});
