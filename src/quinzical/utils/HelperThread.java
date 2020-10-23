@@ -18,7 +18,7 @@ public class HelperThread extends Thread{
 
 	public HelperThread(String text, double speed) {
 		_text = text;
-		_speed = speed;
+		_speed = 2.5 - speed;
 	}
 
 	@Override

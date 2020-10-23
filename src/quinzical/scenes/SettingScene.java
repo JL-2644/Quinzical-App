@@ -1,5 +1,7 @@
 package quinzical.scenes;
 
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,7 +21,7 @@ public class SettingScene extends Menu{
 
 	private Stage _primaryStage;
 	private Scene _menu;
-	private Button _light, _dark, _nz, _maori, _back;
+	private Button _light, _dark, _nz, _maori, _back, _reset;
 	private final DropShadow shadow = new DropShadow();
 	private Background _bg;
 	
@@ -35,20 +37,24 @@ public class SettingScene extends Menu{
 		label.setFill(Color.web("#f26868"));
 		label.setStroke(Color.web("#e82a2a"));
 		label.setFont(new Font("Arial", 24));
+		
 		shadow.setColor(Color.web("#7f96eb"));
 		_light = new Button("Light Theme");
 		_dark = new Button("Dark Theme");
 		_nz = new Button("New Zealand Flag");
 		_maori = new Button("Maori Flag");
 		_back = new Button("Main Menu");
+		_reset= new Button("Reset Game");
+		
 		_light.setEffect(shadow);
 		_dark.setEffect(shadow);
 		_nz.setEffect(shadow);
 		_maori.setEffect(shadow);
 		_back.setEffect(shadow);
+		_reset.setEffect(shadow);
 		_bg = theme.getBackground();
 		VBox vbox = new VBox(30);
-		vbox.getChildren().addAll(label, _light, _dark, _nz, _maori, _back);
+		vbox.getChildren().addAll(label, _light, _dark, _nz, _maori, _reset, _back);
 		vbox.setAlignment(Pos.BASELINE_CENTER);
 		vbox.setBackground(_bg);
 		vbox.setPadding(new Insets(100));
@@ -131,6 +137,17 @@ public class SettingScene extends Menu{
 			public void handle(ActionEvent event) {
 				_primaryStage.setScene(_menu);
 			}
+		});
+		
+		_reset.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				File saveDir = new File("./saves");
+				// Clear all save data
+				for(File file : saveDir.listFiles()) {
+					file.delete();
+				}
+			}	
 		});
 	}
 }

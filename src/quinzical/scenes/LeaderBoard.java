@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -18,7 +20,7 @@ import quinzical.utils.User;
 
 public class LeaderBoard {
 
-	private Button _backBtn;
+	private Button _backBtn, _clear;
 	private TableView<User> table;
 	private Stage _primary;
 	private final DropShadow shadow = new DropShadow();
@@ -54,10 +56,17 @@ public class LeaderBoard {
 				_primary.setScene(_menu);
 			}	
 		});
+		
+		_clear = new Button("Clear LeaderBoard");
 
+		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
+		tileBtns.setAlignment(Pos.BASELINE_CENTER);
+		tileBtns.setHgap(80);
+		tileBtns.getChildren().addAll(_clear, _backBtn);
+		
 		VBox vBox = new VBox(20);
 		vBox.setAlignment(Pos.CENTER);
-		vBox.getChildren().addAll(table, _backBtn);
+		vBox.getChildren().addAll(table, tileBtns);
 
 		Scene scene = new Scene(vBox, 500, 500);
 		_primary.setScene(scene);
