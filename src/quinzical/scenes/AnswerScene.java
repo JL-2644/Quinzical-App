@@ -322,9 +322,6 @@ public class AnswerScene extends Menu{
 		else if(type.equals("question")) {
 			msg = msg.substring(0, msg.indexOf("|"));
 		}
-		else {
-			msg = "Error has occurred";
-		}
 
 		return msg;
 	}

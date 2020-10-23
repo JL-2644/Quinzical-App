@@ -122,7 +122,7 @@ public class Menu extends Application{
 		});
 		
 		// Layout of menu
-		layout = new VBox(30);
+		layout = new VBox(40);
 		layout.setAlignment(Pos.BASELINE_CENTER);
 		layout.setBackground(_bg);
 		layout.setPadding(new Insets(100));

@@ -1,9 +1,11 @@
 package quinzical.scenes;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -92,7 +94,8 @@ public class RewardScene extends Menu {
 					name.setText("Anonymous");
 				}
 				LeaderBoard board = new LeaderBoard(_primary, _menu, theme);
-				board.add(name.getText(), score);
+				board.addUser(name.getText(), score);
+				save(name.getText(), score);
 				clear();
 				_primary.setScene(_menu);
 			}
@@ -118,6 +121,21 @@ public class RewardScene extends Menu {
 		File saveDir = new File("./saves");
 		for(File file : saveDir.listFiles()) {
 			file.delete();
+		}
+	}
+
+	public void save(String name, int score) {
+		// Write user and their score to file
+		File scoreFile = new File("./leaderboard/score");
+		BufferedWriter out = null;
+		try {
+			out = new BufferedWriter(new FileWriter(scoreFile, true));
+			out.write(name + "|" + score);
+			out.newLine();
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

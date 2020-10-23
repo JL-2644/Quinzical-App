@@ -1,5 +1,10 @@
 package quinzical.scenes;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,9 +31,10 @@ public class LeaderBoard extends Menu{
 	private TableView<User> table;
 	private Stage _primary;
 	private final DropShadow shadow = new DropShadow();
-	private static ObservableList<User> users = FXCollections.observableArrayList();
 	private Scene _menu;
 	private Background _bg;
+	private static ObservableList<User> users = FXCollections.observableArrayList();
+	private static int init = 0;
 
 	public LeaderBoard(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
@@ -38,20 +44,28 @@ public class LeaderBoard extends Menu{
 
 	public void start() {
 		
+		File scoreFile = new File("./leaderboard/score");
+		
 		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
 		TableColumn<User, String> nameColumn = new TableColumn<>("Name");
 		TableColumn<User, Integer> scoreColumn = new TableColumn<>("Score");
-		nameColumn.setMinWidth(200);
-		scoreColumn.setMinWidth(250);
+		nameColumn.setMinWidth(250);
+		scoreColumn.setMinWidth(300);
 		
 		nameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
 		scoreColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("score"));
 
 		table = new TableView<>();
 		table.prefHeightProperty().bind(_primary.heightProperty().multiply(0.8));
-		table.setItems(getUsers());
+		// Initialize previous winners onto the leaderboard
+		if(init == 0 && scoreFile.exists()) {
+			table.setItems(loadUsers());
+			init++;
+		}
+		
+		table.setItems(users);
 		table.getColumns().addAll(nameColumn, scoreColumn);
 
 		// Button to go back to menu
@@ -65,6 +79,13 @@ public class LeaderBoard extends Menu{
 		});
 		
 		_clear = new Button("Clear LeaderBoard");
+		_clear.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				scoreFile.delete();
+				users.clear();
+			}	
+		});
 
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.setAlignment(Pos.BASELINE_CENTER);
@@ -81,11 +102,26 @@ public class LeaderBoard extends Menu{
 		_primary.show();
 
 	}
-	public void add(String name, int score) {
+	public void addUser(String name, int score) {
 		users.add(new User(name, score));
 	}
-
-	public ObservableList<User> getUsers() {
+	
+	private ObservableList<User> loadUsers() {
+		File scoreFile = new File("./leaderboard/score");
+		String username = null;
+		int score = 0;
+		try (BufferedReader read = new BufferedReader(new FileReader(scoreFile))){
+			String line;
+			while ((line = read.readLine()) != null) {
+				username = line.substring(0, line.indexOf("|"));
+				score = Integer.parseInt(line.substring(line.indexOf("|") + 1));
+				addUser(username, score);
+			}
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return users;
 	}
 }
