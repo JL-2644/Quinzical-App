@@ -90,6 +90,7 @@ public class AnswerScene extends Menu{
 		slider.setMin(0.5);
 		slider.setMax(2);
 		slider.setValue(1);
+		slider.setMaxWidth(320);
 
 		// Set increment
 		slider.setShowTickLabels(true);
@@ -133,6 +134,7 @@ public class AnswerScene extends Menu{
 
 		// Allow user to enter their answer
 		TextField txtInput = new TextField();
+		txtInput.setMaxWidth(300);
 		// Check if entered answer is correct
 		btnEnter.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -240,6 +242,7 @@ public class AnswerScene extends Menu{
 		// Macron buttons
 		_macrons = new Button[5];
 		TilePane macronTile = new TilePane(Orientation.HORIZONTAL);
+		macronTile.setAlignment(Pos.BASELINE_CENTER);
 		macronTile.setHgap(50);
 		_macrons[0] = new Button("ā");
 		_macrons[1] = new Button("ē");
@@ -269,6 +272,7 @@ public class AnswerScene extends Menu{
 		theme.setSmallText(info);
 
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
+		tileBtns.setAlignment(Pos.BASELINE_CENTER);
 		tileBtns.setHgap(25);
 		tileBtns.getChildren().addAll(btnEnter, dkBtn, replay);
 

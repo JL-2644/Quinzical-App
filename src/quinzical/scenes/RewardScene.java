@@ -93,8 +93,6 @@ public class RewardScene extends Menu {
 				if(name.getText().length() == 0) {
 					name.setText("Anonymous");
 				}
-				LeaderBoard board = new LeaderBoard(_primary, _menu, theme);
-				board.addUser(name.getText(), score);
 				save(name.getText(), score);
 				clear();
 				_primary.setScene(_menu);

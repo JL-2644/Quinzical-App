@@ -34,7 +34,6 @@ public class LeaderBoard extends Menu{
 	private Scene _menu;
 	private Background _bg;
 	private static ObservableList<User> users = FXCollections.observableArrayList();
-	private static int init = 0;
 
 	public LeaderBoard(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
@@ -60,12 +59,9 @@ public class LeaderBoard extends Menu{
 		table = new TableView<>();
 		table.prefHeightProperty().bind(_primary.heightProperty().multiply(0.8));
 		// Initialize previous winners onto the leaderboard
-		if(init == 0 && scoreFile.exists()) {
+		if(scoreFile.exists()) {
 			table.setItems(loadUsers());
-			init++;
 		}
-		
-		table.setItems(users);
 		table.getColumns().addAll(nameColumn, scoreColumn);
 
 		// Button to go back to menu
@@ -102,9 +98,6 @@ public class LeaderBoard extends Menu{
 		_primary.show();
 
 	}
-	public void addUser(String name, int score) {
-		users.add(new User(name, score));
-	}
 	
 	private ObservableList<User> loadUsers() {
 		File scoreFile = new File("./leaderboard/score");
@@ -115,7 +108,7 @@ public class LeaderBoard extends Menu{
 			while ((line = read.readLine()) != null) {
 				username = line.substring(0, line.indexOf("|"));
 				score = Integer.parseInt(line.substring(line.indexOf("|") + 1));
-				addUser(username, score);
+				users.add(new User(username, score));
 			}
 		}
 		catch (IOException e) {
