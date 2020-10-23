@@ -43,6 +43,7 @@ public class LeaderBoard extends Menu{
 
 	public void start() {
 		
+		users.clear();
 		File scoreFile = new File("./leaderboard/score");
 		
 		_bg = theme.getBackground();
