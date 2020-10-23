@@ -79,11 +79,13 @@ public class RewardScene extends Menu {
 		}
 		//Silver
 		else if (score >= 3000 && score < 6000) {
-			reward.setText("You have won Silver");
+			int diff = 6000 - score;
+			reward.setText("You have won Silver. You were " + diff + " away from gold");
 		}
 		//Bronze
 		else {
-			reward.setText("You have won Bronze");
+			int diff = 3000 - score;
+			reward.setText("You have won Bronze. You were " + diff + " away from silver");
 		}
 		
 		_menuBtn =  new Button("Play Again?");
