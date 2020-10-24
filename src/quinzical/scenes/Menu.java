@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import quinzical.utils.AppTheme;
 
 public class Menu extends Application{
@@ -132,6 +133,7 @@ public class Menu extends Application{
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
 		primaryStage.centerOnScreen();
+		primaryStage.setResizable(false);
 		primaryStage.show();
 		
 	}
