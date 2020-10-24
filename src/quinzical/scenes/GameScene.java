@@ -3,11 +3,16 @@ package quinzical.scenes;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -34,11 +39,32 @@ public class GameScene extends Menu{
 
 		_bg = theme.getBackground();
 
-		// gonna replace with pics
-		nZBtn = new Button("NZ");
-		worldBtn = new Button("World");
+		Image world = new Image("file:./images/world.png");
+		ImageView viewWorld = new ImageView(world);
+		viewWorld.setFitHeight(125);
+		viewWorld.setFitWidth(125);
+		
+		Image nz = new Image("file:./images/flag.png");
+		ImageView viewNZ = new ImageView(nz);
+		viewNZ.setFitHeight(125);
+		viewNZ.setFitWidth(125);
+		
+		nZBtn = new Button();
+		nZBtn.setTranslateX(30);
+		nZBtn.setTranslateY(20);
+		nZBtn.setGraphic(viewNZ);
+		
+		worldBtn = new Button();
+		worldBtn.setTranslateX(170);
+		worldBtn.setTranslateY(20);
+		worldBtn.setGraphic(viewWorld);
+		
 		menuBtn = new Button("Back to Menu");
+		menuBtn.setTranslateY(160);
 
+		TilePane btnPane = new TilePane(Orientation.HORIZONTAL);
+		btnPane.getChildren().addAll(nZBtn, worldBtn);
+		
 		// Title
 		Text title = new Text("Games Mode");
 		theme.setText(title);
@@ -47,8 +73,8 @@ public class GameScene extends Menu{
 		VBox gameLayout = new VBox(40);
 		gameLayout.setAlignment(Pos.BASELINE_CENTER);
 		gameLayout.setBackground(_bg);
-		gameLayout.setPadding(new Insets(100));
-		gameLayout.getChildren().addAll(title, nZBtn, worldBtn, menuBtn);
+		gameLayout.setPadding(new Insets(80));
+		gameLayout.getChildren().addAll(title, btnPane, menuBtn);
 
 		Scene gameScene = new Scene(gameLayout, 650, 600);
 		primary.setScene(gameScene);
