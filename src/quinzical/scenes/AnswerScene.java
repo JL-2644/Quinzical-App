@@ -65,7 +65,7 @@ public class AnswerScene extends Menu{
 		_bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
-		GameScene game = new GameScene(_catNames, _primary, _menu, theme);
+		NZScene game = new NZScene(_catNames, _primary, _menu, theme);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value
