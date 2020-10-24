@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,6 +34,8 @@ public class RewardScene extends Menu {
 	private final DropShadow shadow = new DropShadow();
 	private Background _bg;
 	private int score;
+	private ImageView view;
+	private Image medal;
 
 	public RewardScene(Stage primary, Scene menu, AppTheme theme) {
 		_primary = primary;
@@ -75,18 +79,25 @@ public class RewardScene extends Menu {
 		theme.setSmallText(reward);
 		// Gold
 		if(score >= 6000) {
+			medal = new Image("file:./images/gold.png");
 			reward.setText("You have won Gold");
 		}
 		//Silver
 		else if (score >= 3000 && score < 6000) {
+			medal = new Image("file:./images/silver.png");
 			int diff = 6000 - score;
 			reward.setText("You have won Silver. You were " + diff + " away from gold");
 		}
 		//Bronze
 		else {
+			medal = new Image("file:./images/bronze.png");
 			int diff = 3000 - score;
 			reward.setText("You have won Bronze. You were " + diff + " away from silver");
 		}
+		
+		view = new ImageView(medal);
+		view.setFitHeight(150);
+		view.setPreserveRatio(true);
 		
 		_menuBtn =  new Button("Play Again?");
 		_menuBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,11 +129,11 @@ public class RewardScene extends Menu {
 		});
 
 		// Create a layout for the reward scene
-		VBox rewardLayout = new VBox(50);
+		VBox rewardLayout = new VBox(40);
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
-		rewardLayout.setPadding(new Insets(100));
+		rewardLayout.setPadding(new Insets(60));
 		rewardLayout.setBackground(_bg);
-		rewardLayout.getChildren().addAll(title, finalScore, reward, _addScore, _menuBtn);
+		rewardLayout.getChildren().addAll(title, finalScore, view, reward, _addScore, _menuBtn);
 		_reward = new Scene(rewardLayout, 650, 600);
 
 		// Display the scene
@@ -132,14 +143,14 @@ public class RewardScene extends Menu {
 	/*
 	 * Clear all the save data
 	 */
-	public void clear() {
+	private void clear() {
 		File saveDir = new File("./saves");
 		for(File file : saveDir.listFiles()) {
 			file.delete();
 		}
 	}
 
-	public void save(String name, int score) {
+	private void save(String name, int score) {
 		// Write user and their score to file
 		File scoreFile = new File("./leaderboard/score");
 		BufferedWriter out = null;
