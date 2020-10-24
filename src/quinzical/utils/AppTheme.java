@@ -53,7 +53,7 @@ public class AppTheme {
 	
 	public void changeNZ() {
 		str = "nz";
-		image = new Image("file:NZ.png");
+		image = new Image("file:./images/NZ.png");
 		BackgroundSize size = new BackgroundSize(394, 500, false, false, false, false);
 		BackgroundImage bgi = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, size);
 		bg = new Background(bgi);
@@ -61,7 +61,7 @@ public class AppTheme {
 	
 	public void changeMaori() {
 		str = "maori";
-		image = new Image("file:Maori.png");
+		image = new Image("file:./images/Maori.png");
 		BackgroundSize size = new BackgroundSize(354, 500, false, false, false, false);
 		BackgroundImage bgi = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, size);
 		bg = new Background(bgi);
