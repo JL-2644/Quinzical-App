@@ -23,15 +23,15 @@ import quinzical.utils.AppTheme;
 
 public class SettingScene extends Menu{
 
-	private Stage _primaryStage;
-	private Scene _menu;
-	private Button _light, _dark, _nz, _maori, _back, _reset;
+	private Stage primaryStage;
+	private Scene menu;
+	private Button light, dark, nz, maori, back, reset;
 	private final DropShadow shadow = new DropShadow();
-	private Background _bg;
+	private Background bg;
 	
 	public SettingScene(Stage primaryStage, Scene menuScene, AppTheme theme, VBox layout) {
-		_primaryStage = primaryStage;
-		_menu = menuScene;
+		this.primaryStage = primaryStage;
+		menu = menuScene;
 		super.theme = theme;
 		super.layout = layout;
 	}
@@ -43,108 +43,108 @@ public class SettingScene extends Menu{
 		label.setFont(new Font("Arial", 24));
 		
 		shadow.setColor(Color.web("#7f96eb"));
-		_light = new Button("Light Theme");
-		_dark = new Button("Dark Theme");
-		_nz = new Button("New Zealand Flag");
-		_maori = new Button("Maori Flag");
-		_back = new Button("Main Menu");
-		_reset= new Button("Reset Game");
+		light = new Button("Light Theme");
+		dark = new Button("Dark Theme");
+		nz = new Button("New Zealand Flag");
+		maori = new Button("Maori Flag");
+		back = new Button("Main Menu");
+		reset= new Button("Reset Game");
 		
-		_light.setEffect(shadow);
-		_dark.setEffect(shadow);
-		_nz.setEffect(shadow);
-		_maori.setEffect(shadow);
-		_back.setEffect(shadow);
-		_reset.setEffect(shadow);
-		_bg = theme.getBackground();
+		light.setEffect(shadow);
+		dark.setEffect(shadow);
+		nz.setEffect(shadow);
+		maori.setEffect(shadow);
+		back.setEffect(shadow);
+		reset.setEffect(shadow);
+		bg = theme.getBackground();
 
 		VBox vbox = new VBox(40);
-		vbox.getChildren().addAll(label, _light, _dark, _nz, _maori, _reset, _back);
+		vbox.getChildren().addAll(label, light, dark, nz, maori, reset, back);
 
 		vbox.setAlignment(Pos.BASELINE_CENTER);
-		vbox.setBackground(_bg);
+		vbox.setBackground(bg);
 		vbox.setPadding(new Insets(100));
 		Scene setting = new Scene(vbox, 650, 600);
-		_primaryStage.setScene(setting);
-		_primaryStage.setTitle("Settings");
+		primaryStage.setScene(setting);
+		primaryStage.setTitle("Settings");
 		
 		// Handle when the light button is pressed
-		_light.setOnAction(new EventHandler<ActionEvent>() {
+		light.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				theme.changeLight();
-				_bg = theme.getBackground();
+				bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori, _reset, _back);
+				vbox2.getChildren().addAll(label, light, dark, nz, maori, reset, back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
-				vbox2.setBackground(_bg);
+				vbox2.setBackground(bg);
 				vbox2.setPadding(new Insets(100));
 				Scene setting = new Scene(vbox2, 650, 600);
-				_primaryStage.setScene(setting);
-				layout.setBackground(_bg);
+				primaryStage.setScene(setting);
+				layout.setBackground(bg);
 			}
 		});
 		
 		// Handle when the dark button is pressed
-		_dark.setOnAction(new EventHandler<ActionEvent>() {
+		dark.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				theme.changeDark();
-				_bg = theme.getBackground();
+				bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.setBackground(_bg);
-				vbox2.getChildren().addAll(label,_light, _dark, _nz, _maori, _reset, _back);
+				vbox2.setBackground(bg);
+				vbox2.getChildren().addAll(label,light, dark, nz, maori, reset, back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
 				vbox2.setPadding(new Insets(100));
 				Scene setting = new Scene(vbox2, 650, 600);
-				_primaryStage.setScene(setting);
-				layout.setBackground(_bg);
+				primaryStage.setScene(setting);
+				layout.setBackground(bg);
 			}
 		});
 		
 		// Handle when NZ button is pressed
-		_nz.setOnAction(new EventHandler<ActionEvent>() {
+		nz.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				theme.changeNZ();
-				_bg = theme.getBackground();
+				bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori,_reset, _back);
+				vbox2.getChildren().addAll(label, light, dark, nz, maori,reset, back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
-				vbox2.setBackground(_bg);
+				vbox2.setBackground(bg);
 				vbox2.setPadding(new Insets(100));
 				Scene setting = new Scene(vbox2, 650, 600);
-				_primaryStage.setScene(setting);
-				layout.setBackground(_bg);
+				primaryStage.setScene(setting);
+				layout.setBackground(bg);
 			}
 		});
 		
 		// Handle when Maori button is pressed
-		_maori.setOnAction(new EventHandler<ActionEvent>() {
+		maori.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				theme.changeMaori();
-				_bg = theme.getBackground();
+				bg = theme.getBackground();
 				VBox vbox2 = new VBox(40);
-				vbox2.getChildren().addAll(label, _light, _dark, _nz, _maori,_reset, _back);
+				vbox2.getChildren().addAll(label, light, dark, nz, maori,reset, back);
 				vbox2.setAlignment(Pos.BASELINE_CENTER);
-				vbox2.setBackground(_bg);
+				vbox2.setBackground(bg);
 				vbox2.setPadding(new Insets(100));
 				Scene setting = new Scene(vbox2, 650, 600);
-				_primaryStage.setScene(setting);
-				layout.setBackground(_bg);
+				primaryStage.setScene(setting);
+				layout.setBackground(bg);
 			}
 		});
 		
 		// Handle when back button is pressed
-		_back.setOnAction(new EventHandler<ActionEvent>() {
+		back.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				_primaryStage.setScene(_menu);
+				primaryStage.setScene(menu);
 			}
 		});
 		
-		_reset.setOnAction(new EventHandler<ActionEvent>() {
+		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				Alert confirm = new Alert(AlertType.CONFIRMATION);

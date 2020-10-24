@@ -20,9 +20,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import quinzical.utils.AppTheme;
-
+/**
+ * This is the main class of the Quinzical application. This is the first display that
+ * the users see and contains transitions to other scenes like leader board, practice,
+ * settings, games, and has a quit button.
+ *  
+ * @author JiaQi and Marcus
+ *
+ */
 public class Menu extends Application{
 
 	private Button pracBtn, gameBtn, quitBtn, settingBtn, leaderboard;
@@ -30,20 +36,20 @@ public class Menu extends Application{
 	private final DropShadow shadow = new DropShadow();
 	protected AppTheme theme = new AppTheme();
 	protected VBox layout;
-	private Background _bg;
+	private Background bg;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		
-		_bg = theme.getBackground();
-		
+		// SetUp styling
+		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 		
 		// Get an array of all the category names
 		File cateDir = new File("./categories");
 		String[] cateFiles = cateDir.list();
 
-		// Create new buttons for the three options
+		// Create new buttons for the different options
 		pracBtn= new Button("Enter Practice Module");
 		gameBtn= new Button("Enter Game Module");
 		quitBtn= new Button("Quit Game");
@@ -56,12 +62,11 @@ public class Menu extends Application{
 		settingBtn.setEffect(shadow);
 		leaderboard.setEffect(shadow);
 		
-		// Title
+		// Create a title for the menu
 		Text title = new Text("Welcome to Quinzical!");
 		theme.setText(title);
 		title.setTextAlignment(TextAlignment.CENTER);
 		
-		// Handle when the practice module button is pressed
 		pracBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -71,7 +76,6 @@ public class Menu extends Application{
 			}
 		});
 		
-		// Handle when the games button is pressed
 		gameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -81,7 +85,6 @@ public class Menu extends Application{
 			}
 		});
 		
-		//Handle the quit button when pressed
 		quitBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -104,7 +107,6 @@ public class Menu extends Application{
 			}
 		});
 		
-		// Handle when the settings button is pressed
 		settingBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -125,11 +127,13 @@ public class Menu extends Application{
 		// Layout of menu
 		layout = new VBox(40);
 		layout.setAlignment(Pos.BASELINE_CENTER);
-		layout.setBackground(_bg);
+		layout.setBackground(bg);
 		layout.setPadding(new Insets(100));
 		layout.getChildren().addAll(title, pracBtn, gameBtn, leaderboard, settingBtn, quitBtn);
 
 		menuScene = new Scene(layout, 650, 600);
+		
+		// Setup the stage
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
 		primaryStage.centerOnScreen();

@@ -26,20 +26,27 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 
+/**
+ * Once the users have finished the NZ quiz game. They are then moved to this scene
+ * where the reward is displayed. There are three tiers, gold, silver and bronze that
+ * the user receives depending on their score.
+ * 
+ * @author JiaQi and Marcus
+ */
 public class RewardScene extends Menu {
 
-	private Scene _reward, _menu;
-	private Button _menuBtn, _addScore;
-	private Stage _primary;
+	private Scene _reward, menu;
+	private Button menuBtn, addScore;
+	private Stage primary;
 	private final DropShadow shadow = new DropShadow();
-	private Background _bg;
+	private Background bg;
 	private int score;
 	private ImageView view;
 	private Image medal;
 
 	public RewardScene(Stage primary, Scene menu, AppTheme theme) {
-		_primary = primary;
-		_menu = menu;
+		this.primary = primary;
+		this.menu = menu;
 		super.theme = theme;
 	}
 	/*
@@ -47,7 +54,7 @@ public class RewardScene extends Menu {
 	 */
 	public void startScene() {
 
-		_bg = theme.getBackground();
+		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
 		// Title
@@ -77,18 +84,18 @@ public class RewardScene extends Menu {
 
 		Text reward = new Text();
 		theme.setSmallText(reward);
-		// Gold
+		// Gold reward
 		if(score >= 6000) {
 			medal = new Image("file:./images/gold.png");
 			reward.setText("You have won Gold");
 		}
-		//Silver
+		//Silver reward
 		else if (score >= 3000 && score < 6000) {
 			medal = new Image("file:./images/silver.png");
 			int diff = 6000 - score;
 			reward.setText("You have won Silver. You were " + diff + " away from gold");
 		}
-		//Bronze
+		//Bronze reward
 		else {
 			medal = new Image("file:./images/bronze.png");
 			int diff = 3000 - score;
@@ -99,18 +106,18 @@ public class RewardScene extends Menu {
 		view.setFitHeight(150);
 		view.setPreserveRatio(true);
 		
-		_menuBtn =  new Button("Play Again?");
-		_menuBtn.setOnAction(new EventHandler<ActionEvent>() {
+		menuBtn =  new Button("Play Again?");
+		menuBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				clear();
 				// Go back to menu
-				_primary.setScene(_menu);
+				primary.setScene(menu);
 			}	
 		});
 
-		_addScore = new Button("Add to leaderBoard?");
-		_addScore.setOnAction(new EventHandler<ActionEvent>() {
+		addScore = new Button("Add to leaderBoard?");
+		addScore.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				TextInputDialog txtInput = new TextInputDialog();
@@ -123,7 +130,7 @@ public class RewardScene extends Menu {
 				}
 				save(name.getText(), score);
 				clear();
-				_primary.setScene(_menu);
+				primary.setScene(menu);
 			}
 
 		});
@@ -132,13 +139,13 @@ public class RewardScene extends Menu {
 		VBox rewardLayout = new VBox(40);
 		rewardLayout.setAlignment(Pos.BASELINE_CENTER);
 		rewardLayout.setPadding(new Insets(60));
-		rewardLayout.setBackground(_bg);
-		rewardLayout.getChildren().addAll(title, finalScore, view, reward, _addScore, _menuBtn);
+		rewardLayout.setBackground(bg);
+		rewardLayout.getChildren().addAll(title, finalScore, view, reward, addScore, menuBtn);
 		_reward = new Scene(rewardLayout, 650, 600);
 
 		// Display the scene
-		_primary.setScene(_reward);
-		_primary.show();
+		primary.setScene(_reward);
+		primary.show();
 	}
 	/*
 	 * Clear all the save data
@@ -150,6 +157,10 @@ public class RewardScene extends Menu {
 		}
 	}
 
+	/*
+	 * Saves the users to a leader board file. Thus, even after quitting the 
+	 * game the users in the leader board are remembered.
+	 */
 	private void save(String name, int score) {
 		// Write user and their score to file
 		File scoreFile = new File("./leaderboard/score");

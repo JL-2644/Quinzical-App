@@ -9,25 +9,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+/**
+ * This class creates a save state of the 5 categories selected by putting them into 
+ * a new directory called saves. This is done to allow users to continue with their 
+ * game even after quitting.
+ * 
+ * @author JiaQi and Marcus
+ *
+ */
+public class Saves {
 
-public class Preparation {
-
-	private List<String> _categories, _lines, _questions;
-	private Random _rnd;
-	private String[] _catNames;
-	private int _monVal;
+	private List<String> categories, lines, questions;
+	private Random rnd;
+	private String[] catNames;
+	private int monVal;
 	
-	public Preparation(String[] catNames) {
-		_catNames = catNames;
+	public Saves(String[] catNames) {
+		this.catNames = catNames;
 	}
-
+	/**
+	 *  This method return the list of categories that are either newly created or 
+	 *  obtained from previous save states
+	 */
 	public List<String> loadCategories() {
 		// Create lists
-		_categories = new ArrayList<String>();
-		_questions = new ArrayList<String>();
-		_lines = new ArrayList<String>();
+		categories = new ArrayList<String>();
+		questions = new ArrayList<String>();
+		lines = new ArrayList<String>();
 
-		_rnd = new Random();
+		rnd = new Random();
 
 		// Creates a directory for save files
 		new File("./saves").mkdir();
@@ -49,17 +59,17 @@ public class Preparation {
 		// Initial preparation of save states
 		if ( saveFiles.length < 1) {
 			// Selects 5 random unique categories
-			while (_categories.size() < 5) {
+			while (categories.size() < 5) {
 				// Generates a random index number
-				int index = _rnd.nextInt(_catNames.length);
+				int index = rnd.nextInt(catNames.length);
 				// Check if category has already been added
-				if(!_categories.contains(_catNames[index])) {
-					_categories.add(_catNames[index]);
+				if(!categories.contains(catNames[index])) {
+					categories.add(catNames[index]);
 				}
 			}
 			// Save the selected categories to a save folder
-			for (int i = 0; i < _categories.size(); i++) {
-				createSave(_categories.get(i), "categories");
+			for (int i = 0; i < categories.size(); i++) {
+				createSave(categories.get(i), "categories");
 			}
 
 			// Create a winnings file to store money earned
@@ -79,13 +89,13 @@ public class Preparation {
 			// exclude winnings and international file
 			for (String category: saveFiles) {
 				if(!category.equals("winnings") && !category.equals("International")) {
-					_categories.add(category);
+					categories.add(category);
 				}
 
 			}
 		}
 		
-		return _categories;
+		return categories;
 	}
 
 	/*
@@ -101,23 +111,23 @@ public class Preparation {
 		try (BufferedReader value = new BufferedReader(new FileReader(catefile))) {
 			String line;
 			while ((line = value.readLine()) != null) {
-				_lines.add(line);
+				lines.add(line);
 			}
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		// Get 5 random questions from that list, write to the new file
-		_monVal = 100;
-		while (_questions.size() < 5) {
-			int rndLineIndex = _rnd.nextInt(_lines.size());
-			String line = _lines.get(rndLineIndex);
+		monVal = 100;
+		while (questions.size() < 5) {
+			int rndLineIndex = rnd.nextInt(lines.size());
+			String line = lines.get(rndLineIndex);
 
-			if(!_questions.contains(line)) {
+			if(!questions.contains(line)) {
 				// Write the line to the new file
 				BufferedWriter out = null;
 				try {
-					int val = _monVal;
+					int val = monVal;
 					savefile.createNewFile();
 					// Appends the new lines to the file with the values
 					out = new BufferedWriter(new FileWriter(savefile, true));
@@ -127,12 +137,12 @@ public class Preparation {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				_monVal += 100;
-				_questions.add(line);
+				monVal += 100;
+				questions.add(line);
 			}
 		}
-		_questions.clear();
-		_lines.clear();
+		questions.clear();
+		lines.clear();
 	}
 
 }

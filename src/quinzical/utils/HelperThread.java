@@ -6,19 +6,25 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * A new thread that is to run the tts system. This was created as tts is too intensive
+ * and will freeze GUI.
+ * 
+ * @author JiaQi and Marcus
+ */
 public class HelperThread extends Thread{
 
-	private String _text;
-	private double _speed;
+	private String text;
+	private double speed;
 
 	public HelperThread(String text) {
-		_text = text;
-		_speed = 1;
+		this.text = text;
+		this.speed = 1;
 	}
 
 	public HelperThread(String text, double speed) {
-		_text = text;
-		_speed = 2.5 - speed;
+		this.text = text;
+		this.speed = 2.5 - speed;
 	}
 
 	@Override
@@ -35,9 +41,9 @@ public class HelperThread extends Thread{
 			scmWriter = new BufferedWriter(new FileWriter(tts));
 			scmWriter.write("(voice_kal_diphone)");
 			scmWriter.newLine();
-			scmWriter.write("(Parameter.set 'Duration_Stretch " + _speed + ")");
+			scmWriter.write("(Parameter.set 'Duration_Stretch " + speed + ")");
 			scmWriter.newLine();
-			scmWriter.write("(SayText " + "\"" + _text + "\"" + ")");
+			scmWriter.write("(SayText " + "\"" + text + "\"" + ")");
 			scmWriter.newLine();
 			scmWriter.close();
 		} catch (IOException e) {

@@ -7,21 +7,29 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+/**
+ * This class updates a particular saved category in which the question which
+ * was recently answered by the user is removed from the category.
+ * 
+ * @author JiaQi and Marcus
+ *
+ */
 public class UpdateCategory {
 	
-	private String _catName;
-	private int _lineRemove;
+	private String catName;
+	private int lineRemove;
 
 	public UpdateCategory(String catName, int lineRemove) {
-		_catName = catName;
-		_lineRemove = lineRemove;
+		this.catName = catName;
+		this.lineRemove = lineRemove;
 	}
-	
+	/*
+	 * Removes the line from the category
+	 */
 	public void update() {
-		_lineRemove++;
-		File inputFile = new File("./saves/"+_catName);
-		File tmp = new File("./saves/"+_catName+"Tmp");
+		lineRemove++;
+		File inputFile = new File("./saves/"+catName);
+		File tmp = new File("./saves/"+catName+"Tmp");
 
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
@@ -37,7 +45,7 @@ public class UpdateCategory {
 			writer = new BufferedWriter(new FileWriter(tmp));
 			while((currentLine = reader.readLine()) != null) {
 				count++;
-				if (count == _lineRemove) {
+				if (count == lineRemove) {
 					continue;
 				}
 				writer.write(currentLine + System.getProperty("line.separator"));

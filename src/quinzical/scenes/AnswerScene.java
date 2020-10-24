@@ -36,40 +36,47 @@ import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 import quinzical.utils.HelperThread;
 import quinzical.utils.UpdateCategory;
-
+/**
+ * This scene is for answering the questions related to the NZ game scene
+ * where the user would of clicked a value/question from the NZScene. The
+ * user can then answer this question here
+ * 
+ *@author JiaQi and Marcus
+ *
+ */
 public class AnswerScene extends Menu{
 
-	private Stage _primary;
-	private Scene _menu;
-	private String[] _catNames;
-	private Button _click;
-	private String _category;
-	private int _lineNum, _counter, _value;
+	private Stage primary;
+	private Scene menu;
+	private String[] catNames;
+	private Button click;
+	private String category;
+	private int lineNum, counter, value;
 	private final DropShadow shadow = new DropShadow();
-	private Background _bg;
-	private Button[] _macrons;
+	private Background bg;
+	private Button[] macrons;
 
 	public AnswerScene(Button click, String category, int lineNum, Stage primary,
 			String[] catNames, Scene menu, AppTheme theme) {
-		_click = click;
-		_category = category;
-		_lineNum = lineNum;
-		_primary = primary;
-		_menu = menu;
-		_catNames = catNames;
+		this.click = click;
+		this.category = category;
+		this.lineNum = lineNum;
+		this.primary = primary;
+		this.menu = menu;
+		this.catNames = catNames;
 		super.theme = theme;
 	}
 
 	public void startScene() {
 
-		_bg = theme.getBackground();
+		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
-		NZScene game = new NZScene(_catNames, _primary, _menu, theme);
+		NZScene game = new NZScene(catNames, primary, menu, theme);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value
-		_value = Integer.parseInt(_click.getText());
+		value = Integer.parseInt(click.getText());
 
 		Button btnEnter = new Button("Enter");
 		Button dkBtn = new Button("Don't know");
@@ -100,7 +107,7 @@ public class AnswerScene extends Menu{
 
 		// Start the timer
 		Timer timer = new Timer();
-		_counter = 45;
+		counter = 45;
 		Text timeLeft = new Text("45 seconds left to answer");
 		theme.setSmallText(timeLeft);
 		TimerTask task = new TimerTask()
@@ -110,9 +117,9 @@ public class AnswerScene extends Menu{
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						timeLeft.setText(Integer.toString(_counter) + " seconds left to answer");
-						_counter--;
-						if(_counter == -1) {
+						timeLeft.setText(Integer.toString(counter) + " seconds left to answer");
+						counter--;
+						if(counter == -1) {
 							// Get the answer
 							timer.cancel();
 							String answer = getType("answer");
@@ -123,7 +130,7 @@ public class AnswerScene extends Menu{
 							a.setHeaderText("The correct answer was " + answer);
 							a.showAndWait();
 
-							update(_category, _lineNum);
+							update(category, lineNum);
 							game.startScene();
 						}
 					}
@@ -179,7 +186,7 @@ public class AnswerScene extends Menu{
 					runTts("Correct");
 					a.showAndWait();
 					
-					money += _value;
+					money += value;
 				}
 				else {
 					Alert a = new Alert(AlertType.NONE, "The correct answer was " + answer, ButtonType.OK);
@@ -200,7 +207,7 @@ public class AnswerScene extends Menu{
 					e.printStackTrace();
 				}
 
-				update(_category, _lineNum);
+				update(category, lineNum);
 				timer.cancel();
 				game.startScene();
 			}	
@@ -215,7 +222,7 @@ public class AnswerScene extends Menu{
 				Alert a = new Alert(AlertType.NONE, "The correct answer was " + answer, ButtonType.OK);
 				a.setTitle("Answer");
 
-				update(_category, _lineNum);
+				update(category, lineNum);
 				timer.cancel();
 				a.showAndWait();
 
@@ -240,17 +247,18 @@ public class AnswerScene extends Menu{
 		});
 
 		// Macron buttons
-		_macrons = new Button[5];
+		macrons = new Button[5];
 		TilePane macronTile = new TilePane(Orientation.HORIZONTAL);
 		macronTile.setAlignment(Pos.BASELINE_CENTER);
 		macronTile.setHgap(50);
-		_macrons[0] = new Button("ā");
-		_macrons[1] = new Button("ē");
-		_macrons[2] = new Button("ī");
-		_macrons[3] = new Button("ō");
-		_macrons[4] = new Button("ū");
-		for (int i = 0; i < _macrons.length; i++) {
-			_macrons[i].setOnAction(new EventHandler<ActionEvent> () {
+		macrons[0] = new Button("ā");
+		macrons[1] = new Button("ē");
+		macrons[2] = new Button("ī");
+		macrons[3] = new Button("ō");
+		macrons[4] = new Button("ū");
+		for (int i = 0; i < macrons.length; i++) {
+			macrons[i].setEffect(shadow);
+			macrons[i].setOnAction(new EventHandler<ActionEvent> () {
 				@Override
 				public void handle(ActionEvent event) {
 					String current = txtInput.getText();
@@ -258,13 +266,13 @@ public class AnswerScene extends Menu{
 					txtInput.setText(current + getLetter);
 				}
 			});
-			macronTile.getChildren().add(_macrons[i]);
+			macronTile.getChildren().add(macrons[i]);
 		}
 
 		// Layout of the answer scene where user gets to input answer to question
 		VBox layout = new VBox(35);
 		layout.setAlignment(Pos.BASELINE_CENTER);
-		layout.setBackground(_bg);
+		layout.setBackground(bg);
 		layout.setPadding(new Insets(80));
 		Text clue = new Text("Clue: " + text + "...");
 		theme.setSmallText(clue);
@@ -280,8 +288,8 @@ public class AnswerScene extends Menu{
 		layout.getChildren().addAll(clue, macronTile, txtInput, tileBtns, slider, info, timeLeft);
 
 		Scene answer = new Scene(layout, 650, 600);
-		_primary.setScene(answer);
-		_primary.show();
+		primary.setScene(answer);
+		primary.show();
 	}
 
 	/*
@@ -307,7 +315,7 @@ public class AnswerScene extends Menu{
 		String line = null;
 		String msg = null;
 		try {
-			line = Files.readAllLines(Paths.get("./saves/"+_category)).get(_lineNum);
+			line = Files.readAllLines(Paths.get("./saves/"+category)).get(lineNum);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

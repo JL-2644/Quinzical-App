@@ -18,6 +18,13 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 
+/**
+ * This is the games module scene where users can select to go to the NZ quiz or 
+ * when they have finished two categories go to the international scene.
+ * 
+ * @author JiaQi and Marcus
+ *
+ */
 public class GameScene extends Menu{
 
 	private Stage primary;
@@ -25,7 +32,7 @@ public class GameScene extends Menu{
 	private String[] catNames;
 	private Button nZBtn, worldBtn, menuBtn;
 	private final DropShadow shadow = new DropShadow();
-	private Background _bg;
+	private Background bg;
 
 	public GameScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
 		this.primary = primary;
@@ -36,8 +43,9 @@ public class GameScene extends Menu{
 
 	public void startScene() {
 
-		_bg = theme.getBackground();
+		bg = theme.getBackground();
 
+		// Retrieve the images
 		Image world = new Image("file:./images/world.png");
 		ImageView viewWorld = new ImageView(world);
 		viewWorld.setFitHeight(125);
@@ -48,6 +56,7 @@ public class GameScene extends Menu{
 		viewNZ.setFitHeight(125);
 		viewNZ.setFitWidth(125);
 		
+		// Set the images onto the button
 		nZBtn = new Button();
 		nZBtn.setTranslateX(30);
 		nZBtn.setTranslateY(20);
@@ -61,17 +70,19 @@ public class GameScene extends Menu{
 		menuBtn = new Button("Back to Menu");
 		menuBtn.setTranslateY(160);
 
+		// PLace all the buttons in a tilepane
 		TilePane btnPane = new TilePane(Orientation.HORIZONTAL);
 		btnPane.getChildren().addAll(nZBtn, worldBtn);
 		
-		// Title
+		// Create title for games module
 		Text title = new Text("Games Mode");
 		theme.setText(title);
 		title.setTextAlignment(TextAlignment.CENTER);
 
+		// Create the layout for the scene
 		VBox gameLayout = new VBox(40);
 		gameLayout.setAlignment(Pos.BASELINE_CENTER);
-		gameLayout.setBackground(_bg);
+		gameLayout.setBackground(bg);
 		gameLayout.setPadding(new Insets(80));
 		gameLayout.getChildren().addAll(title, btnPane, menuBtn);
 

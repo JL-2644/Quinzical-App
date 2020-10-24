@@ -22,33 +22,33 @@ public class AppTheme {
 	
 	private Paint paint;
 	private Image image;
-	private Background _bg;
+	private Background bg;
 	private String str;
 	// Setting the linear gradient
-	private final Stop[] _stops = new Stop[] { new Stop(0, Color.LIGHTBLUE), new Stop(1, Color.web("#fc8b8b")) };
-	private final LinearGradient _gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, _stops);
-	private final Stop[] _stops2 = new Stop[] { new Stop(0, Color.DARKSLATEBLUE), new Stop(1, Color.DARKRED) };
-	private final LinearGradient _gradient2 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, _stops2);
+	private final Stop[] stops = new Stop[] { new Stop(0, Color.LIGHTBLUE), new Stop(1, Color.web("#fc8b8b")) };
+	private final LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
+	private final Stop[] stops2 = new Stop[] { new Stop(0, Color.DARKSLATEBLUE), new Stop(1, Color.DARKRED) };
+	private final LinearGradient gradient2 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops2);
 	
 	public AppTheme() {
-		paint = _gradient;
+		paint = gradient;
 		BackgroundFill bgf = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
-		_bg = new Background(bgf);
+		bg = new Background(bgf);
 		str = "light";
 	}
 	
 	public void changeLight() {
 		str = "light";
-		paint = _gradient;
+		paint = gradient;
 		BackgroundFill bgf = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
-		_bg = new Background(bgf);
+		bg = new Background(bgf);
 	}
 	
 	public void changeDark() {
 		str = "dark";
-		paint = _gradient2;
+		paint = gradient2;
 		BackgroundFill bgf = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
-		_bg = new Background(bgf);
+		bg = new Background(bgf);
 	}
 	
 	public void changeNZ() {
@@ -56,7 +56,7 @@ public class AppTheme {
 		image = new Image("file:NZ.png");
 		BackgroundSize size = new BackgroundSize(394, 500, false, false, false, false);
 		BackgroundImage bgi = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, size);
-		_bg = new Background(bgi);
+		bg = new Background(bgi);
 	}
 	
 	public void changeMaori() {
@@ -64,11 +64,11 @@ public class AppTheme {
 		image = new Image("file:Maori.png");
 		BackgroundSize size = new BackgroundSize(354, 500, false, false, false, false);
 		BackgroundImage bgi = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, size);
-		_bg = new Background(bgi);
+		bg = new Background(bgi);
 	}
 	
 	public Background getBackground() {
-		return _bg;
+		return bg;
 	}
 	
 	/*

@@ -28,28 +28,28 @@ import quinzical.utils.InitialData;
 
 public class PracticeScene extends Menu{
 
-	private Stage _primary;
-	private Scene _menu;
-	private String[] _catNames;
+	private Stage primary;
+	private Scene menu;
+	private String[] catNames;
 	private Alert a = new Alert(AlertType.NONE);
 	private List<Button> catList = new ArrayList<Button>(); 
 	private List<List<String>> question = new ArrayList<List<String>>();
 	private List<List<String>> clue = new ArrayList<List<String>>();
 	private List<List<String>> answer = new ArrayList<List<String>>();
-	private List<String> _cat = new ArrayList<String>();
-	private int _attempts = 0;
+	private List<String> cat = new ArrayList<String>();
+	private int attempts = 0;
 	private Button _back = new Button("Main Menu");
 	private final DropShadow shadow = new DropShadow();
-	private Background _bg;
-	private Button[] _macrons;
+	private Background bg;
+	private Button[] macrons;
 
 	/*
 	 * Constructor
 	 */
 	public PracticeScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
-		_primary = primary;
-		_menu = menu;
-		_catNames = catNames;
+		this.primary = primary;
+		this.menu = menu;
+		this.catNames = catNames;
 		super.theme = theme;
 	}
 
@@ -60,7 +60,7 @@ public class PracticeScene extends Menu{
 		
 		//Initialize the data(questions, answers, categories)
 		InitialData data = new InitialData();
-		data.initial(_catNames, _cat, question, clue, answer);
+		data.initial(catNames, cat, question, clue, answer);
 		int count = 0;
 		
 		// Set shadow color
@@ -72,9 +72,9 @@ public class PracticeScene extends Menu{
 		back.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				_primary.setTitle("Quinzical");
-				_primary.setScene(_menu);
-				_primary.centerOnScreen();
+				primary.setTitle("Quinzical");
+				primary.setScene(menu);
+				primary.centerOnScreen();
 			}
 		});
 		Text label = new Text("Pick a catergory!!!");
@@ -85,7 +85,7 @@ public class PracticeScene extends Menu{
 		vbox.getChildren().add(label);
 		
 		//create buttons according to amount of categories
-		for (String cat:_cat) {
+		for (String cat:cat) {
 			Button catButton = new Button(cat);
 			catButton.setEffect(shadow);
 			vbox.getChildren().add(catButton);
@@ -93,13 +93,13 @@ public class PracticeScene extends Menu{
 			count++;
 		}
 		
-		_bg = theme.getBackground();
-		vbox.setBackground(_bg);
+		bg = theme.getBackground();
+		vbox.setBackground(bg);
 		
 		//Practice scene
 		Scene scene = new Scene(vbox, 650, 45 * count + 164);
-		_primary.setTitle("Practice");
-		_primary.setScene(scene);
+		primary.setTitle("Practice");
+		primary.setScene(scene);
 
 		//Set up for every category buttons
 		for (Button cat:catList) {
@@ -116,7 +116,7 @@ public class PracticeScene extends Menu{
 					theme.setText(label2);
 					VBox vbox2 = new VBox(20);
 					vbox2.setAlignment(Pos.CENTER);
-					vbox2.setBackground(_bg);
+					vbox2.setBackground(bg);
 					Text que = new Text(randomQuestion);
 					theme.setSmallText(que);
 					double len = que.getLayoutBounds().getWidth();
@@ -136,17 +136,18 @@ public class PracticeScene extends Menu{
 					slider.setMaxWidth(320);
 					
 					// Macron buttons
-					_macrons = new Button[5];
+					macrons = new Button[5];
 					TilePane macronTile = new TilePane(Orientation.HORIZONTAL);
 					macronTile.setAlignment(Pos.BASELINE_CENTER);
 					macronTile.setHgap(30);
-					_macrons[0] = new Button("ā");
-					_macrons[1] = new Button("ē");
-					_macrons[2] = new Button("ī");
-					_macrons[3] = new Button("ō");
-					_macrons[4] = new Button("ū");
-					for (int i = 0; i < _macrons.length; i++) {
-						_macrons[i].setOnAction(new EventHandler<ActionEvent> () {
+					macrons[0] = new Button("ā");
+					macrons[1] = new Button("ē");
+					macrons[2] = new Button("ī");
+					macrons[3] = new Button("ō");
+					macrons[4] = new Button("ū");
+					for (int i = 0; i < macrons.length; i++) {
+						macrons[i].setEffect(shadow);
+						macrons[i].setOnAction(new EventHandler<ActionEvent> () {
 							@Override
 							public void handle(ActionEvent event) {
 								String current = answerTxt.getText();
@@ -154,7 +155,7 @@ public class PracticeScene extends Menu{
 								answerTxt.setText(current + getLetter);
 							}
 						});
-						macronTile.getChildren().add(_macrons[i]);
+						macronTile.getChildren().add(macrons[i]);
 					}
 					
 					
@@ -182,9 +183,9 @@ public class PracticeScene extends Menu{
 					ttsQ.start();
 
 					//change scene to the random question
-					_primary.setScene(scene2);
-					_primary.centerOnScreen();
-					_attempts = 0;
+					primary.setScene(scene2);
+					primary.centerOnScreen();
+					attempts = 0;
 
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
@@ -215,19 +216,19 @@ public class PracticeScene extends Menu{
 								a = new Alert(AlertType.NONE, sen, ButtonType.OK);
 								a.setTitle("Result");
 								a.showAndWait();
-								_primary.setScene(scene);
-								_primary.centerOnScreen();
+								primary.setScene(scene);
+								primary.centerOnScreen();
 							} else {
-								_attempts++;
+								attempts++;
 								//After all attempts
-								if (_attempts == 3) {
+								if (attempts == 3) {
 									Text label3 = new Text("Question");
 									theme.setText(label3);
 									Text label4 = new Text("Answer");
 									theme.setText(label4);
 									VBox vbox3 = new VBox(40);
 									vbox3.setAlignment(Pos.CENTER);
-									vbox3.setBackground(_bg);
+									vbox3.setBackground(bg);
 									Text que = new Text(randomQuestion);
 									theme.setSmallText(que);
 									
@@ -237,9 +238,9 @@ public class PracticeScene extends Menu{
 									practice.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
 										public void handle(ActionEvent e) {
-											_primary.setTitle("Practice");
-											_primary.setScene(scene);
-											_primary.centerOnScreen();
+											primary.setTitle("Practice");
+											primary.setScene(scene);
+											primary.centerOnScreen();
 										}
 									});
 									//show user the correct answer
@@ -250,9 +251,9 @@ public class PracticeScene extends Menu{
 									_back.setOnAction(new EventHandler<ActionEvent>() {
 										@Override
 										public void handle(ActionEvent e) {
-											_primary.setTitle("Quinzical");
-											_primary.setScene(_menu);
-											_primary.centerOnScreen();
+											primary.setTitle("Quinzical");
+											primary.setScene(menu);
+											primary.centerOnScreen();
 										}
 									});
 									
@@ -261,8 +262,8 @@ public class PracticeScene extends Menu{
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
 									Scene scene3 = new Scene(vbox3, sceneWidth, 600);
-									_primary.setScene(scene3);
-									_primary.centerOnScreen();
+									primary.setScene(scene3);
+									primary.centerOnScreen();
 								} else {
 									//not revealing the correct answer if the user hasn't 
 									//answered the questions three times
@@ -275,19 +276,19 @@ public class PracticeScene extends Menu{
 									a.showAndWait();
 
 									//User gets the first letter of the answer as a hint
-									if (_attempts == 2) {
+									if (attempts == 2) {
 										Text hint = new Text("Hint: " + answer.get(tmp).get(ran).charAt(0));
 										theme.setSmallText(hint);
 										VBox vbox4 = new VBox(20);
 										vbox4.setAlignment(Pos.CENTER);
-										vbox4.setBackground(_bg);
+										vbox4.setBackground(bg);
 										vbox4.getChildren().addAll(label2, que, slider, info, replay, hint, clueLabel,
 												macronTile, answerTxt, confirm);
 
 										// change to a scene that contain hint
 										Scene scene4 = new Scene(vbox4, sceneWidth, 600);
-										_primary.setScene(scene4);
-										_primary.centerOnScreen();
+										primary.setScene(scene4);
+										primary.centerOnScreen();
 									}
 								}
 							}

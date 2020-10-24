@@ -7,9 +7,6 @@ import java.util.List;
 
 public class InitialData {
 	
-	public InitialData () {
-	}
-
 	/*
 	 * Initialize the information used for the game from categories/ folder.
 	 */

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,17 +28,17 @@ import quinzical.utils.User;
 
 public class LeaderBoard extends Menu{
 
-	private Button _backBtn, _clear;
+	private Button backBtn, clear;
 	private TableView<User> table;
-	private Stage _primary;
+	private Stage primary;
 	private final DropShadow shadow = new DropShadow();
-	private Scene _menu;
-	private Background _bg;
+	private Scene menu;
+	private Background bg;
 	private ObservableList<User> users = FXCollections.observableArrayList();
 
 	public LeaderBoard(Stage primary, Scene menu, AppTheme theme) {
-		_primary = primary;
-		_menu = menu;
+		this.primary = primary;
+		this.menu = menu;
 		super.theme = theme;
 	}
 
@@ -45,7 +46,7 @@ public class LeaderBoard extends Menu{
 
 		File scoreFile = new File("./leaderboard/score");
 		
-		_bg = theme.getBackground();
+		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
 		TableColumn<User, String> nameColumn = new TableColumn<>("Name");
@@ -57,25 +58,25 @@ public class LeaderBoard extends Menu{
 		scoreColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("score"));
 
 		table = new TableView<>();
-		table.prefHeightProperty().bind(_primary.heightProperty().multiply(0.8));
+		table.prefHeightProperty().bind(primary.heightProperty().multiply(0.8));
 		// Initialize previous winners onto the leaderboard
 		if(scoreFile.exists()) {
 			table.setItems(loadUsers());
 		}
-		table.getColumns().addAll(nameColumn, scoreColumn);
+		table.getColumns().addAll(Arrays.asList(nameColumn, scoreColumn));
 
 		// Button to go back to menu
-		_backBtn = new Button("Back to Menu");
-		_backBtn.setEffect(shadow);
-		_backBtn.setOnAction(new EventHandler<ActionEvent>() {
+		backBtn = new Button("Back to Menu");
+		backBtn.setEffect(shadow);
+		backBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				_primary.setScene(_menu);
+				primary.setScene(menu);
 			}	
 		});
 		
-		_clear = new Button("Clear LeaderBoard");
-		_clear.setOnAction(new EventHandler<ActionEvent>() {
+		clear = new Button("Clear LeaderBoard");
+		clear.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				scoreFile.delete();
@@ -86,16 +87,16 @@ public class LeaderBoard extends Menu{
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.setAlignment(Pos.BASELINE_CENTER);
 		tileBtns.setHgap(150);
-		tileBtns.getChildren().addAll(_clear, _backBtn);
+		tileBtns.getChildren().addAll(clear, backBtn);
 		
 		VBox vBox = new VBox(20);
 		vBox.setAlignment(Pos.CENTER);
 		vBox.getChildren().addAll(table, tileBtns);
-		vBox.setBackground(_bg);
+		vBox.setBackground(bg);
 
 		Scene scene = new Scene(vBox, 650, 600);
-		_primary.setScene(scene);
-		_primary.show();
+		primary.setScene(scene);
+		primary.show();
 
 	}
 	
