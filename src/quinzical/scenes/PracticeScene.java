@@ -42,15 +42,17 @@ public class PracticeScene extends Menu{
 	private final DropShadow shadow = new DropShadow();
 	private Background bg;
 	private Button[] macrons;
+	private String file;
 
 	/*
 	 * Constructor
 	 */
-	public PracticeScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
+	public PracticeScene(String[] catNames, Stage primary, Scene menu, AppTheme theme, String file) {
 		this.primary = primary;
 		this.menu = menu;
 		this.catNames = catNames;
 		super.theme = theme;
+		this.file = file;
 	}
 
 	/*
@@ -59,7 +61,7 @@ public class PracticeScene extends Menu{
 	public void startScene() {
 		
 		//Initialize the data(questions, answers, categories)
-		InitialData data = new InitialData();
+		InitialData data = new InitialData(file);
 		data.initial(catNames, cat, question, clue, answer);
 		
 		// Set shadow color
