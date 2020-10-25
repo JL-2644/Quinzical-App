@@ -50,6 +50,7 @@ public class InternationalScene extends Menu {
 	public void startScene() {
 		InitialData data = new InitialData(file);
 		data.initial(catNames, cat, question, clue, answer);
+		shadow.setColor(Color.web("#7f96eb"));
 
 		TabPane tabs = new TabPane();
 		tabs.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
