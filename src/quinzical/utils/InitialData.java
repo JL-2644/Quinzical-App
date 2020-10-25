@@ -7,6 +7,12 @@ import java.util.List;
 
 public class InitialData {
 	
+	private String _file;
+	
+	public InitialData(String file) {
+		_file = file;
+	}
+	
 	/*
 	 * Initialize the information used for the game from categories/ folder.
 	 */
@@ -16,7 +22,7 @@ public class InitialData {
 		try {
 				for (String line:catNames) {
 					cat.add(line);
-					String file = "categories/" + line;
+					String file = _file + line;
 					readFile(file, question, clue, answer);
 				}
 		} catch (Exception e) {

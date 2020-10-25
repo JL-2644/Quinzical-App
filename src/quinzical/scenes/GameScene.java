@@ -1,5 +1,7 @@
 package quinzical.scenes;
 
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -112,7 +114,11 @@ public class GameScene extends Menu{
 		worldBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				primary.setScene(menu);
+				File cateDir = new File("./categoriesInternational");
+				String[] cateFiles = cateDir.list();
+				// Start up the game module scene
+				InternationalScene inter = new InternationalScene(cateFiles, primary, menu, theme, "categoriesInternational/");
+				inter.startScene();
 			}	
 		});
 	}

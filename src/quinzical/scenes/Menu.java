@@ -71,7 +71,7 @@ public class Menu extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the practice module scene
-				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene, theme);
+				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene, theme, "categories/");
 				prac.startScene();	
 			}
 		});
@@ -136,10 +136,9 @@ public class Menu extends Application{
 		// Setup the stage
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
-		//primaryStage.centerOnScreen();
 		primaryStage.setResizable(false);
 		primaryStage.show();
-		
+		primaryStage.centerOnScreen();
 	}
 	
 	public static void main(String[] args) {
