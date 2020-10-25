@@ -71,7 +71,7 @@ public class Menu extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the practice module scene
-				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene, theme);
+				PracticeScene prac = new PracticeScene(cateFiles, primaryStage, menuScene, theme, "categories/");
 				prac.startScene();	
 			}
 		});
