@@ -17,6 +17,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class AppTheme {
 	
@@ -107,5 +108,10 @@ public class AppTheme {
 			text.setStrokeWidth(0.7);
 			text.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		}
+	}
+	
+	public void setCenter(Text text) {
+		text.setWrappingWidth(380);
+		text.setTextAlignment(TextAlignment.CENTER);
 	}
 }
