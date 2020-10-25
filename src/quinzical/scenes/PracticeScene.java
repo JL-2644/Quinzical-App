@@ -61,7 +61,6 @@ public class PracticeScene extends Menu{
 		//Initialize the data(questions, answers, categories)
 		InitialData data = new InitialData();
 		data.initial(catNames, cat, question, clue, answer);
-		int count = 0;
 		
 		// Set shadow color
 		shadow.setColor(Color.web("#7f96eb"));
@@ -74,7 +73,6 @@ public class PracticeScene extends Menu{
 			public void handle(ActionEvent e) {
 				primary.setTitle("Quinzical");
 				primary.setScene(menu);
-				primary.centerOnScreen();
 			}
 		});
 		Text label = new Text("Pick a catergory!!!");
@@ -90,14 +88,13 @@ public class PracticeScene extends Menu{
 			catButton.setEffect(shadow);
 			vbox.getChildren().add(catButton);
 			catList.add(catButton);
-			count++;
 		}
 		
 		bg = theme.getBackground();
 		vbox.setBackground(bg);
 		
 		//Practice scene
-		Scene scene = new Scene(vbox, 650, 45 * count + 164);
+		Scene scene = new Scene(vbox, 650, 600);
 		primary.setTitle("Practice");
 		primary.setScene(scene);
 
@@ -119,7 +116,7 @@ public class PracticeScene extends Menu{
 					vbox2.setBackground(bg);
 					Text que = new Text(randomQuestion);
 					theme.setSmallText(que);
-					double len = que.getLayoutBounds().getWidth();
+					theme.setCenter(que);
 					TextField answerTxt = new TextField();
 					answerTxt.setMaxWidth(300);
 					Button confirm = new Button("Submit");
@@ -176,15 +173,13 @@ public class PracticeScene extends Menu{
 						}
 					});
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
-					int sceneWidth = setWidth(len);
-					Scene scene2 = new Scene(vbox2, sceneWidth, 600);
+					Scene scene2 = new Scene(vbox2, 650, 600);
 					// tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
 					ttsQ.start();
 
 					//change scene to the random question
 					primary.setScene(scene2);
-					primary.centerOnScreen();
 					attempts = 0;
 
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
@@ -217,7 +212,6 @@ public class PracticeScene extends Menu{
 								a.setTitle("Result");
 								a.showAndWait();
 								primary.setScene(scene);
-								primary.centerOnScreen();
 							} else {
 								attempts++;
 								//After all attempts
@@ -231,6 +225,7 @@ public class PracticeScene extends Menu{
 									vbox3.setBackground(bg);
 									Text que = new Text(randomQuestion);
 									theme.setSmallText(que);
+									theme.setCenter(que);
 									
 									//Button to go back to practice module
 									Button practice = new Button("Practice Module");
@@ -240,7 +235,6 @@ public class PracticeScene extends Menu{
 										public void handle(ActionEvent e) {
 											primary.setTitle("Practice");
 											primary.setScene(scene);
-											primary.centerOnScreen();
 										}
 									});
 									//show user the correct answer
@@ -253,7 +247,6 @@ public class PracticeScene extends Menu{
 										public void handle(ActionEvent e) {
 											primary.setTitle("Quinzical");
 											primary.setScene(menu);
-											primary.centerOnScreen();
 										}
 									});
 									
@@ -261,9 +254,8 @@ public class PracticeScene extends Menu{
 									HelperThread ttsQ = new HelperThread(sen);
 									ttsQ.start();
 									vbox3.getChildren().addAll(label3, que, label4, ans, _back, practice);
-									Scene scene3 = new Scene(vbox3, sceneWidth, 600);
+									Scene scene3 = new Scene(vbox3, 650, 600);
 									primary.setScene(scene3);
-									primary.centerOnScreen();
 								} else {
 									//not revealing the correct answer if the user hasn't 
 									//answered the questions three times
@@ -286,9 +278,8 @@ public class PracticeScene extends Menu{
 												macronTile, answerTxt, confirm);
 
 										// change to a scene that contain hint
-										Scene scene4 = new Scene(vbox4, sceneWidth, 600);
+										Scene scene4 = new Scene(vbox4, 650, 600);
 										primary.setScene(scene4);
-										primary.centerOnScreen();
 									}
 								}
 							}
@@ -305,16 +296,5 @@ public class PracticeScene extends Menu{
 	public int getRandomElement(List<String> list) {
 		Random rand = new Random();
 		return rand.nextInt(list.size());
-	}
-	
-	/*
-	 * set minimum window width for practice scene.
-	 */
-	public int setWidth(double len) {
-		int sceneWidth = (int)len + 100;
-		if (sceneWidth < 650) {
-			sceneWidth = 650;
-		}
-		return sceneWidth;
 	}
 }
