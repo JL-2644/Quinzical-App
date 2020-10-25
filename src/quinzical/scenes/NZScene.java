@@ -34,16 +34,16 @@ import quinzical.utils.Saves;
 public class NZScene extends Menu{
 
 	private Stage primary;
-	private Scene menu, game;
+	private Scene gameScene, nzScene;
 	private String[] catNames;
 	private Button valueBtn, backBtn, btnClicked;
 	private List<String> categories;
 	private final DropShadow shadow = new DropShadow();
 	private Background bg;
-	
-	public NZScene(String[] catNames, Stage primary, Scene menu, AppTheme theme) {
+
+	public NZScene(String[] catNames, Stage primary, Scene gameScene, AppTheme theme) {
 		this.primary = primary;
-		this.menu = menu;
+		this.gameScene = gameScene;
 		this.catNames = catNames;
 		super.theme = theme;
 	}
@@ -55,10 +55,10 @@ public class NZScene extends Menu{
 
 		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
-		
+
 		Saves prep = new Saves(catNames);
 		categories = prep.loadCategories();
-		
+
 		File international = new File("./saves/International");
 
 		// Check if all sections have been completed
@@ -71,26 +71,25 @@ public class NZScene extends Menu{
 		}
 
 		// If the game has been completed, display the reward scene
-		if(count == categories.size() && international.length() == 0) {
+		if(count == categories.size()) {
 			// Start up the reward scene
-			RewardScene reward = new RewardScene(primary, menu, theme);
+			RewardScene reward = new RewardScene(primary, gameScene, theme);
 			reward.startScene();
 			return;
 		}
 
-		// If two sections have been completed, open up international module
-		if(count >= 2 ) {
-			// If first time unlocking then display a pop up 
-			if(!international.exists()) {
-				prep.createSave("International", "categoriesInternational");
-
-				Alert a = new Alert(AlertType.CONFIRMATION);
-				a.setTitle("Unlocked");
-				a.setHeaderText("Congratulations, you have unlocked the international section");
-				a.showAndWait();
+		// If two sections have been completed, and first time unlocking
+		if(count >= 2 && !international.exists()) {
+			try {
+				international.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			categories.add("International");
+			Alert a = new Alert(AlertType.CONFIRMATION);
+			a.setTitle("Unlocked");
+			a.setHeaderText("Congratulations, you have unlocked the international section");
+			a.showAndWait();
 		}
 
 		TabPane tabs= new TabPane();
@@ -141,7 +140,7 @@ public class NZScene extends Menu{
 							public void handle(ActionEvent event) {
 								btnClicked = (Button) event.getSource();
 								AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
-										lineNum, primary, catNames, menu, theme);
+										lineNum, primary, catNames, gameScene, theme);
 
 								answer.startScene();
 							}	
@@ -155,12 +154,12 @@ public class NZScene extends Menu{
 				}
 			}
 			// Button to go back to menu
-			backBtn = new Button("Back to Menu");
+			backBtn = new Button("Back to Games");
 			backBtn.setEffect(shadow);
 			backBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					primary.setScene(menu);
+					primary.setScene(gameScene);
 				}	
 			});
 
@@ -174,10 +173,10 @@ public class NZScene extends Menu{
 
 		gameLayout.getChildren().addAll(tabs);
 		gameLayout.setBackground(bg);
-		game = new Scene(gameLayout, 650, 600);
+		nzScene = new Scene(gameLayout, 650, 600);
 
 		// Display the scene
-		primary.setScene(game);
+		primary.setScene(nzScene);
 		primary.show();
 	}
 }

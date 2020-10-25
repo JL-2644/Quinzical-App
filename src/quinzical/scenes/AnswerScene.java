@@ -47,7 +47,7 @@ import quinzical.utils.UpdateCategory;
 public class AnswerScene extends Menu{
 
 	private Stage primary;
-	private Scene menu;
+	private Scene gameScene;
 	private String[] catNames;
 	private Button click;
 	private String category;
@@ -57,12 +57,12 @@ public class AnswerScene extends Menu{
 	private Button[] macrons;
 
 	public AnswerScene(Button click, String category, int lineNum, Stage primary,
-			String[] catNames, Scene menu, AppTheme theme) {
+			String[] catNames, Scene gameScene, AppTheme theme) {
 		this.click = click;
 		this.category = category;
 		this.lineNum = lineNum;
 		this.primary = primary;
-		this.menu = menu;
+		this.gameScene = gameScene;
 		this.catNames = catNames;
 		super.theme = theme;
 	}
@@ -72,7 +72,7 @@ public class AnswerScene extends Menu{
 		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
-		NZScene game = new NZScene(catNames, primary, menu, theme);
+		NZScene game = new NZScene(catNames, primary, gameScene, theme);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value
