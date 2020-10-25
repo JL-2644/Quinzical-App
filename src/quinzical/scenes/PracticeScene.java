@@ -119,7 +119,9 @@ public class PracticeScene extends Menu{
 					vbox2.setBackground(bg);
 					Text que = new Text(randomQuestion);
 					theme.setSmallText(que);
+					
 					double len = que.getLayoutBounds().getWidth();
+					
 					TextField answerTxt = new TextField();
 					answerTxt.setMaxWidth(300);
 					Button confirm = new Button("Submit");
@@ -177,6 +179,7 @@ public class PracticeScene extends Menu{
 					});
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
 					int sceneWidth = setWidth(len);
+					
 					Scene scene2 = new Scene(vbox2, sceneWidth, 600);
 					// tts the question
 					HelperThread ttsQ = new HelperThread(randomQuestion);
