@@ -136,10 +136,9 @@ public class Menu extends Application{
 		// Setup the stage
 		primaryStage.setScene(menuScene);
 		primaryStage.setTitle("Quinzical");
-		primaryStage.centerOnScreen();
 		primaryStage.setResizable(false);
 		primaryStage.show();
-		
+		primaryStage.centerOnScreen();
 	}
 	
 	public static void main(String[] args) {
