@@ -76,7 +76,7 @@ public class NZScene extends Menu{
 		// If the game has been completed, display the reward scene
 		if(count == categories.size()) {
 			// Start up the reward scene
-			RewardScene reward = new RewardScene(primary, gameScene, theme);
+			RewardScene reward = new RewardScene(primary, menu, theme);
 			reward.startScene();
 			return;
 		}
