@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,8 +48,9 @@ import quinzical.utils.UpdateCategory;
 public class AnswerScene extends Menu{
 
 	private Stage primary;
-	private Scene gameScene;
+	private Scene gameScene, menu;
 	private String[] catNames;
+	private List<String> categories;
 	private Button click;
 	private String category;
 	private int lineNum, counter, value;
@@ -57,13 +59,15 @@ public class AnswerScene extends Menu{
 	private Button[] macrons;
 
 	public AnswerScene(Button click, String category, int lineNum, Stage primary,
-			String[] catNames, Scene gameScene, AppTheme theme) {
+				List<String> categories, Scene gameScene, String[] catNames, Scene menu, AppTheme theme) {
+		this.menu = menu;
+		this.catNames = catNames;
 		this.click = click;
 		this.category = category;
+		this.categories = categories;
 		this.lineNum = lineNum;
 		this.primary = primary;
 		this.gameScene = gameScene;
-		this.catNames = catNames;
 		super.theme = theme;
 	}
 
@@ -72,7 +76,7 @@ public class AnswerScene extends Menu{
 		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
-		NZScene game = new NZScene(catNames, primary, gameScene, theme);
+		NZScene game = new NZScene(catNames,categories, primary, gameScene, menu, theme);
 		File winFile = new File("./saves/winnings");
 
 		// Get the value

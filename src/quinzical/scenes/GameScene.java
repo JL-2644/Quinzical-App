@@ -124,7 +124,7 @@ public class GameScene extends Menu{
 			@Override
 			public void handle(ActionEvent event) {
 				// Start up the game module scene
-				NZScene game = new NZScene(catNames, primary, gameScene, theme);
+				NZScene game = new NZScene(catNames,categories, primary, gameScene, menu, theme);
 				game.startScene();
 			}	
 		});

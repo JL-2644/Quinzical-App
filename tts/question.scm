@@ -1,3 +1,3 @@
 (voice_kal_diphone)
 (Parameter.set 'Duration_Stretch 1.0)
-(SayText "Answer was blue")
+(SayText "Answer was Cook Strait")

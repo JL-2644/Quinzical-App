@@ -24,27 +24,33 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
-import quinzical.utils.Saves;
 
 /**
- * This is the main scene for the NZ quiz game mode
+ * This is the main scene for the NZ quiz game mode, five
+ * categories are randomly selected. From that 5, users can 
+ * choose from among these categories and answer a question
+ * with a corresponding value.
  * 
  * @author JiaQi and Marcus
  */
 public class NZScene extends Menu{
 
 	private Stage primary;
-	private Scene gameScene, nzScene;
+	private Scene gameScene, nzScene, menu;
 	private String[] catNames;
 	private Button valueBtn, backBtn, btnClicked;
 	private List<String> categories;
 	private final DropShadow shadow = new DropShadow();
 	private Background bg;
 
-	public NZScene(String[] catNames, Stage primary, Scene gameScene, AppTheme theme) {
+	public NZScene(String[] catNames, List<String> categories, Stage primary, Scene gameScene, 
+			Scene menu, AppTheme theme) {
+		
+		this.menu = menu;
+		this.catNames = catNames;
 		this.primary = primary;
 		this.gameScene = gameScene;
-		this.catNames = catNames;
+		this.categories = categories;
 		super.theme = theme;
 	}
 
@@ -55,9 +61,6 @@ public class NZScene extends Menu{
 
 		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
-
-		Saves prep = new Saves(catNames);
-		categories = prep.loadCategories();
 
 		File international = new File("./saves/International");
 
@@ -140,7 +143,7 @@ public class NZScene extends Menu{
 							public void handle(ActionEvent event) {
 								btnClicked = (Button) event.getSource();
 								AnswerScene answer = new AnswerScene(btnClicked, cateNum, 
-										lineNum, primary, catNames, gameScene, theme);
+										lineNum, primary, categories, gameScene, catNames, menu, theme);
 
 								answer.startScene();
 							}	
@@ -159,7 +162,8 @@ public class NZScene extends Menu{
 			backBtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					primary.setScene(gameScene);
+					GameScene scene = new GameScene(catNames, primary, menu, theme);
+					scene.startScene();
 				}	
 			});
 
