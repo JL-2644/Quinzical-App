@@ -12,4 +12,7 @@
 17/10/2020 - Added the international questions database and finished the international section<br/>
 18/10/2020 - Added some special effects on buttons, refactored classes into multiple packages<br/>
 20/10/2020 - Created setting scene and added different background color and images<br/>
-21/10/2020 - Added the macron buttons feature
+21/10/2020 - Added the macron buttons feature,br/>
+26/10/2020 -  Added the leaderboard feature<br/>
+27/10/2020 - Redid the international module
+
