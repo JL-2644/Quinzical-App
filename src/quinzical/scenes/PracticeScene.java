@@ -97,7 +97,6 @@ public class PracticeScene extends Menu{
 		
 		//Practice scene
 		Scene scene = new Scene(vbox, 650, 600);
-		primary.setTitle("Practice");
 		primary.setScene(scene);
 
 		//Set up for every category buttons

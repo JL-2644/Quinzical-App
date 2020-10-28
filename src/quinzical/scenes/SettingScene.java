@@ -66,7 +66,6 @@ public class SettingScene extends Menu{
 		vbox.setPadding(new Insets(100));
 		Scene setting = new Scene(vbox, 650, 600);
 		primaryStage.setScene(setting);
-		primaryStage.setTitle("Settings");
 		
 		// Handle when the light button is pressed
 		light.setOnAction(new EventHandler<ActionEvent>() {
