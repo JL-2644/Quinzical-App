@@ -1,4 +1,4 @@
-package quinzical.scenes;
+package quinzical.scenes.game;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import quinzical.scenes.main.Menu;
 import quinzical.utils.AppTheme;
 import quinzical.utils.HelperThread;
 import quinzical.utils.UpdateCategory;

@@ -1,4 +1,4 @@
-package quinzical.scenes;
+package quinzical.scenes.main;
 
 import java.io.File;
 
@@ -20,6 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import quinzical.scenes.game.GameScene;
+import quinzical.scenes.practice.PracticeScene;
 import quinzical.utils.AppTheme;
 /**
  * This is the main class of the Quinzical application. This is the first display that

@@ -1,4 +1,4 @@
-package quinzical.scenes;
+package quinzical.scenes.game;
 
 import java.io.File;
 import java.util.List;
@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import quinzical.scenes.main.Menu;
 import quinzical.utils.AppTheme;
 import quinzical.utils.Saves;
 
