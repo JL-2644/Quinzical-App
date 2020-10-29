@@ -248,7 +248,7 @@ public class InternationalScene extends Menu {
 									Alert a = new Alert(AlertType.NONE, sen, ButtonType.OK);
 									a.setTitle("Result");
 									a.showAndWait();
-									primary.setScene(gameScene);
+									primary.setScene(game);
 								} else {
 									wrongAns(que, ans, game);
 								}
