@@ -136,7 +136,7 @@ public class GameScene extends Menu{
 				File cateDir = new File("./categoriesInternational");
 				String[] cateFiles = cateDir.list();
 				// Start up the game module scene
-				InternationalScene inter = new InternationalScene(cateFiles, primary, menu, theme, "categoriesInternational/");
+				InternationalScene inter = new InternationalScene(cateFiles, primary, gameScene, theme, "categoriesInternational/");
 				inter.startScene();
 			}	
 		});
