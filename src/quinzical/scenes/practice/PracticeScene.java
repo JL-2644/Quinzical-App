@@ -201,7 +201,7 @@ public class PracticeScene extends Menu{
 
 					//change scene to the random question
 					primary.setScene(scene2);
-					attempts = 0;
+					attempts = 3;
 
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
@@ -234,9 +234,9 @@ public class PracticeScene extends Menu{
 								a.showAndWait();
 								primary.setScene(scene);
 							} else {
-								attempts++;
+								attempts--;
 								//After all attempts
-								if (attempts == 3) {
+								if (attempts == 0) {
 									Text label3 = new Text("Question");
 									theme.setText(label3);
 									Text label4 = new Text("Answer");
@@ -289,7 +289,7 @@ public class PracticeScene extends Menu{
 									a.showAndWait();
 
 									//User gets the first letter of the answer as a hint
-									if (attempts == 2) {
+									if (attempts == 1) {
 										Text hint = new Text("Hint: " + answer.get(tmp).get(ran).charAt(0));
 										theme.setSmallText(hint);
 										VBox vbox4 = new VBox(20);
