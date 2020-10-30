@@ -51,6 +51,7 @@ public class PracticeScene extends Menu{
 	private Background bg;
 	private Button[] macrons;
 	private String file;
+	private Text atmpt;
 
 	/**
 	 * Constructor of PracticeScene
@@ -191,8 +192,12 @@ public class PracticeScene extends Menu{
 						}
 					});
 					
+					attempts = 3;
+					atmpt = new Text("Attempts left: " + attempts);
+					theme.setSmallText(atmpt);
+					
 					// scene for answering question
-					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
+					vbox2.getChildren().addAll(label2, que, slider, info, replay, atmpt, clueLabel, macronTile, answerTxt, confirm);
 					Scene scene2 = new Scene(vbox2, 650, 600);
 
 					// tts the question
@@ -201,7 +206,6 @@ public class PracticeScene extends Menu{
 
 					//change scene to the random question
 					primary.setScene(scene2);
-					attempts = 3;
 
 					confirm.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
@@ -235,6 +239,8 @@ public class PracticeScene extends Menu{
 								primary.setScene(scene);
 							} else {
 								attempts--;
+								atmpt = new Text("Attempts left: " + attempts);
+								theme.setSmallText(atmpt);
 								//After all attempts
 								if (attempts == 0) {
 									Text label3 = new Text("Question");
@@ -287,6 +293,13 @@ public class PracticeScene extends Menu{
 									a = new Alert(AlertType.NONE, sen, ButtonType.OK);
 									a.setTitle("Result");
 									a.showAndWait();
+									
+									VBox newVbox = new VBox(20);
+									newVbox.setAlignment(Pos.CENTER);
+									newVbox.setBackground(bg);
+									newVbox.getChildren().addAll(label2, que, slider, info, replay, atmpt, clueLabel, macronTile, answerTxt, confirm);
+									Scene newScene = new Scene(newVbox, 650, 600);
+									primary.setScene(newScene);
 
 									//User gets the first letter of the answer as a hint
 									if (attempts == 1) {
@@ -295,7 +308,7 @@ public class PracticeScene extends Menu{
 										VBox vbox4 = new VBox(20);
 										vbox4.setAlignment(Pos.CENTER);
 										vbox4.setBackground(bg);
-										vbox4.getChildren().addAll(label2, que, slider, info, replay, hint, clueLabel,
+										vbox4.getChildren().addAll(label2, que, slider, info, replay, atmpt, hint, clueLabel,
 												macronTile, answerTxt, confirm);
 
 										// change to a scene that contain hint
