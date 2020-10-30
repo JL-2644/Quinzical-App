@@ -21,6 +21,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 
+/**
+ * The is the setting scene where user can reset the game and change
+ * themes of the application
+ * 
+ * @author Marcus and JiaQi
+ *
+ */
 public class SettingScene extends Menu{
 
 	private Stage primaryStage;
@@ -29,6 +36,13 @@ public class SettingScene extends Menu{
 	private final DropShadow shadow = new DropShadow();
 	private Background bg;
 	
+	/**
+	 * This is the constructor
+	 * @param primaryStage the stage of the application
+	 * @param menuScene the main menu scene
+	 * @param theme the theme of the application
+	 * @param layout the Vbox layout of main menu scene
+	 */
 	public SettingScene(Stage primaryStage, Scene menuScene, AppTheme theme, VBox layout) {
 		this.primaryStage = primaryStage;
 		menu = menuScene;
@@ -36,12 +50,17 @@ public class SettingScene extends Menu{
 		super.layout = layout;
 	}
 
+	/**
+	 * Method to start the scene
+	 */
 	public void startScene() {
+		// Title text
 		Text label = new Text("Choose a background theme!");
 		label.setFill(Color.web("#f26868"));
 		label.setStroke(Color.web("#e82a2a"));
 		label.setFont(new Font("Arial", 24));
 		
+		// Set up for theme buttons, reset and main menu button
 		shadow.setColor(Color.web("#7f96eb"));
 		light = new Button("Light Theme");
 		dark = new Button("Dark Theme");
@@ -50,6 +69,7 @@ public class SettingScene extends Menu{
 		back = new Button("Main Menu");
 		reset= new Button("Reset Game");
 		
+		//set up effect for buttons
 		light.setEffect(shadow);
 		dark.setEffect(shadow);
 		nz.setEffect(shadow);
@@ -58,6 +78,7 @@ public class SettingScene extends Menu{
 		reset.setEffect(shadow);
 		bg = theme.getBackground();
 
+		// create setting scene
 		VBox vbox = new VBox(40);
 		vbox.getChildren().addAll(label, light, dark, nz, maori, reset, back);
 
@@ -143,6 +164,7 @@ public class SettingScene extends Menu{
 			}
 		});
 		
+		// Handle when reset button is pressed
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
