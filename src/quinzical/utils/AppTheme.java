@@ -19,6 +19,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * This class stores all the different themes for the
+ * application.
+ * 
+ * @author Marcus and Jiaqi
+ *
+ */
 public class AppTheme {
 	
 	private Paint paint;
@@ -31,6 +38,9 @@ public class AppTheme {
 	private final Stop[] stops2 = new Stop[] { new Stop(0, Color.DARKSLATEBLUE), new Stop(1, Color.DARKRED) };
 	private final LinearGradient gradient2 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops2);
 	
+	/**
+	 * This is the constructor of AppTheme
+	 */
 	public AppTheme() {
 		paint = gradient;
 		BackgroundFill bgf = new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY);
@@ -38,6 +48,9 @@ public class AppTheme {
 		str = "light";
 	}
 	
+	/**
+	 * This method would change the the background to the light theme
+	 */
 	public void changeLight() {
 		str = "light";
 		paint = gradient;
@@ -45,6 +58,9 @@ public class AppTheme {
 		bg = new Background(bgf);
 	}
 	
+	/**
+	 * This method would change the the background to the dark theme
+	 */
 	public void changeDark() {
 		str = "dark";
 		paint = gradient2;
@@ -52,6 +68,9 @@ public class AppTheme {
 		bg = new Background(bgf);
 	}
 	
+	/**
+	 * This method would change the the background to the NZ theme(New Zealand Flag Photo)
+	 */
 	public void changeNZ() {
 		str = "nz";
 		image = new Image("file:./images/NZ.png");
@@ -60,6 +79,9 @@ public class AppTheme {
 		bg = new Background(bgi);
 	}
 	
+	/**
+	 * This method would change the the background to the Maori theme(Maori Flag Photo)
+	 */
 	public void changeMaori() {
 		str = "maori";
 		image = new Image("file:./images/Maori.png");
@@ -68,12 +90,17 @@ public class AppTheme {
 		bg = new Background(bgi);
 	}
 	
+	/**
+	 * Getter for the background
+	 * @return The background of the chosen theme
+	 */
 	public Background getBackground() {
 		return bg;
 	}
 	
-	/*
-	 * set up for text
+	/**
+	 * Set up for title text 
+	 * @param text the text needed to be styled
 	 */
 	public void setText(Text text) {
 		text.setFill(Color.web("#f26868"));
@@ -81,6 +108,10 @@ public class AppTheme {
 		text.setFont(new Font("Arial", 25));
 	}
 	
+	/**
+	 * Set up for normal text
+	 * @param text the text needed to be styled
+	 */
 	public void setSmallText(Text text) {
 		if(str.contentEquals("") || str.contentEquals("light")) {
 			text.setFill(Color.web("#000000"));
@@ -110,6 +141,11 @@ public class AppTheme {
 		}
 	}
 	
+	/**
+	 * The method set maximum length for a text object and creates
+	 * multiple lines if it is too long
+	 * @param text the text needed to be set centered
+	 */
 	public void setCenter(Text text) {
 		text.setWrappingWidth(380);
 		text.setTextAlignment(TextAlignment.CENTER);
