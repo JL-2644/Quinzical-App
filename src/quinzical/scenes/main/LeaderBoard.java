@@ -26,6 +26,13 @@ import javafx.stage.Stage;
 import quinzical.utils.AppTheme;
 import quinzical.utils.User;
 
+/**
+ * This class displays the leader board scene, this is where users who have completed
+ * the NZ quiz can add their scores to compare with others.
+ * 
+ * @author JiaQi and Marcus
+ *
+ */
 public class LeaderBoard extends Menu{
 
 	private Button backBtn, clear;
@@ -49,6 +56,7 @@ public class LeaderBoard extends Menu{
 		bg = theme.getBackground();
 		shadow.setColor(Color.web("#7f96eb"));
 
+		// Setup the columns for the table
 		TableColumn<User, String> nameColumn = new TableColumn<>("Name");
 		TableColumn<User, Integer> scoreColumn = new TableColumn<>("Score");
 		nameColumn.setMinWidth(250);
@@ -59,7 +67,8 @@ public class LeaderBoard extends Menu{
 
 		table = new TableView<>();
 		table.prefHeightProperty().bind(primary.heightProperty().multiply(0.8));
-		// Initialize previous winners onto the leaderboard
+		// Initialize previous winners onto the leaderboard as well as potential
+		// future ones
 		if(scoreFile.exists()) {
 			table.setItems(loadUsers());
 		}
@@ -84,6 +93,7 @@ public class LeaderBoard extends Menu{
 			}	
 		});
 
+		// Layout of the leader board scene
 		TilePane tileBtns = new TilePane(Orientation.HORIZONTAL);
 		tileBtns.setAlignment(Pos.BASELINE_CENTER);
 		tileBtns.setHgap(150);
@@ -100,6 +110,10 @@ public class LeaderBoard extends Menu{
 
 	}
 	
+	/*
+	 * Reads the file where user scores are stored, adds those users to the
+	 * list
+	 */
 	private ObservableList<User> loadUsers() {
 		File scoreFile = new File("./leaderboard/score");
 		String username = null;

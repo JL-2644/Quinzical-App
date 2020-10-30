@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
  * This class is used to create user objects which are then displayed by the
  * JavaFX table view
  * 
- * @author se206-2020
+ * @author JiaQi and Marcus
  *
  */
 public class User {

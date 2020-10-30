@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * This class creates a save state of the 5 categories selected by putting them into 
  * a new directory called saves. This is done to allow users to continue with their 
- * game even after quitting.
+ * NZ quiz game even after quitting.
  * 
  * @author JiaQi and Marcus
  *
