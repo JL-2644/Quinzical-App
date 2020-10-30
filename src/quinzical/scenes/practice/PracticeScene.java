@@ -27,6 +27,13 @@ import quinzical.utils.AppTheme;
 import quinzical.utils.HelperThread;
 import quinzical.utils.InitialData;
 
+/**
+ * This is the practice module scene where users can select to practice with all the categories
+ * from the New Zealand trivia
+ * 
+ * @author Marcus and Jiaqi
+ *
+ */
 public class PracticeScene extends Menu{
 
 	private Stage primary;
@@ -45,8 +52,13 @@ public class PracticeScene extends Menu{
 	private Button[] macrons;
 	private String file;
 
-	/*
-	 * Constructor
+	/**
+	 * Constructor of PracticeScene
+	 * @param catNames array of category names
+	 * @param primary primary stage
+	 * @param menu main menu scene
+	 * @param theme the theme of the application
+	 * @param file the name of the file
 	 */
 	public PracticeScene(String[] catNames, Stage primary, Scene menu, AppTheme theme, String file) {
 		this.primary = primary;
@@ -56,7 +68,7 @@ public class PracticeScene extends Menu{
 		this.file = file;
 	}
 
-	/*
+	/**
 	 * Method to start the scene
 	 */
 	public void startScene() {
@@ -78,6 +90,8 @@ public class PracticeScene extends Menu{
 				primary.setScene(menu);
 			}
 		});
+		
+		// Create vbox for the category scene
 		Text label = new Text("Pick a catergory!!!");
 		theme.setText(label);
 		VBox vbox = new VBox(20);
@@ -176,8 +190,9 @@ public class PracticeScene extends Menu{
 							ttsQ.start();
 						}
 					});
+					
+					// scene for answering question
 					vbox2.getChildren().addAll(label2, que, slider, info, replay, clueLabel, macronTile, answerTxt, confirm);
-
 					Scene scene2 = new Scene(vbox2, 650, 600);
 
 					// tts the question
@@ -296,8 +311,10 @@ public class PracticeScene extends Menu{
 		}
 	}
 
-	/*
-	 * get random position from a list
+	/**
+	 * This method gets random position from a list
+	 * @param list list of categories
+	 * @return random position of the list
 	 */
 	public int getRandomElement(List<String> list) {
 		Random rand = new Random();
