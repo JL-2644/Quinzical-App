@@ -30,6 +30,14 @@ import quinzical.utils.AppTheme;
 import quinzical.utils.HelperThread;
 import quinzical.utils.InitialData;
 
+/**
+ * This is the international scene, it is unlocked after attempting to finish
+ * two of the NZ categories, it is not compulsory to finish this module for
+ * the game
+ * 
+ * @author Marcus and Jiaqi
+ *
+ */
 public class InternationalScene extends Menu {
 
 	private Stage primary;
@@ -46,8 +54,13 @@ public class InternationalScene extends Menu {
 	private Background bg;
 	private Button[] macrons;
 
-	/*
+	/**
 	 * Constructor
+	 * @param catNames array of category names
+	 * @param primary primary stage
+	 * @param gameScene game selection scene
+	 * @param theme the theme of the application
+	 * @param file the name of the file
 	 */
 	public InternationalScene(String[] catNames, Stage primary, Scene gameScene, AppTheme theme, String file) {
 		this.primary = primary;
@@ -57,8 +70,8 @@ public class InternationalScene extends Menu {
 		this.file = file;
 	}
 
-	/*
-	 * method to start the scene
+	/**
+	 * Method to start the scene
 	 */
 	public void startScene() {
 		InitialData data = new InitialData(file);
@@ -261,6 +274,13 @@ public class InternationalScene extends Menu {
 		}
 	}
 
+	/**
+	 * This method would create a new scene when the answer provided
+	 * by the user is wrong
+	 * @param que the question
+	 * @param ans the correct answer
+	 * @param scene international scene
+	 */
 	public void wrongAns(String que, String ans, Scene scene) {
 		Text label3 = new Text("Question");
 		theme.setText(label3);
