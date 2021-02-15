@@ -1,7 +1,7 @@
 # Quinzical
 
 ### User Manual
-For full information on how to use the app, see [link](https://github.com/JL-2644/Quinzical-App/blob/master/User_Manual.pdf)
+For full information on how to use the app or to view screenshots of the GUI, see [link](https://github.com/JL-2644/Quinzical-App/blob/master/User_Manual.pdf)
 
 ### General info and quick setup
 
